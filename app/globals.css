@@ -1,0 +1,39 @@
+/* No preflight: the v2 artboards were designed on browser defaults and set their own spacing. */
+@layer theme, base, components, utilities;
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/utilities.css" layer(utilities);
+
+/* The retired archive holds class names on purpose; never generate CSS from it. */
+@source not "../.unlazy";
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: #ffffff;
+  font-family: var(--font-geist), -apple-system, 'SF Pro Text', 'Segoe UI', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* One page, two artboards: the desktop layout from 1024px, the mobile layout below it. */
+.v2-wide {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .v2-wide {
+    display: block;
+  }
+
+  .v2-narrow {
+    display: none;
+  }
+}
