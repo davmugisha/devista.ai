@@ -1,0 +1,46 @@
+[
+  {
+    "route": "/",
+    "w": 375,
+    "scrollW": 375,
+    "clientW": 375,
+    "h": 4093,
+    "h1": 1,
+    "title": "Devista AI: the operating layer between your systems",
+    "overflow": false,
+    "errors": []
+  },
+  {
+    "route": "/",
+    "w": 768,
+    "scrollW": 768,
+    "clientW": 768,
+    "h": 3149,
+    "h1": 1,
+    "title": "Devista AI: the operating layer between your systems",
+    "overflow": false,
+    "errors": []
+  },
+  {
+    "route": "/",
+    "w": 1280,
+    "scrollW": 1280,
+    "clientW": 1280,
+    "h": 2572,
+    "h1": 1,
+    "title": "Devista AI: the operating layer between your systems",
+    "overflow": false,
+    "errors": []
+  },
+  {
+    "route": "/",
+    "w": 1440,
+    "scrollW": 1440,
+    "clientW": 1440,
+    "h": 2572,
+    "h1": 1,
+    "title": "Devista AI: the operating layer between your systems",
+    "overflow": false,
+    "errors": []
+  }
+]
