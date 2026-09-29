@@ -35,8 +35,9 @@ type LinkProps = Omit<ComponentProps<typeof Link>, 'className'> & {
 };
 
 export function ButtonLink({ variant = 'primary', size = 'md', className = '', track, children, ...rest }: LinkProps) {
+  // Only the primary action prefetches, so booking opens instantly without loading every page up front.
   return (
-    <Link {...rest} className={buttonClass(variant, size, className)} data-track={track}>
+    <Link prefetch={variant === 'primary' ? undefined : false} {...rest} className={buttonClass(variant, size, className)} data-track={track}>
       {children}
     </Link>
   );

@@ -1,6 +1,6 @@
 # Site audit, 2026-09-29
 
-Scope: the two live routes, `/` and `/book`, on the production build (`next build`, `next start`), captured at 375, 768, 1280 and 1440 px. Full-page captures are in `redesign/before/` (`home-<width>.png`, `book-<width>.png`, plus extracted text). Close-up regions are in `redesign/before/regions/` and are cited below as `regions/<file>`.
+Scope: the two live routes, `/` and `/book`, on the production build (`next build`, `next start`), captured at 375, 768, 1280 and 1440 px. Full-page captures are in `redesign/before/` at 2x (`book-<width>.png`; the long homepage is split into `home-<width>-part<N>.png` tiles because Chrome cannot capture more than 16,384 device pixels in one image), plus extracted text. Close-up regions are in `redesign/before/regions/` and are cited below as `regions/<file>`.
 
 Baseline measurements (Lighthouse 12, mobile emulation, local production server):
 
@@ -67,7 +67,7 @@ Fix: the hero visual becomes a faithful rendering of the command center (approva
 
 Area: information architecture.
 
-Evidence: `redesign/before/home-1440.png` is 11,960 px tall at 1440 (15,267 px at 375) with about 16 sections. Navigation is "Product, Solution, How To, Pricing" (`regions/home-1440-s00.png`), all anchors on the same page. "Solution" and "How To" do not say what they contain. There is no page for security, for the company, or for the audit itself beyond the calendar. The department picker lists Software Dev, Engineering and Design first (`regions/home-1440-s06.png`), which points the site toward engineering buyers.
+Evidence: the homepage in `redesign/before/home-1440-part1..3.png` is 11,960 px tall at 1440 (15,267 px at 375) with about 16 sections. Navigation is "Product, Solution, How To, Pricing" (`regions/home-1440-s00.png`), all anchors on the same page. "Solution" and "How To" do not say what they contain. There is no page for security, for the company, or for the audit itself beyond the calendar. The department picker lists Software Dev, Engineering and Design first (`regions/home-1440-s06.png`), which points the site toward engineering buyers.
 
 Why it costs us: the IT or security lead, who can block the deal, has nowhere to go. A referral visitor checking who is behind the company finds a founder quote but no company page. Long single pages bury the answers to specific objections.
 

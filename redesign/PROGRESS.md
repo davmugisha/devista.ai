@@ -1,43 +1,56 @@
 # Redesign progress
 
-Branch: `redesign/operations-audit`.
+Branch: `redesign/operations-audit`. Not merged, pushed or deployed.
 
 ## Decisions (Checkpoint 1, 2026-09-29)
 
-- Name: Devista AI. Leads: email through Resend. Audit: free, no obligation. No scheduler: we reply within one working day with times. Analytics: Vercel Web Analytics.
-- Claims: the core control model is live (command center, approvals, permissions, policies, escalation, audit trail, works with existing tools). Departments and agents appear only as configurable examples. No integration logos, no security specifics, until the claims table in `CHECKPOINT-1.md` is marked.
-- Company details come later; the Company page ships as a labelled draft.
-- Design plan approved as written in `CHECKPOINT-1.md`. The generated `app/_v2` homepage and stock photos are archived in `.unlazy/retired-2026-09-29/` (not deleted).
+- **Name and delivery:** the site stays Devista AI, and leads go out by email through Resend.
+- **Audit and follow-up:** the audit is free with no obligation. There's no scheduler; we reply within one working day with call times.
+- **Analytics:** Vercel Web Analytics.
+- **Claims:** the core control model is live (command center, approvals, permissions, policies, escalation, audit trail, works with existing tools). Departments and agents appear only as examples. No integration logos and no security specifics until the claims table in `CHECKPOINT-1.md` is marked.
+- **Company details:** these come later, so the Company page ships as a labelled draft.
+- **Design:** the plan in `CHECKPOINT-1.md` is approved. The old generated site and stock photos are archived in `.unlazy/retired-2026-09-29/`.
 
 ## Done
 
-- Phase 0 and 1: recon, before screenshots, `AUDIT.md` (15 findings), `CHECKPOINT-1.md`.
-- Phase 2, vertical slice:
-  - Tokens in `app/globals.css` (`@theme` with the Tailwind defaults cleared), mirrored for images in `lib/tokens.ts`.
-  - Instrument Sans with its width axis, self-hosted through `next/font`.
-  - Header (sticky; the booking button is visible at every width), mobile menu, footer.
-  - Hero with an HTML rendering of the command center, labelled as an illustration with example data.
-  - The signature interactive: `components/home/WorkflowExplorer.tsx`, with data in `lib/workflows.ts`.
-  - The components in use so far are `ButtonLink`, `Section`, `PageIntro`, `ModeGlyph` and `ClickTracker`, with analytics events sent through `lib/analytics.ts`.
-  - Starter pages for Product, How it works, Security and Company, so the header links work.
-  - Screenshots in `redesign/slice/`.
+- **Phase 0, recon:** before screenshots.
+- **Phase 1, audit:** `AUDIT.md` (15 findings) and `CHECKPOINT-1.md`.
+- **Phase 2, vertical slice:** tokens, header, footer, hero and the workflow interactive. Approved at Checkpoint 2.
+- **Phase 3, full build:**
+  - every homepage section
+  - the Product, How it works, Security, Company, Book, Privacy and Terms pages
+  - the booking flow with Resend delivery
+  - sitemap, robots rules, Open Graph images and structured data
+- **Phase 4, measure:**
+  - every page captured at four widths into `redesign/after/`
+  - every interaction state captured into `redesign/states/`
+  - Lighthouse and axe on every page, and the whole booking flow walked end to end with a mock inbox
+  - fixes that came out of it:
+    - layout shift on Booking, Product and How it works
+    - the interactive now loads lazily
+    - only the booking link prefetches
+    - only the Latin font file is preloaded
+    - a width-matched fallback font for headings
+    - the homepage FAQ now covers the brief's eight objections
+- **Phase 5, handoff:** `HANDOFF.md` and the "Marketing site rules" section in `CLAUDE.md`.
 
-## Defaults I caught myself reaching for (kept out of the rest of the build)
+## Defaults I caught myself reaching for (kept out of the build)
 
-- **Checkbox-like glyph:** an outlined square for "agent" looked like an unchecked checkbox. The glyphs are now a circle for a person, a half-filled circle for AI-assisted, and a diamond for an agent.
-- **Truncated text on phones:** product rows ended in ellipses on phones. Text now wraps below 640px.
-- **Glyphs as separators:** mode glyphs sat inside hero rows where the legend isn't shown yet, so they read as separator dots. Removed from the hero.
-- **Scroll entrance animations:** I was about to add them to the interactive's steps. Steps only animate when the visitor changes department, and exit animations are not used.
+- **Checkbox-like glyph:** an outlined-square "agent" glyph read as an unchecked checkbox. The glyphs are now a circle, a half-filled circle and a diamond.
+- **Truncated text on phones:** product rows ended in ellipses; text now wraps below 640px.
+- **Glyphs as separators:** mode glyphs sat inside hero rows before the legend explains them. Removed from the hero.
+- **Scroll entrance animations:** kept out; steps animate only when the visitor changes department.
 - **"Example" chips:** I nearly put one on every element. There is one caption per illustration instead.
-- **Headline breaking mid-thought:** the side-by-side hero broke the headline as "work. The". The headline now spans the full width and breaks at its sentences.
+- **Headline breaking mid-thought:** the side-by-side hero broke the headline as "work. The". It now spans the full width.
+- **Grids of identical cards:** replaced by the ruled `ItemList` everywhere.
+- **Skipping every section below the fold:** that caused layout shift on short inner pages. Now used only on homepage sections well below the fold.
 
-## Next
+## Open
 
-- Checkpoint 2: owner reviews `redesign/slice/`.
-- Phase 3 builds the remaining homepage sections, the Product, How it works, Security and Company pages, the booking page and form, the delivery route to Resend, Privacy and Terms, the sitemap, robots rules and Open Graph images.
-
-## Open questions
-
-- The claims table in `CHECKPOINT-1.md` section 5 (still unmarked).
-- Company details: team, location, contact email, legal entity.
-- The Resend API key and the inbox address that receives leads.
+- **Performance target:** Lighthouse performance is 79 to 90 on this machine, against a target of 90. Accessibility, best practices and SEO meet their targets on every page. The machine's CPU benchmark is low and runs vary by up to 14 points, so the verdict needs PageSpeed Insights on a deployed preview (see `HANDOFF.md`, Scores).
+- **Needs the owner:**
+  - Resend key and inbox
+  - the claims table
+  - company details
+  - legal review of Privacy and Terms
+  - confirming the drafted audit format and the reply-time commitment

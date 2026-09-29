@@ -9,15 +9,17 @@ type Props = {
   as?: 'h1' | 'h2';
   children?: ReactNode;
   className?: string;
+  /** Skip layout and paint until near the viewport. Only for sections well below the fold. */
+  defer?: boolean;
 };
 
 /** A page section that answers one buyer question: a heading, an optional one-sentence lede, content. */
-export function Section({ id, title, lede, tone = 'paper', as: H = 'h2', children, className = '' }: Props) {
+export function Section({ id, title, lede, tone = 'paper', as: H = 'h2', children, className = '', defer = false }: Props) {
   return (
     <section
       id={id}
       aria-labelledby={`${id}-title`}
-      className={(tone === 'mist' ? 'bg-mist ' : 'bg-paper ') + 'py-16 md:py-24 ' + className}
+      className={(tone === 'mist' ? 'bg-mist ' : 'bg-paper ') + (defer ? 'defer-render ' : '') + 'py-16 md:py-24 ' + className}
     >
       <div className="mx-auto max-w-page px-4 md:px-8">
         <div className="max-w-narrow">

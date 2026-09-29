@@ -12,7 +12,7 @@ export function Mark({ className = 'size-7' }: { className?: string }) {
 
 export function Logo({ wordmarkFrom = 'always' }: { wordmarkFrom?: 'always' | 'xs' }) {
   return (
-    <Link href="/" className="inline-flex items-center gap-2 rounded-chip" aria-label="Devista AI, home">
+    <Link href="/" prefetch={false} className="inline-flex items-center gap-2 rounded-chip" aria-label="Devista AI, home">
       <Mark />
       <span
         className={

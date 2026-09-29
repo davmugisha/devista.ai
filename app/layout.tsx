@@ -10,7 +10,8 @@ import './globals.css';
 
 // Self-hosted at build time by next/font; the width axis gives the semi-condensed display cut.
 const instrument = Instrument_Sans({
-  subsets: ['latin', 'latin-ext'],
+  // Only Latin is preloaded; Latin Extended still loads on demand via unicode-range.
+  subsets: ['latin'],
   axes: ['wdth'],
   variable: '--font-instrument',
   display: 'swap',

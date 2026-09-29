@@ -7,6 +7,7 @@
     "h": 15267,
     "h1": 2,
     "title": "Devista AI · AI operations for growing businesses",
+    "tiles": 4,
     "overflow": false,
     "errors": []
   },
@@ -18,6 +19,7 @@
     "h": 12980,
     "h1": 2,
     "title": "Devista AI · AI operations for growing businesses",
+    "tiles": 4,
     "overflow": false,
     "errors": []
   },
@@ -29,6 +31,7 @@
     "h": 11960,
     "h1": 2,
     "title": "Devista AI · AI operations for growing businesses",
+    "tiles": 3,
     "overflow": false,
     "errors": []
   },
@@ -40,6 +43,7 @@
     "h": 11960,
     "h1": 2,
     "title": "Devista AI · AI operations for growing businesses",
+    "tiles": 3,
     "overflow": false,
     "errors": []
   },
@@ -51,6 +55,7 @@
     "h": 1098,
     "h1": 2,
     "title": "Book your free Process Audit · Devista AI",
+    "tiles": 1,
     "overflow": false,
     "errors": []
   },
@@ -62,6 +67,7 @@
     "h": 1042,
     "h1": 2,
     "title": "Book your free Process Audit · Devista AI",
+    "tiles": 1,
     "overflow": false,
     "errors": []
   },
@@ -73,6 +79,7 @@
     "h": 926,
     "h1": 2,
     "title": "Book your free Process Audit · Devista AI",
+    "tiles": 1,
     "overflow": false,
     "errors": []
   },
@@ -84,94 +91,7 @@
     "h": 926,
     "h1": 2,
     "title": "Book your free Process Audit · Devista AI",
-    "overflow": false,
-    "errors": []
-  },
-  {
-    "route": "/robots.txt",
-    "w": 375,
-    "scrollW": 375,
-    "clientW": 375,
-    "h": 900,
-    "h1": 1,
-    "title": "Devista AI · AI operations for growing businesses",
-    "overflow": false,
-    "errors": []
-  },
-  {
-    "route": "/robots.txt",
-    "w": 768,
-    "scrollW": 768,
-    "clientW": 768,
-    "h": 900,
-    "h1": 1,
-    "title": "Devista AI · AI operations for growing businesses",
-    "overflow": false,
-    "errors": []
-  },
-  {
-    "route": "/robots.txt",
-    "w": 1280,
-    "scrollW": 1280,
-    "clientW": 1280,
-    "h": 900,
-    "h1": 1,
-    "title": "Devista AI · AI operations for growing businesses",
-    "overflow": false,
-    "errors": []
-  },
-  {
-    "route": "/robots.txt",
-    "w": 1440,
-    "scrollW": 1440,
-    "clientW": 1440,
-    "h": 900,
-    "h1": 1,
-    "title": "Devista AI · AI operations for growing businesses",
-    "overflow": false,
-    "errors": []
-  },
-  {
-    "route": "/sitemap.xml",
-    "w": 375,
-    "scrollW": 375,
-    "clientW": 375,
-    "h": 900,
-    "h1": 1,
-    "title": "Devista AI · AI operations for growing businesses",
-    "overflow": false,
-    "errors": []
-  },
-  {
-    "route": "/sitemap.xml",
-    "w": 768,
-    "scrollW": 768,
-    "clientW": 768,
-    "h": 900,
-    "h1": 1,
-    "title": "Devista AI · AI operations for growing businesses",
-    "overflow": false,
-    "errors": []
-  },
-  {
-    "route": "/sitemap.xml",
-    "w": 1280,
-    "scrollW": 1280,
-    "clientW": 1280,
-    "h": 900,
-    "h1": 1,
-    "title": "Devista AI · AI operations for growing businesses",
-    "overflow": false,
-    "errors": []
-  },
-  {
-    "route": "/sitemap.xml",
-    "w": 1440,
-    "scrollW": 1440,
-    "clientW": 1440,
-    "h": 900,
-    "h1": 1,
-    "title": "Devista AI · AI operations for growing businesses",
+    "tiles": 1,
     "overflow": false,
     "errors": []
   }

@@ -26,7 +26,7 @@ export function Footer() {
             <ul className="mt-3 space-y-2">
               {[{ label: 'Home', href: '/' }, ...NAV].map((item) => (
                 <li key={item.href}>
-                  <Link href={item.href} className="text-sm text-graphite hover:text-ink">
+                  <Link href={item.href} prefetch={false} className="text-sm text-graphite hover:text-ink">
                     {item.label}
                   </Link>
                 </li>
@@ -43,7 +43,7 @@ export function Footer() {
               </li>
               {LEGAL.map((item) => (
                 <li key={item.href}>
-                  <Link href={item.href} className="text-sm text-graphite hover:text-ink">
+                  <Link href={item.href} prefetch={false} className="text-sm text-graphite hover:text-ink">
                     {item.label}
                   </Link>
                 </li>

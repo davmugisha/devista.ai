@@ -5,12 +5,13 @@ import { ButtonLink } from '@/components/Button';
 import { CtaBand } from '@/components/CtaBand';
 import { Faq } from '@/components/Faq';
 import { Hero } from '@/components/home/Hero';
-import { WorkflowExplorer } from '@/components/home/WorkflowExplorer';
+import { ExplorerIsland } from '@/components/home/ExplorerIsland';
+import { ExplorerView } from '@/components/home/ExplorerView';
 import { ItemList } from '@/components/ItemList';
 import { MediaFrame } from '@/components/MediaFrame';
 import { Section } from '@/components/Section';
 import { Stages } from '@/components/Stages';
-import { CONTROLS, FAQ, GAPS, PRODUCT_PARTS } from '@/lib/content';
+import { CONTROLS, FAQ, GAPS, HOME_FAQ_EXCLUDE, PRODUCT_PARTS } from '@/lib/content';
 import { CTA } from '@/lib/site';
 
 export const metadata: Metadata = {
@@ -39,7 +40,9 @@ export default function Home() {
         title="People command. AI executes. Every step has an owner."
         lede="Each task goes to the most effective mix of people, AI and software. People keep strategy, approvals and exceptions. AI prepares and drafts. Agents run repetitive, measurable work, only within the rules you set."
       >
-        <WorkflowExplorer />
+        <ExplorerIsland uid="wf">
+          <ExplorerView uid="wf" active={0} focus={null} />
+        </ExplorerIsland>
         <p className="mt-4 text-xs text-slate">
           Examples for illustration. Your workflows, rules and approvers are mapped during the audit and set by you.
         </p>
@@ -47,6 +50,7 @@ export default function Home() {
 
       <Section
         id="product"
+        defer
         title="One place to run the company from."
         lede="Your teams keep the tools they know. Devista adds the command center over them, and the agents that do the work between them."
       >
@@ -65,6 +69,7 @@ export default function Home() {
 
       <Section
         id="control"
+        defer
         tone="mist"
         title="AI works inside the limits you set."
         lede="Nothing important happens without a person approving it, and every action, by a person or an agent, is on record."
@@ -84,6 +89,7 @@ export default function Home() {
 
       <Section
         id="how-it-works"
+        defer
         title="Start with one department. Expand when it proves itself."
         lede="Six stages take you from the first conversation to a department running on Devista, with a decision for you at each one."
       >
@@ -95,6 +101,7 @@ export default function Home() {
 
       <Section
         id="audit"
+        defer
         tone="mist"
         title="What happens in the operations audit."
         lede="A short, structured look at one department, run with the people who do the work. It is free, and the findings are yours to keep."
@@ -107,8 +114,8 @@ export default function Home() {
         </ButtonLink>
       </Section>
 
-      <Section id="faq" title="Questions executives ask before they book.">
-        <Faq items={FAQ} />
+      <Section id="faq" defer title="Questions executives ask before they book.">
+        <Faq items={FAQ.filter((f) => !HOME_FAQ_EXCLUDE.has(f.q))} />
       </Section>
 
       <CtaBand />

@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { startTransition, useActionState, useEffect, useMemo, useRef, useState, type FormEvent } from 'react';
+import { startTransition, useActionState, useEffect, useRef, useState, type FormEvent } from 'react';
 import { buttonClass } from '@/components/Button';
 import { Chevron, controlClass, describedBy, Field } from '@/components/Field';
 import { track } from '@/lib/analytics';
@@ -43,7 +43,6 @@ export function BookingForm() {
   const summaryRef = useRef<HTMLDivElement>(null);
   const failRef = useRef<HTMLDivElement>(null);
   const doneRef = useRef<HTMLHeadingElement>(null);
-  const zones = useMemo(timeZones, []);
 
   // The visitor's own time zone, detected in the browser; editable.
   useEffect(() => {
@@ -341,7 +340,7 @@ export function BookingForm() {
                   onChange={set('timezone')}
                   className={controlClass(false, 'h-12 appearance-none pr-10')}
                 >
-                  {zones.map((z) => (
+                  {timeZones().map((z) => (
                     <option key={z} value={z}>
                       {tzLabel(z)}
                     </option>
@@ -351,18 +350,19 @@ export function BookingForm() {
               </div>
             </Field>
           ) : (
-            <p className="text-sm text-graphite">
-              We will propose call times in{' '}
-              <span className="font-medium text-ink">{values.timezone ? tzLabel(values.timezone) : 'your local'}</span>{' '}
-              time.{' '}
-              <button
-                type="button"
-                onClick={() => setEditingTz(true)}
-                className="font-medium text-ink underline decoration-rule-strong underline-offset-4 hover:decoration-ink"
-              >
-                Change time zone
-              </button>
-            </p>
+            <div className="text-sm text-graphite">
+              <p>We will propose call times in your time zone:</p>
+              <p className="mt-1 flex min-h-6 flex-wrap items-baseline gap-x-3">
+                <span className="font-medium text-ink">{values.timezone ? tzLabel(values.timezone) : 'Detecting'}</span>
+                <button
+                  type="button"
+                  onClick={() => setEditingTz(true)}
+                  className="font-medium text-ink underline decoration-rule-strong underline-offset-4 hover:decoration-ink"
+                >
+                  Change time zone
+                </button>
+              </p>
+            </div>
           )}
         </div>
 

@@ -21,6 +21,7 @@ export function Header() {
               <li key={item.href}>
                 <Link
                   href={item.href}
+                  prefetch={false}
                   className="rounded-chip text-sm font-medium text-graphite transition-colors duration-150 hover:text-ink"
                 >
                   {item.label}

@@ -1,0 +1,130 @@
+# Redesign handoff
+
+Branch `redesign/operations-audit`. Not merged, pushed or deployed: those are your calls.
+
+## What changed, and why
+
+| Before | After | Why it matters to this buyer |
+|---|---|---|
+| The booking form showed "Confirmed" and sent nothing. Slots came from a formula, not a calendar | The form validates on the client and the server, sends each lead to your inbox through Resend, and confirms only when Resend accepts it. A failed delivery shows an error and keeps the answers | No lead can be lost silently. Every booking reaches a person |
+| "Run a bigger business without a bigger payroll", pitched at small-business owners | "Your systems work. The work between them doesn't.", written for CEOs, COOs and CFOs of established companies | No headcount pitch. It names the gaps between systems they already run |
+| Invented figures (44 agents, 10/30/60%, 318 tasks, a $274,560 calculator), a 16-logo integration strip, bracketed placeholders, dead Privacy and Terms links | No statistic, logo, certification or price anywhere. A claims gate checks every page. Illustrations carry an "example data" caption | A skeptical referral visitor finds nothing to disprove |
+| A 15-minute call promising three documents in 48 hours | A free operations audit: intro call, two working sessions, readout, about two weeks, one department, named deliverables | Concrete and credible for a company-wide decision |
+| One 12,000 px page, "Solution" and "How To" navigation, no Security or Company page | Product, How it works, Security and Company pages, plus `/book`, Privacy and Terms. The homepage answers one buyer question per section | The IT lead and the skeptic each have a page to go to |
+| Stock photos in the hero and throughout | An HTML rendering of the command center, and labelled frames at 16:10 and 16:9 for the real screens and the product tour | Shows the product, not people high-fiving |
+| Desktop and phone layouts both sent to every visitor, all client-rendered, 492 KB JPEGs | One responsive, server-rendered layout. JavaScript only for the menu, the form and the workflow interactive, which loads as it nears the viewport | Homepage LCP down from 6.8 s (see scores) |
+| At 768 px, the phone layout stretched across a tablet screen | Fluid layout checked at 375, 768, 1280 and 1440 | iPads look designed |
+| No description, canonical URL, Open Graph image, sitemap or robots rules | All of those on every page, plus Organization structured data. Previews are noindexed on Vercel | Shared links show a proper preview |
+| Five names for one action ("Book Free Call", "Book call", "Book a free audit") | "Book an operations audit" everywhere | The visitor always knows what the button does |
+
+**The signature moment** is "People command. AI executes. Every step has an owner." You pick Finance, Sales, Operations or Support and see one example workflow step by step. Each step says who does it: a person, AI-assisted work, or an agent under your rules. It also shows where the approval gate sits and what escalates, and to whom. It works fully by keyboard and is readable on a phone.
+
+## Screenshots
+
+- Before: `redesign/before/` (full pages at the four widths) and `redesign/before/regions/` (the areas the audit cites).
+- After: `redesign/after/` (every page at the four widths).
+- Interaction states: `redesign/states/`. These cover validation errors, inline error, loading, failed delivery, confirmation, mobile menu, hover, keyboard focus, highlight filter, FAQ open, placeholder frames and 404.
+
+Key pages, before and after:
+
+| Page | Before | After |
+|---|---|---|
+| Home, desktop | `before/home-1440-part1.png` to `part3` | `after/home-1440-part1.png` to `part3` |
+| Home, phone | `before/home-375-part1.png` to `part4` | `after/home-375-part1.png` to `part4` |
+| Home, tablet | `before/home-768-part1.png` to `part4` | `after/home-768-part1.png` to `part3` |
+| Booking, desktop | `before/book-1440.png` | `after/book-1440.png` |
+| Booking, phone | `before/book-375.png` | `after/book-375.png` |
+
+All captures are at 2x. Long pages are split into 4,000 px tiles (`-partN`), because Chrome cannot capture more than 16,384 device pixels in one image.
+
+## Scores
+
+Lighthouse 12, mobile, on a local production build. Figures are the median of three runs; any run taken while the machine was busy (CPU benchmark under 600) was repeated.
+
+| Page | Performance | Accessibility | Best practices | SEO | LCP | CLS | TBT |
+|---|---|---|---|---|---|---|---|
+| Home, before | 61 | 100 | 100 | 91 | 6.8 s | 0 | 440 ms |
+| Booking, before | 90 | 100 | 100 | 91 | 2.6 s | 0 | 230 ms |
+| Home | 81 | 100 | 100 | 100 | 2.9 s | 0 | 550 ms |
+| Product | 86 | 100 | 100 | 100 | 2.5 s | 0 | 450 ms |
+| How it works | 90 | 100 | 100 | 100 | 2.6 s | 0 | 310 ms |
+| Security | 87 | 100 | 100 | 100 | 1.7 s | 0 | 520 ms |
+| Company | 79 | 100 | 100 | 100 | 2.6 s | 0 | 710 ms |
+| Booking | 81 | 100 | 100 | 100 | 2.7 s | 0 | 600 ms |
+| Privacy | 82 | 100 | 100 | 100 | 1.9 s | 0 | 700 ms |
+| Terms | 84 | 100 | 100 | 100 | 1.5 s | 0 | 660 ms |
+
+axe-core (WCAG 2.2 A and AA plus best practice) found zero serious or critical issues on all eight pages at 375 and 1280.
+
+**Accessibility, best practices and SEO meet the targets (95, 95, 100) on every page. Performance does not: only How it works reaches 90 in this measurement.** What that means:
+
+- **Content is fast.** LCP is 1.5 to 2.9 s, against 6.8 s before, and nothing shifts (CLS 0 everywhere; it was 0.037 on Booking).
+- **The score is held down by script time (TBT), not content.** Even Privacy, which is plain text, spends up to 700 ms on it. Most of that is the React and Next.js runtime present on every App Router page.
+- **This machine measures poorly.** Its CPU benchmark is 680 to 870 against the roughly 1,500 or more Lighthouse's four-times slowdown assumes. The same page varied by up to 14 points between runs, and runs in quieter moments reached 92 to 97 on the inner pages.
+- **The honest verdict needs the real host.** Run PageSpeed Insights on the deployed site, or a preview deployment, before treating the performance target as met or missed.
+
+Performance work already done:
+- one server-rendered layout instead of two
+- no photographs
+- the workflow interactive loads as it nears the viewport
+- below-the-fold homepage sections skip layout until needed
+- only the booking link prefetches
+- only the Latin font file is preloaded
+- a width-matched fallback font for headings, so they don't shift
+
+The next lever is fewer client components per page. The mobile menu, header button and click tracker could become one small script.
+
+
+## Placeholders waiting on a real asset or fact
+
+| Where | What it needs |
+|---|---|
+| Home "One place to run the company from", and `/product` command center | Product screen: command center overview (16:10) |
+| `/product` departments | Product screen: department view (16:10) |
+| `/product` AI agents | Product screen: agents and their permissions (16:10) |
+| `/product` approvals | Product screen: approvals queue (16:10) |
+| `/product` intro | Product tour video (16:9). When it exists, rename the secondary action to "Watch the product tour" in `lib/site.ts` |
+| Home hero (`components/home/CommandCenter.tsx`) | An HTML illustration with example data. Check it against the real command center, or swap in a real screen |
+| Home and `/security` audit trail (`components/ActivityLog.tsx`) | An illustration with example data. Check it against the real audit log |
+| `/company` "Who you will work with" | Team profiles, location, contact, legal entity |
+| Footer | Contact email, legal entity and registered address (removed until supplied) |
+| `/privacy`, `/terms` | Drafts marked as awaiting legal review. They need your entity and contact details, and a lawyer's read, before launch |
+
+To add a screen, put the image in `public/product/` and pass `src="/product/<file>"` and `alt` to the matching `MediaFrame`.
+
+## Open decisions
+
+1. **Before launch: lead delivery.** Set up Resend with a verified sending domain, then add `RESEND_API_KEY`, `LEAD_FROM_EMAIL` (for example audits@devista.ai) and `LEAD_TO_EMAIL` to the host's environment. Until then the form shows its failure message: it never pretends.
+2. **Claims table.** `CHECKPOINT-1.md` section 5 is still unmarked. The Security page now lists the questions answered in writing, not practices. Once you confirm hosting, encryption, SSO, retention or named integrations, they can be stated there.
+3. **Audit format.** The drafted format (30-minute intro, two 90-minute sessions, 60-minute readout, about two weeks) is on the site. Confirm it or adjust it in `lib/content.ts`.
+4. **Commitments in the copy.** Confirm these three:
+   - "We reply within one working day."
+   - "No access to your systems is needed" for the audit.
+   - The FAQ promise that the proposal sets out in writing what you own and how your data is handled if you leave.
+5. **Analytics.** Vercel Web Analytics loads only when hosted on Vercel. The custom events (`cta_click`, `form_start`, `form_submit`, `form_error`) need a Vercel plan that includes custom events.
+6. **Site URL.** Canonical URLs, the sitemap and Open Graph links use `https://devista.ai`. Set `NEXT_PUBLIC_SITE_URL` if production lives elsewhere.
+7. **Archive.** The generated v2 artboards, the canvas-era booking page and the stock photos are in `.unlazy/retired-2026-09-29/` (gitignored). Tell me if and when to delete them.
+
+## What I would do next
+
+1. Add the real product screens and the tour video. They are the strongest proof the site can carry.
+2. After deploying, measure with PageSpeed Insights on the real host. Local Lighthouse on this machine runs on a slow CPU (benchmark index about 1,000 against the roughly 1,500 or more it calibrates for) and varies by up to 14 points between runs.
+3. Mark the claims table, then give the Security page concrete answers for the IT lead.
+4. Send the requester an automatic acknowledgement email from the same Resend setup.
+5. Add bot protection such as Cloudflare Turnstile if spam appears. The hidden honeypot field is the only guard today.
+6. Render the Open Graph images in Instrument Sans (they use the default font now).
+
+## How the work was verified
+
+The gate checks live in `.unlazy/redesign-2026-09-29/checks/` (local, gitignored). Each runs against a production build (`next build` then `next start`):
+
+- **`render`:** no horizontal scroll or element wider than the viewport, exactly one `h1` and one `main`, no console errors, and the header call to action visible, on every page at four widths.
+- **`copy`:** no em dashes, banned words, arrows, bracketed placeholders or Title Case labels.
+- **`claims`:** no certifications, security specifics, named integrations, percentages, prices, customer proof or headcount pitch.
+- **`axe-gate`:** zero serious or critical WCAG 2.2 AA issues at 375 and 1280.
+- **`seo`:** unique title and description, canonical URL, Open Graph image returning a PNG, JSON-LD, sitemap, and robots rules that allow indexing.
+- **`interactive`:** tabs, Home, End and the highlight toggles work by keyboard at 375 and 1280.
+- **`flow`:** the booking flow runs against a mock Resend. It checks the empty-submit summary, inline errors, the loading state, a failed delivery that must not confirm, and a successful delivery whose email contains every field.
+- **`lead-unit`:** server validation of each field, and a delivery with no configuration must fail.
+- **`tokens`:** no raw colour or size outside the token files.
+- **`lighthouse`:** mobile, median of three runs per page.

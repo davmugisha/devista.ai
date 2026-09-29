@@ -124,6 +124,21 @@
   --animate-spin: spin 800ms linear infinite;
 }
 
+/*
+ * Headings use Instrument Sans at 88% width. next/font's generated fallback matches the normal
+ * width, so headings would wrap differently until the font loads and shift the layout. This
+ * fallback is Arial scaled to the measured width of the condensed cut (0.84), with the vertical
+ * metrics rescaled to keep the same baseline.
+ */
+@font-face {
+  font-family: "Instrument Sans Condensed Fallback";
+  src: local("Arial");
+  size-adjust: 84%;
+  ascent-override: 115.5%;
+  descent-override: 29.8%;
+  line-gap-override: 0%;
+}
+
 @keyframes spin {
   to { transform: rotate(360deg); }
 }
@@ -152,13 +167,15 @@
   }
 
   /* Display headings use the semi-condensed cut of Instrument Sans. */
-  h1, h2, h3 {
+  h1, h2, h3, .wdth-display {
+    /* "Instrument Sans" is the family name next/font registers for the variable --font-instrument. */
+    font-family: "Instrument Sans", "Instrument Sans Condensed Fallback", Arial, sans-serif;
     font-variation-settings: "wdth" 88;
-    text-wrap: balance;
   }
 
-  p {
-    text-wrap: pretty;
+  /* Balanced wrapping costs extra layout passes, so only the few large headings get it. */
+  h1, h2 {
+    text-wrap: balance;
   }
 
   :focus-visible {
@@ -181,4 +198,6 @@
   .tabular { font-variant-numeric: tabular-nums; }
   .wdth-display { font-variation-settings: "wdth" 88; }
   .wdth-normal { font-variation-settings: "wdth" 100; }
+  /* Below-the-fold sections skip layout and paint until they near the viewport. */
+  .defer-render { content-visibility: auto; contain-intrinsic-size: auto 50rem; }
 }

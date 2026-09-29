@@ -1,0 +1,233 @@
+[
+  {
+    "route": "/",
+    "performance": 81,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 100,
+    "benchmark": 837,
+    "lcp": "2.9 s",
+    "cls": "0",
+    "tbt": "550 ms",
+    "failing": [
+      "largest-contentful-paint",
+      "total-blocking-time",
+      "max-potential-fid",
+      "mainthread-work-breakdown",
+      "largest-contentful-paint-element",
+      "render-blocking-resources",
+      "unused-javascript",
+      "legacy-javascript",
+      "forced-reflow-insight",
+      "legacy-javascript-insight",
+      "network-dependency-tree-insight",
+      "render-blocking-insight"
+    ],
+    "runs": [
+      77,
+      81,
+      87
+    ]
+  },
+  {
+    "route": "/product",
+    "performance": 86,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 100,
+    "benchmark": 680,
+    "lcp": "2.5 s",
+    "cls": "0",
+    "tbt": "450 ms",
+    "failing": [
+      "largest-contentful-paint",
+      "total-blocking-time",
+      "max-potential-fid",
+      "largest-contentful-paint-element",
+      "render-blocking-resources",
+      "unused-javascript",
+      "legacy-javascript",
+      "forced-reflow-insight",
+      "legacy-javascript-insight",
+      "network-dependency-tree-insight",
+      "render-blocking-insight"
+    ],
+    "runs": [
+      83,
+      86,
+      88
+    ]
+  },
+  {
+    "route": "/how-it-works",
+    "performance": 90,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 100,
+    "benchmark": 823,
+    "lcp": "2.6 s",
+    "cls": "0",
+    "tbt": "310 ms",
+    "failing": [
+      "largest-contentful-paint",
+      "total-blocking-time",
+      "max-potential-fid",
+      "largest-contentful-paint-element",
+      "render-blocking-resources",
+      "unused-javascript",
+      "legacy-javascript",
+      "forced-reflow-insight",
+      "legacy-javascript-insight",
+      "network-dependency-tree-insight",
+      "render-blocking-insight"
+    ],
+    "runs": [
+      85,
+      90,
+      92
+    ]
+  },
+  {
+    "route": "/security",
+    "performance": 87,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 100,
+    "benchmark": 761,
+    "lcp": "1.7 s",
+    "cls": "0",
+    "tbt": "520 ms",
+    "failing": [
+      "total-blocking-time",
+      "max-potential-fid",
+      "mainthread-work-breakdown",
+      "render-blocking-resources",
+      "unused-javascript",
+      "legacy-javascript",
+      "forced-reflow-insight",
+      "legacy-javascript-insight",
+      "network-dependency-tree-insight",
+      "render-blocking-insight"
+    ],
+    "runs": [
+      84,
+      87,
+      95
+    ]
+  },
+  {
+    "route": "/company",
+    "performance": 79,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 100,
+    "benchmark": 727,
+    "lcp": "2.6 s",
+    "cls": "0",
+    "tbt": "710 ms",
+    "failing": [
+      "largest-contentful-paint",
+      "total-blocking-time",
+      "max-potential-fid",
+      "mainthread-work-breakdown",
+      "largest-contentful-paint-element",
+      "render-blocking-resources",
+      "unused-javascript",
+      "legacy-javascript",
+      "forced-reflow-insight",
+      "legacy-javascript-insight",
+      "network-dependency-tree-insight",
+      "render-blocking-insight"
+    ],
+    "runs": [
+      78,
+      79,
+      89
+    ]
+  },
+  {
+    "route": "/book",
+    "performance": 81,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 100,
+    "benchmark": 675,
+    "lcp": "2.7 s",
+    "cls": "0",
+    "tbt": "600 ms",
+    "failing": [
+      "largest-contentful-paint",
+      "total-blocking-time",
+      "max-potential-fid",
+      "mainthread-work-breakdown",
+      "largest-contentful-paint-element",
+      "render-blocking-resources",
+      "unused-javascript",
+      "legacy-javascript",
+      "forced-reflow-insight",
+      "legacy-javascript-insight",
+      "network-dependency-tree-insight",
+      "render-blocking-insight"
+    ],
+    "runs": [
+      80,
+      81,
+      81
+    ]
+  },
+  {
+    "route": "/privacy",
+    "performance": 82,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 100,
+    "benchmark": 743,
+    "lcp": "1.9 s",
+    "cls": "0",
+    "tbt": "700 ms",
+    "failing": [
+      "total-blocking-time",
+      "max-potential-fid",
+      "mainthread-work-breakdown",
+      "render-blocking-resources",
+      "unused-javascript",
+      "legacy-javascript",
+      "forced-reflow-insight",
+      "legacy-javascript-insight",
+      "network-dependency-tree-insight",
+      "render-blocking-insight"
+    ],
+    "runs": [
+      79,
+      82,
+      82
+    ]
+  },
+  {
+    "route": "/terms",
+    "performance": 84,
+    "accessibility": 100,
+    "bestPractices": 100,
+    "seo": 100,
+    "benchmark": 873,
+    "lcp": "1.5 s",
+    "cls": "0",
+    "tbt": "660 ms",
+    "failing": [
+      "total-blocking-time",
+      "max-potential-fid",
+      "mainthread-work-breakdown",
+      "render-blocking-resources",
+      "unused-javascript",
+      "legacy-javascript",
+      "legacy-javascript-insight",
+      "network-dependency-tree-insight",
+      "render-blocking-insight"
+    ],
+    "runs": [
+      78,
+      84,
+      87
+    ]
+  }
+]

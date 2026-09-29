@@ -60,10 +60,13 @@ export const PRODUCT_PARTS = [
   { title: 'Approvals', detail: 'One queue for every decision that needs a person, with the context to decide quickly.' },
 ] as const;
 
+/** The homepage shows the eight objections from the brief; deeper pages pick others by question. */
+export const HOME_FAQ_EXCLUDE = new Set(['How do we bring our teams along?', 'You are a young company. What if you disappear?']);
+
 export const FAQ = [
   {
     q: 'Will this replace our staff?',
-    a: 'No. Devista moves repetitive work between systems to agents so your people spend their time on judgment, relationships and decisions. We never scope a project around cutting headcount.',
+    a: 'No. Devista moves repetitive work between systems to agents so your people spend their time on judgment, relationships and decisions. We never scope a project around cutting headcount. The people who do the work help map it during the audit and decide which steps agents take on, so nothing changes without them.',
   },
   {
     q: 'How do we bring our teams along?',
