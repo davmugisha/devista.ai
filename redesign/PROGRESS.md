@@ -47,7 +47,7 @@ Branch: `redesign/operations-audit`. Not merged, pushed or deployed.
 
 ## Open
 
-- **Performance target:** Lighthouse performance is 79 to 90 on this machine, against a target of 90. Accessibility, best practices and SEO meet their targets on every page. The machine's CPU benchmark is low and runs vary by up to 14 points, so the verdict needs PageSpeed Insights on a deployed preview (see `HANDOFF.md`, Scores).
+- **Performance target:** met on 7 of 8 pages (91 to 95) in the final run. The homepage is at 87 against 90. See `HANDOFF.md`, Scores.
 - **Needs the owner:**
   - Resend key and inbox
   - the claims table

@@ -45,23 +45,24 @@ Lighthouse 12, mobile, on a local production build. Figures are the median of th
 |---|---|---|---|---|---|---|---|
 | Home, before | 61 | 100 | 100 | 91 | 6.8 s | 0 | 440 ms |
 | Booking, before | 90 | 100 | 100 | 91 | 2.6 s | 0 | 230 ms |
-| Home | 81 | 100 | 100 | 100 | 2.9 s | 0 | 550 ms |
-| Product | 86 | 100 | 100 | 100 | 2.5 s | 0 | 450 ms |
-| How it works | 90 | 100 | 100 | 100 | 2.6 s | 0 | 310 ms |
-| Security | 87 | 100 | 100 | 100 | 1.7 s | 0 | 520 ms |
-| Company | 79 | 100 | 100 | 100 | 2.6 s | 0 | 710 ms |
-| Booking | 81 | 100 | 100 | 100 | 2.7 s | 0 | 600 ms |
-| Privacy | 82 | 100 | 100 | 100 | 1.9 s | 0 | 700 ms |
-| Terms | 84 | 100 | 100 | 100 | 1.5 s | 0 | 660 ms |
+| Home | 87 | 100 | 100 | 100 | 2.9 s | 0 | 340 ms |
+| Product | 93 | 100 | 100 | 100 | 2.5 s | 0 | 190 ms |
+| How it works | 93 | 100 | 100 | 100 | 2.5 s | 0 | 170 ms |
+| Security | 91 | 100 | 100 | 100 | 2.6 s | 0 | 230 ms |
+| Company | 93 | 100 | 100 | 100 | 2.6 s | 0 | 220 ms |
+| Booking | 94 | 100 | 100 | 100 | 2.4 s | 0 | 180 ms |
+| Privacy | 94 | 100 | 100 | 100 | 2.4 s | 0 | 210 ms |
+| Terms | 95 | 100 | 100 | 100 | 2.4 s | 0 | 190 ms |
+
+Final run on the committed code (`c759edc`), with the machine's CPU benchmark between 888 and 1,331. The per-run figures are in `redesign/after/lighthouse.json`.
 
 axe-core (WCAG 2.2 A and AA plus best practice) found zero serious or critical issues on all eight pages at 375 and 1280.
 
-**Accessibility, best practices and SEO meet the targets (95, 95, 100) on every page. Performance does not: only How it works reaches 90 in this measurement.** What that means:
+**Seven of eight pages meet every target: performance 90 or more, accessibility 95, best practices 95, SEO 100. The homepage misses performance at 87** (runs of 85, 87 and 87). What that means:
 
-- **Content is fast.** LCP is 1.5 to 2.9 s, against 6.8 s before, and nothing shifts (CLS 0 everywhere; it was 0.037 on Booking).
-- **The score is held down by script time (TBT), not content.** Even Privacy, which is plain text, spends up to 700 ms on it. Most of that is the React and Next.js runtime present on every App Router page.
-- **This machine measures poorly.** Its CPU benchmark is 680 to 870 against the roughly 1,500 or more Lighthouse's four-times slowdown assumes. The same page varied by up to 14 points between runs, and runs in quieter moments reached 92 to 97 on the inner pages.
-- **The honest verdict needs the real host.** Run PageSpeed Insights on the deployed site, or a preview deployment, before treating the performance target as met or missed.
+- **Content is fast.** LCP is 2.4 to 2.9 s, against 6.8 s before, and nothing shifts (CLS 0 everywhere; it was 0.037 on Booking).
+- **The homepage carries the most script time.** Its TBT is 340 ms against about 200 ms on the other pages. It is the longest page, so it has the largest document to parse and the most elements for React to hydrate.
+- **This machine measures inconsistently.** Earlier runs, taken while the machine was busy (CPU benchmark 680 to 870), put every page 5 to 15 points lower. Confirm the final figures with PageSpeed Insights on the deployed site or a preview deployment.
 
 Performance work already done:
 - one server-rendered layout instead of two
