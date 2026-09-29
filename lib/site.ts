@@ -5,7 +5,7 @@ export const SITE = {
   shortName: 'Devista',
   url: (process.env.NEXT_PUBLIC_SITE_URL || 'https://devista.ai').replace(/\/$/, ''),
   description:
-    'Devista is a business operating system that connects the tools, teams and data a company already runs, with AI agents doing the work between them and people approving what matters.',
+    'Devista connects the tools, teams and data your company already runs into one operating layer, where AI agents handle the handoffs and people approve what matters.',
 } as const;
 
 export const CTA = {

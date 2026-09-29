@@ -1,8 +1,8 @@
 import Link from 'next/link';
-import { ButtonLink } from './Button';
+import { HeaderCta } from './HeaderCta';
 import { Logo } from './Logo';
 import { MobileMenu } from './MobileMenu';
-import { CTA, NAV } from '@/lib/site';
+import { NAV } from '@/lib/site';
 
 export function Header() {
   return (
@@ -30,9 +30,7 @@ export function Header() {
           </ul>
         </nav>
         <div className="ml-auto flex items-center gap-2">
-          <ButtonLink href={CTA.book.href} size="sm" track="header" className="md:h-11 md:px-4">
-            {CTA.book.label}
-          </ButtonLink>
+          <HeaderCta />
           <MobileMenu />
         </div>
       </div>

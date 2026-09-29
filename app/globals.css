@@ -121,6 +121,11 @@
   --ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);
 
   --animate-arrive: arrive 240ms var(--ease-out) backwards;
+  --animate-spin: spin 800ms linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }
 
 @keyframes arrive {
