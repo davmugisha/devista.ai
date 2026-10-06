@@ -1,0 +1,48 @@
+# saydeed.com on the VPS, served by the Traefik that already runs there (/docker/traefik: Docker
+# provider, Let's Encrypt resolver "letsencrypt", http redirected to https). deploy/deploy.sh copies
+# this file to /docker/saydeed and the source to /docker/saydeed/src.
+name: saydeed
+
+services:
+  web:
+    build:
+      context: ./src
+      dockerfile: deploy/Dockerfile
+      args:
+        NEXT_PUBLIC_SITE_URL: https://saydeed.com
+    image: saydeed-web:latest
+    container_name: saydeed-web
+    restart: unless-stopped
+    # Optional runtime settings, such as the Google Calendar booking keys from .env.example.
+    env_file:
+      - path: ./.env
+        required: false
+    # Email updates signups are written to /docker/saydeed/data/subscribers.csv on the server.
+    environment:
+      SUBSCRIBERS_FILE: /app/data/subscribers.csv
+    volumes:
+      - ./data:/app/data
+    labels:
+      - traefik.enable=true
+      - traefik.http.services.saydeed.loadbalancer.server.port=3000
+      - traefik.http.routers.saydeed.rule=Host(`saydeed.com`)
+      - traefik.http.routers.saydeed.entrypoints=websecure
+      - traefik.http.routers.saydeed.tls.certresolver=letsencrypt
+      - traefik.http.routers.saydeed.service=saydeed
+      # www.saydeed.com gets its own certificate and a permanent redirect to the bare domain.
+      - traefik.http.routers.saydeed-www.rule=Host(`www.saydeed.com`)
+      - traefik.http.routers.saydeed-www.entrypoints=websecure
+      - traefik.http.routers.saydeed-www.tls.certresolver=letsencrypt
+      - traefik.http.routers.saydeed-www.middlewares=saydeed-to-apex
+      - traefik.http.routers.saydeed-www.service=saydeed
+      - traefik.http.middlewares.saydeed-to-apex.redirectregex.regex=^https?://www\.saydeed\.com/(.*)
+      - traefik.http.middlewares.saydeed-to-apex.redirectregex.replacement=https://saydeed.com/$${1}
+      - traefik.http.middlewares.saydeed-to-apex.redirectregex.permanent=true
+      # A preview address on the server's own Hostinger domain, which already resolves here. It works
+      # before saydeed.com's DNS does, and asks search engines not to index it.
+      - traefik.http.routers.saydeed-preview.rule=Host(`saydeed.srv2035906.hstgr.cloud`)
+      - traefik.http.routers.saydeed-preview.entrypoints=websecure
+      - traefik.http.routers.saydeed-preview.tls.certresolver=letsencrypt
+      - traefik.http.routers.saydeed-preview.middlewares=saydeed-noindex
+      - traefik.http.routers.saydeed-preview.service=saydeed
+      - traefik.http.middlewares.saydeed-noindex.headers.customresponseheaders.X-Robots-Tag=noindex, nofollow

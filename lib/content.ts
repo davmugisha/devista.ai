@@ -1,5 +1,6 @@
 // Copy shared between the homepage and the deeper pages, so each fact is stated once.
 // Only claims the owner confirmed as live appear here (see redesign/CHECKPOINT-1.md).
+import { SITE } from './site';
 
 export const AUDIT = {
   facts: [
@@ -50,7 +51,7 @@ export const CONTROLS = [
   { title: 'Policies', detail: 'Rules agents must follow, such as spending thresholds and approved suppliers.' },
   { title: 'Escalation', detail: 'Anything outside the rules goes to the person you name, with the context attached.' },
   { title: 'Audit trail', detail: 'Every action by a person or an agent is recorded: what happened, when, and on whose authority.' },
-  { title: 'Your existing systems', detail: 'Devista works through the tools you already run. It does not replace them.' },
+  { title: 'Your existing systems', detail: `${SITE.shortName} works through the tools you already run. It does not replace them.` },
 ] as const;
 
 export const PRODUCT_PARTS = [
@@ -66,7 +67,7 @@ export const HOME_FAQ_EXCLUDE = new Set(['How do we bring our teams along?', 'Yo
 export const FAQ = [
   {
     q: 'Will this replace our staff?',
-    a: 'No. Devista moves repetitive work between systems to agents so your people spend their time on judgment, relationships and decisions. We never scope a project around cutting headcount. The people who do the work help map it during the audit and decide which steps agents take on, so nothing changes without them.',
+    a: `No. ${SITE.shortName} moves repetitive work between systems to agents so your people spend their time on judgment, relationships and decisions. We never scope a project around cutting headcount. The people who do the work help map it during the audit and decide which steps agents take on, so nothing changes without them.`,
   },
   {
     q: 'How do we bring our teams along?',
@@ -74,7 +75,7 @@ export const FAQ = [
   },
   {
     q: 'Do we have to replace the software we already use?',
-    a: 'No. Devista connects the systems you run today. Where a tool cannot do the job, we say so and recommend an alternative, and the decision stays yours.',
+    a: `No. ${SITE.shortName} connects the systems you run today. Where a tool cannot do the job, we say so and recommend an alternative, and the decision stays yours.`,
   },
   {
     q: 'How is our data kept safe?',
@@ -98,10 +99,10 @@ export const FAQ = [
   },
   {
     q: 'You are a young company. What if you disappear?',
-    a: 'It is a fair question for any new vendor. Before any build starts, the proposal sets out in writing what you own and how your data and configuration are handled if you stop using Devista.',
+    a: `It is a fair question for any new vendor. Before any build starts, the proposal sets out in writing what you own and how your data and configuration are handled if you stop using ${SITE.shortName}.`,
   },
   {
-    q: 'Is Devista right for a company like ours?',
-    a: 'It fits established companies with several departments and years of accumulated tools and workflows. If you are starting a new business and want to build it on Devista from day one, mention it when you book and we will tell you honestly whether it fits.',
+    q: `Is ${SITE.shortName} right for a company like ours?`,
+    a: `It fits established companies with several departments and years of accumulated tools and workflows. If you are starting a new business and want to build it on ${SITE.shortName} from day one, mention it when you book and we will tell you honestly whether it fits.`,
   },
 ] as const;

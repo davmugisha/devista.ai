@@ -34,7 +34,7 @@ export function MobileMenu() {
         aria-expanded={open}
         aria-controls={id}
         onClick={() => setOpen((o) => !o)}
-        className="inline-flex size-11 items-center justify-center rounded-control text-ink hover:bg-mist"
+        className="inline-flex size-11 items-center justify-center rounded-control text-ink hover:bg-panel"
       >
         <span className="sr-only">{open ? 'Close menu' : 'Open menu'}</span>
         <svg viewBox="0 0 20 20" aria-hidden="true" className="size-5" fill="none" stroke="currentColor" strokeWidth="1.6">
@@ -45,7 +45,7 @@ export function MobileMenu() {
         id={id}
         aria-label="Main"
         hidden={!open}
-        className="absolute inset-x-0 top-full border-b border-rule bg-paper shadow-float animate-arrive motion-reduce:animate-none"
+        className="absolute inset-x-0 top-full border-b border-rule bg-paper shadow-float animate-arrive"
       >
         <ul className="mx-auto flex max-w-page flex-col px-4 py-2 md:px-8">
           {NAV.map((item) => (
@@ -54,7 +54,7 @@ export function MobileMenu() {
                 href={item.href}
                 prefetch={false}
                 aria-current={pathname === item.href ? 'page' : undefined}
-                className="flex h-12 items-center text-md font-medium text-ink aria-[current=page]:text-signal"
+                className="flex h-12 items-center text-md font-medium text-ink aria-[current=page]:text-signal-bright"
               >
                 {item.label}
               </Link>

@@ -1,0 +1,7 @@
+[Unit]
+Description=Request the saydeed.com certificate again once DNS points at this server
+After=docker.service
+
+[Service]
+Type=oneshot
+ExecStart=/bin/sh /docker/saydeed/cert-retry.sh

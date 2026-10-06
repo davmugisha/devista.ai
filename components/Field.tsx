@@ -1,9 +1,8 @@
 import type { ReactNode } from 'react';
 
 const control =
-  'block w-full rounded-control border bg-paper px-3 text-base text-ink transition-colors duration-150 ' +
-  'placeholder:text-slate hover:border-ink focus-visible:border-signal disabled:bg-mist disabled:text-graphite ' +
-  'motion-reduce:transition-none';
+  'block w-full rounded-control border bg-panel px-4 text-base text-ink transition-colors duration-150 ' +
+  'placeholder:text-slate hover:border-graphite focus-visible:border-signal-bright disabled:bg-mist disabled:text-graphite';
 
 export function controlClass(invalid: boolean, extra = '') {
   return `${control} ${invalid ? 'border-alert' : 'border-rule-strong'} ${extra}`;

@@ -11,13 +11,23 @@ Branch `redesign/operations-audit`. Not merged, pushed or deployed: those are yo
 | Invented figures (44 agents, 10/30/60%, 318 tasks, a $274,560 calculator), a 16-logo integration strip, bracketed placeholders, dead Privacy and Terms links | No statistic, logo, certification or price anywhere. A claims gate checks every page. Illustrations carry an "example data" caption | A skeptical referral visitor finds nothing to disprove |
 | A 15-minute call promising three documents in 48 hours | A free operations audit: intro call, two working sessions, readout, about two weeks, one department, named deliverables | Concrete and credible for a company-wide decision |
 | One 12,000 px page, "Solution" and "How To" navigation, no Security or Company page | Product, How it works, Security and Company pages, plus `/book`, Privacy and Terms. The homepage answers one buyer question per section | The IT lead and the skeptic each have a page to go to |
-| Stock photos in the hero and throughout | An HTML rendering of the command center, and labelled frames at 16:10 and 16:9 for the real screens and the product tour | Shows the product, not people high-fiving |
+| Stock photos in the hero and throughout | HTML renderings of the product with example data: command center, approvals queue, department view, agent permissions and audit trail. Also a systems-and-handoffs diagram and previews of the audit deliverables. Only the product tour keeps a labelled 16:9 frame | Shows the product, not people high-fiving |
 | Desktop and phone layouts both sent to every visitor, all client-rendered, 492 KB JPEGs | One responsive, server-rendered layout. JavaScript only for the menu, the form and the workflow interactive, which loads as it nears the viewport | Homepage LCP down from 6.8 s (see scores) |
 | At 768 px, the phone layout stretched across a tablet screen | Fluid layout checked at 375, 768, 1280 and 1440 | iPads look designed |
 | No description, canonical URL, Open Graph image, sitemap or robots rules | All of those on every page, plus Organization structured data. Previews are noindexed on Vercel | Shared links show a proper preview |
 | Five names for one action ("Book Free Call", "Book call", "Book a free audit") | "Book an operations audit" everywhere | The visitor always knows what the button does |
 
 **The signature moment** is "People command. AI executes. Every step has an owner." You pick Finance, Sales, Operations or Support and see one example workflow step by step. Each step says who does it: a person, AI-assisted work, or an agent under your rules. It also shows where the approval gate sits and what escalates, and to whom. It works fully by keyboard and is readable on a phone.
+
+**The visual pass.** After review, the first build read as text-heavy and wireframe-like. Lists and grey frames stood in for the product. The pages now show the product instead:
+
+- **Home, problem:** a diagram of five everyday systems (CRM, ERP, accounting, help desk, spreadsheets). "Today", people carry the work across each gap. "With Devista", agents carry it and people approve.
+- **Home and `/product`:** the approvals queue (why an agent stopped, what happens next, Approve and Send back) and a department view (workflows, owners, people and agents).
+- **Home and `/security`:** one dark band for control. It shows an agent's written permissions (can do, needs approval, never allowed) beside the audit trail.
+- **Home and `/book`:** the audit deliverables as documents (workflow map, tool review, work allocation) rather than bullet points.
+- **Home and `/how-it-works`:** the six stages as a numbered path, then the order in which departments follow.
+
+Every rendering is labelled "example data". Departments and agents appear only as examples, as agreed at Checkpoint 1. The renderings are one shared `Window` frame (`components/screens/`), built from tokens, so they stay sharp at any size and cost almost nothing to load.
 
 ## Screenshots
 
@@ -80,18 +90,13 @@ The next lever is fewer client components per page. The mobile menu, header butt
 
 | Where | What it needs |
 |---|---|
-| Home "One place to run the company from", and `/product` command center | Product screen: command center overview (16:10) |
-| `/product` departments | Product screen: department view (16:10) |
-| `/product` AI agents | Product screen: agents and their permissions (16:10) |
-| `/product` approvals | Product screen: approvals queue (16:10) |
-| `/product` intro | Product tour video (16:9). When it exists, rename the secondary action to "Watch the product tour" in `lib/site.ts` |
-| Home hero (`components/home/CommandCenter.tsx`) | An HTML illustration with example data. Check it against the real command center, or swap in a real screen |
-| Home and `/security` audit trail (`components/ActivityLog.tsx`) | An illustration with example data. Check it against the real audit log |
+| `/product` "Product tour." | Product tour video (16:9). When it exists, pass `src` to the `MediaFrame` there and rename the secondary action to "Watch the product tour" in `lib/site.ts` |
+| Command center (`components/home/CommandCenter.tsx`), approvals queue, department view and agent permissions (`components/screens/`), audit trail (`components/ActivityLog.tsx`) | HTML illustrations with example data. Check each against the real product: labels, states and actions should match what a customer will see |
 | `/company` "Who you will work with" | Team profiles, location, contact, legal entity |
 | Footer | Contact email, legal entity and registered address (removed until supplied) |
 | `/privacy`, `/terms` | Drafts marked as awaiting legal review. They need your entity and contact details, and a lawyer's read, before launch |
 
-To add a screen, put the image in `public/product/` and pass `src="/product/<file>"` and `alt` to the matching `MediaFrame`.
+If you would rather show real screenshots, put the image in `public/product/` and replace the rendering with a `MediaFrame` that has `src="/product/<file>"` and `alt`. Keep the renderings wherever the real screen holds customer data.
 
 ## Open decisions
 
@@ -108,7 +113,7 @@ To add a screen, put the image in `public/product/` and pass `src="/product/<fil
 
 ## What I would do next
 
-1. Add the real product screens and the tour video. They are the strongest proof the site can carry.
+1. Check the renderings against the real product, and record the tour video. Seeing the product is the strongest proof the site can offer.
 2. After deploying, measure with PageSpeed Insights on the real host. Local Lighthouse on this machine runs on a slow CPU (benchmark index about 1,000 against the roughly 1,500 or more it calibrates for) and varies by up to 14 points between runs.
 3. Mark the claims table, then give the Security page concrete answers for the IT lead.
 4. Send the requester an automatic acknowledgement email from the same Resend setup.
@@ -128,4 +133,5 @@ The gate checks live in `.unlazy/redesign-2026-09-29/checks/` (local, gitignored
 - **`flow`:** the booking flow runs against a mock Resend. It checks the empty-submit summary, inline errors, the loading state, a failed delivery that must not confirm, and a successful delivery whose email contains every field.
 - **`lead-unit`:** server validation of each field, and a delivery with no configuration must fail.
 - **`tokens`:** no raw colour or size outside the token files.
+- **`spacing`:** every spacing class exists in the token scale. With Tailwind's defaults cleared, an undefined one such as `mt-14` is silently dropped.
 - **`lighthouse`:** mobile, median of three runs per page.

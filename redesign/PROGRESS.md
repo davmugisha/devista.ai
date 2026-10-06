@@ -33,6 +33,15 @@ Branch: `redesign/operations-audit`. Not merged, pushed or deployed.
     - a width-matched fallback font for headings
     - the homepage FAQ now covers the brief's eight objections
 - **Phase 5, handoff:** `HANDOFF.md` and the "Marketing site rules" section in `CLAUDE.md`.
+- **Visual pass (after owner review, 2026-09-29):** the owner found the build text-heavy and "low level" and chose "rich product visuals". Changes:
+  - product renderings in one shared `Window` frame: approvals queue, department view, agent permissions
+  - a systems-and-handoffs diagram for the problem section
+  - the audit deliverables as documents
+  - the six stages as a numbered path, with the department order
+  - one dark band for control
+  - larger section headings and varied layouts (split, stepped, sticky FAQ column)
+  - no people on the site until the owner supplies photos
+  - a new `spacing` check, after an undefined `mt-14` was silently dropped
 
 ## Defaults I caught myself reaching for (kept out of the build)
 
@@ -44,6 +53,10 @@ Branch: `redesign/operations-audit`. Not merged, pushed or deployed.
 - **Headline breaking mid-thought:** the side-by-side hero broke the headline as "work. The". It now spans the full width.
 - **Grids of identical cards:** replaced by the ruled `ItemList` everywhere.
 - **Skipping every section below the fold:** that caused layout shift on short inner pages. Now used only on homepage sections well below the fold.
+- **Restraint read as emptiness:** the first build removed invented proof and put text lists and grey frames in its place. It was honest, but the page showed nothing. Renderings with example data show the product without claiming anything.
+- **Overlapping product windows:** a stepped overlap hid the Approve button. The windows now step without covering each other.
+- **The checkbox glyph, again:** an outlined square slipped back into the approvals queue. It is now the amber hold dot.
+- **A horizontal diagram at tablet width:** five systems and four handoffs overflowed at 768. The diagram goes horizontal only from 1024.
 
 ## Open
 
@@ -54,3 +67,20 @@ Branch: `redesign/operations-audit`. Not merged, pushed or deployed.
   - company details
   - legal review of Privacy and Terms
   - confirming the drafted audit format and the reply-time commitment
+
+## Dark immersive rebuild (2026-09-30)
+
+The owner found the rich-visuals light build still "not great" and asked for a site modelled on xtract.framer.ai. Decisions: dark with a blue glow like Meznt AI, the whole site, and honest replacements wherever the template uses proof we don't have. The light build is archived in `.unlazy/retired-2026-09-30/light-rich-visuals/`.
+
+- **New design system:** dark tokens with one blue accent, a star field, a rotating glow behind headlines, glowing cards and scroll reveals that stay visible without JavaScript. Everything stops under reduced motion.
+- **Homepage:**
+  - hero with a tilted command center, four floating cards and mouse parallax
+  - an endless strip of the kinds of system Devista works across
+  - a problem diagram that switches between Today and With Devista
+  - four product rows: company overview, a typing agent log, a working approvals queue, agent permissions
+  - the workflow explorer, six benefit cards and six stage cards with small animations
+  - pricing cards with a "what you get / what you decide" toggle
+  - four written commitments in place of testimonials, then the FAQ and a glowing closing card
+- **Inner pages:** Product, How it works, Security, Company (About, with a Today / With Devista comparison) and Book (Contact, with info cards and the form in a glowing card) all rebuilt in the same style.
+- **Checks passed on every page:** copy rules, no unconfirmed claims, layout at four widths, and no serious or critical accessibility violations.
+- **Still needs the owner:** the reversed white logo mark on the dark site (the favicon is still emerald), plus everything listed under Open above.

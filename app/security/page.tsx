@@ -1,27 +1,32 @@
 import type { Metadata } from 'next';
+import { CircleCheck, KeyRound, Plug, ScrollText, Scale, Siren } from 'lucide-react';
 import { ActivityLog } from '@/components/ActivityLog';
 import { CtaBand } from '@/components/CtaBand';
 import { Faq } from '@/components/Faq';
-import { ItemList } from '@/components/ItemList';
 import { ModeGlyph } from '@/components/ModeGlyph';
 import { PageIntro } from '@/components/PageIntro';
-import { Section } from '@/components/Section';
+import { AgentPermissions } from '@/components/screens/AgentPermissions';
+import { delay, Section } from '@/components/Section';
 import { CONTROLS, FAQ } from '@/lib/content';
 import { MODES, type Mode } from '@/lib/workflows';
+import { OPEN_GRAPH, SITE } from '@/lib/site';
 
 export const metadata: Metadata = {
   title: 'Security and control',
   description:
-    'How Devista keeps people in control: approvals, permissions, policies, escalation and a complete audit trail, plus the questions we answer in writing for your IT lead.',
+    `How ${SITE.shortName} keeps people in control: approvals, permissions, policies, escalation and a complete audit trail, plus the questions we answer in writing for your IT lead.`,
   alternates: { canonical: '/security' },
-  openGraph: { title: 'Security and control | Devista AI' },
+  openGraph: { ...OPEN_GRAPH, title: `Security and control | ${SITE.name}` },
 };
 
+// One icon per control, in the order CONTROLS lists them.
+const CONTROL_ICONS = [CircleCheck, KeyRound, Scale, Siren, ScrollText, Plug];
+
 const IT_QUESTIONS = [
-  'Where Devista is hosted, and in which region your data is stored',
+  `Where ${SITE.shortName} is hosted, and in which region your data is stored`,
   'How data is protected in transit and at rest',
-  'Who at Devista can access your data, and how that access is controlled and logged',
-  'Which systems Devista connects to, and with what level of access',
+  `Who at ${SITE.shortName} can access your data, and how that access is controlled and logged`,
+  `Which systems ${SITE.shortName} connects to, and with what level of access`,
   'How long data is kept, and how it is returned or deleted',
 ];
 
@@ -31,39 +36,50 @@ export default function SecurityPage() {
   return (
     <>
       <PageIntro
+        chip="Security and control"
         title="AI that works inside the permissions you set."
         lede="People approve what matters. Agents act only within the rules and access you grant. Every action, by a person or an agent, is recorded."
       />
 
-      <Section id="control-model" title="The control model." lede="Control runs through every part of Devista, not a settings page added at the end.">
-        <div className="mt-12 grid gap-12 lg:grid-cols-12 lg:items-start">
-          <div className="lg:col-span-7">
-            <ItemList items={CONTROLS} />
+      <Section id="control-model" chip="The control model" title={`Control runs through every part of ${SITE.shortName}.`} lede="Not a settings page added at the end: every workflow is built on these six.">
+        <ul className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {CONTROLS.map((c, i) => {
+            const Icon = CONTROL_ICONS[i];
+            return (
+              <li key={c.title} data-reveal style={delay((i % 3) * 80)} className="card p-6">
+                <span className="flex size-10 items-center justify-center rounded-control border border-rule bg-panel">
+                  <Icon aria-hidden="true" className="size-5 text-signal-bright" strokeWidth={1.8} />
+                </span>
+                <h3 className="mt-5 text-lg font-display tracking-snug text-ink">{c.title}</h3>
+                <p className="mt-2 text-sm text-graphite">{c.detail}</p>
+              </li>
+            );
+          })}
+        </ul>
+        <div className="mt-6 grid items-start gap-4 lg:grid-cols-2">
+          <div data-reveal className="card p-4 sm:p-8">
+            <AgentPermissions />
           </div>
-          <div className="lg:col-span-5">
+          <div data-reveal style={delay(120)} className="card p-4 sm:p-8">
             <ActivityLog />
           </div>
         </div>
+        <p className="mt-4 text-center text-xs text-slate">Illustrations with example data.</p>
       </Section>
 
-      <Section
-        id="who-acts"
-        tone="mist"
-        title="Who is allowed to do what."
-        lede="Every step of every workflow is assigned to one of three modes, and you decide which."
-      >
-        <ul className="mt-12 grid gap-x-12 md:grid-cols-3">
-          {(['person', 'assisted', 'agent'] as Mode[]).map((m) => (
-            <li key={m} className="border-t border-rule py-6">
-              <div className="flex items-center gap-3">
-                <ModeGlyph mode={m} className="size-4" />
-                <h3 className="text-lg font-display tracking-display">{MODES[m].label}</h3>
-              </div>
-              <p className="mt-2 max-w-measure text-base text-graphite">{MODES[m].description}</p>
+      <Section id="who-acts" chip="Who acts" title="Who is allowed to do what." lede="Every step of every workflow is assigned to one of three modes, and you decide which.">
+        <ul className="mt-14 grid gap-4 md:grid-cols-3">
+          {(['person', 'assisted', 'agent'] as Mode[]).map((m, i) => (
+            <li key={m} data-reveal style={delay(i * 90)} className={'card p-7 ' + (m === 'agent' ? 'card-lit' : '')}>
+              <span className="flex size-10 items-center justify-center rounded-dot border border-rule bg-panel">
+                <ModeGlyph mode={m} className={'size-4 ' + (m === 'person' ? 'text-hold' : 'text-signal-bright')} />
+              </span>
+              <h3 className="mt-5 text-lg font-display tracking-snug text-ink">{MODES[m].label}</h3>
+              <p className="mt-2 text-sm text-graphite">{MODES[m].description}</p>
             </li>
           ))}
         </ul>
-        <p className="mt-6 max-w-measure text-base text-graphite">
+        <p data-reveal className="mx-auto mt-8 max-w-narrow text-center text-base text-graphite">
           Agents run work on their own only where it is repetitive and measurable, and only where the economics and
           reliability justify it. Everything else stays with a person, with AI preparing the ground.
         </p>
@@ -71,27 +87,30 @@ export default function SecurityPage() {
 
       <Section
         id="it-review"
-        title="For your IT and security lead."
-        lede="Before anything is connected, we answer these questions in writing, so your IT or security lead can review them on your terms."
+        chip="For your IT lead"
+        title="Answered in writing, before anything connects."
+        lede="Your IT or security lead can review these on your terms, and is welcome to join the operations audit."
       >
-        <ul className="mt-10 max-w-narrow border-t border-rule">
-          {IT_QUESTIONS.map((q) => (
-            <li key={q} className="flex gap-3 border-b border-rule py-4 text-base text-ink">
-              <span aria-hidden="true" className="mt-3 size-1 shrink-0 rounded-dot bg-ink" />
-              {q}
+        <ol data-reveal className="card mx-auto mt-14 max-w-narrow divide-y divide-rule p-2 sm:p-4">
+          {IT_QUESTIONS.map((q, i) => (
+            <li key={q} className="flex items-start gap-4 px-3 py-4">
+              <span className="tabular flex size-7 shrink-0 items-center justify-center rounded-control border border-rule bg-panel text-xs font-semibold text-signal-bright">
+                {i + 1}
+              </span>
+              <span className="pt-0.5 text-base text-ink">{q}</span>
             </li>
           ))}
-        </ul>
-        <p className="mt-6 max-w-measure text-base text-graphite">
-          Your IT lead is welcome to join the operations audit. Mention it when you book.
-        </p>
+        </ol>
       </Section>
 
-      <Section id="questions" tone="mist" title="Questions about trust and control.">
+      <Section id="questions" chip="FAQ" title="Questions about trust and control.">
         <Faq items={FAQ.filter((f) => PICK.has(f.q))} />
       </Section>
 
-      <CtaBand title="Bring your IT lead to the audit." lede="The operations audit is free and takes about two weeks. Security questions are answered in writing before anything connects." />
+      <CtaBand
+        title="Bring your IT lead to the audit."
+        lede="The operations audit is free and takes about two weeks. Security questions are answered in writing before anything connects."
+      />
     </>
   );
 }

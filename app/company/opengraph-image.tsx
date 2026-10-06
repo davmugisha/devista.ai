@@ -1,6 +1,7 @@
 import { OG_SIZE, renderOg } from '@/lib/og';
+import { SITE } from '@/lib/site';
 
-export const alt = 'The people behind Devista.';
+export const alt = `The people behind ${SITE.shortName}.`;
 export const size = OG_SIZE;
 export const contentType = 'image/png';
 

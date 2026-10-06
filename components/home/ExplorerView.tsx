@@ -24,7 +24,7 @@ type Props = {
  */
 export function ExplorerView({ uid, active, focus, animate = false, onSelect, onTabKey, onToggle, tabRefs, interactive = false }: Props) {
   const wf = WORKFLOWS[active];
-  const arrive = animate ? 'animate-arrive motion-reduce:animate-none ' : '';
+  const arrive = animate ? 'animate-arrive ' : '';
   const counts = MODE_ORDER.map((m) => ({
     mode: m,
     n: wf.steps.filter((s) => s.kind === 'step' && s.mode === m).length,
@@ -32,7 +32,7 @@ export function ExplorerView({ uid, active, focus, animate = false, onSelect, on
   let stepNo = 0;
 
   return (
-    <div className="mt-12 overflow-hidden rounded-frame border border-rule bg-paper" data-interactive={interactive ? 'true' : undefined}>
+    <div className="mt-14 overflow-hidden rounded-card border border-rule bg-mist shadow-float" data-interactive={interactive ? 'true' : undefined}>
       <div className="flex flex-col gap-4 border-b border-rule px-4 pt-4 md:flex-row md:items-end md:justify-between md:px-6 md:pt-5">
         <div role="tablist" aria-label="Department" className="-mb-px flex gap-1 overflow-x-auto">
           {WORKFLOWS.map((w, i) => (
@@ -53,8 +53,8 @@ export function ExplorerView({ uid, active, focus, animate = false, onSelect, on
               onClick={onSelect ? () => onSelect(i) : undefined}
               onKeyDown={onTabKey}
               className={
-                'h-11 shrink-0 border-b-2 px-3 text-sm font-medium transition-colors duration-150 motion-reduce:transition-none ' +
-                (i === active ? 'border-signal text-ink' : 'border-transparent text-graphite hover:text-ink')
+                'h-11 shrink-0 border-b-2 px-3 text-sm font-medium transition-colors duration-150 ' +
+                (i === active ? 'border-signal-bright text-ink' : 'border-transparent text-graphite hover:text-ink')
               }
             >
               {w.department}
@@ -69,8 +69,8 @@ export function ExplorerView({ uid, active, focus, animate = false, onSelect, on
               aria-pressed={focus === m}
               onClick={onToggle ? () => onToggle(m) : undefined}
               className={
-                'inline-flex h-10 items-center gap-2 rounded-control px-2 text-sm transition-colors duration-150 motion-reduce:transition-none ' +
-                (focus === m ? 'bg-signal-tint text-ink' : 'text-graphite hover:bg-mist hover:text-ink')
+                'inline-flex h-10 items-center gap-2 rounded-control px-2 text-sm transition-colors duration-150 ' +
+                (focus === m ? 'bg-signal-tint text-ink' : 'text-graphite hover:bg-panel hover:text-ink')
               }
             >
               <ModeGlyph mode={m} />
@@ -88,7 +88,7 @@ export function ExplorerView({ uid, active, focus, animate = false, onSelect, on
         className="grid gap-8 p-4 md:p-6 lg:grid-cols-12 lg:gap-12"
       >
         <div key={`${wf.id}-head`} className={arrive + 'self-start lg:sticky lg:top-24 lg:col-span-4'}>
-          <p className="inline-flex rounded-chip border border-rule px-2 py-px text-xs text-graphite">Example workflow</p>
+          <p className="inline-flex rounded-chip border border-rule bg-panel px-2 py-px text-xs text-graphite">Example workflow</p>
           <h3 className="mt-3 text-xl font-display tracking-display">{wf.name}</h3>
           <p className="mt-2 max-w-measure text-sm text-graphite">{wf.summary}</p>
           <ul className="mt-6 space-y-3 border-t border-rule pt-4" aria-label="Who does the work in this workflow">
@@ -113,9 +113,9 @@ export function ExplorerView({ uid, active, focus, animate = false, onSelect, on
               return (
                 <li
                   key={i}
-                  className={'relative my-3 flex items-start gap-3 rounded-control border border-signal bg-signal-tint px-4 py-3 ' + arrive}
+                  className={'relative my-3 flex items-start gap-3 rounded-control border border-signal/60 bg-signal-tint px-4 py-3 ' + arrive}
                 >
-                  <svg viewBox="0 0 16 16" aria-hidden="true" className="mt-px size-4 shrink-0 fill-none stroke-signal" strokeWidth="1.6">
+                  <svg viewBox="0 0 16 16" aria-hidden="true" className="mt-px size-4 shrink-0 fill-none stroke-signal-bright" strokeWidth="1.6">
                     <rect x="3" y="7" width="10" height="7" rx="1.5" />
                     <path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2" />
                   </svg>
@@ -132,7 +132,7 @@ export function ExplorerView({ uid, active, focus, animate = false, onSelect, on
               <li
                 key={i}
                 className={
-                  'relative grid grid-cols-[auto_1fr] gap-x-4 border-t border-rule py-4 transition-opacity duration-200 first:border-t-0 motion-reduce:transition-none ' +
+                  'relative grid grid-cols-[auto_1fr] gap-x-4 border-t border-rule py-4 transition-opacity duration-200 first:border-t-0 ' +
                   arrive +
                   (dim ? 'opacity-35' : 'opacity-100')
                 }

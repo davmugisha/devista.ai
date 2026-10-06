@@ -1,14 +1,14 @@
 [
   {
     "route": "/",
-    "performance": 87,
+    "performance": 84,
     "accessibility": 100,
     "bestPractices": 100,
     "seo": 100,
-    "benchmark": 1267,
-    "lcp": "2.9 s",
+    "benchmark": 857,
+    "lcp": "2.7 s",
     "cls": "0",
-    "tbt": "340 ms",
+    "tbt": "490 ms",
     "failing": [
       "largest-contentful-paint",
       "total-blocking-time",
@@ -17,89 +17,91 @@
       "render-blocking-resources",
       "unused-javascript",
       "legacy-javascript",
+      "dom-size",
       "forced-reflow-insight",
       "legacy-javascript-insight",
       "network-dependency-tree-insight",
       "render-blocking-insight"
     ],
     "runs": [
-      85,
-      87,
-      87
+      71,
+      84,
+      85
     ]
   },
   {
     "route": "/product",
-    "performance": 93,
+    "performance": 77,
     "accessibility": 100,
     "bestPractices": 100,
     "seo": 100,
-    "benchmark": 1331,
-    "lcp": "2.5 s",
-    "cls": "0",
-    "tbt": "190 ms",
+    "benchmark": 894,
+    "lcp": "2.9 s",
+    "cls": "0.033",
+    "tbt": "730 ms",
     "failing": [
       "largest-contentful-paint",
-      "speed-index",
+      "total-blocking-time",
       "max-potential-fid",
+      "mainthread-work-breakdown",
       "largest-contentful-paint-element",
       "render-blocking-resources",
       "unused-javascript",
       "legacy-javascript",
+      "forced-reflow-insight",
       "legacy-javascript-insight",
       "network-dependency-tree-insight",
       "render-blocking-insight"
     ],
     "runs": [
-      92,
-      93,
-      93
+      73,
+      77,
+      81
     ]
   },
   {
     "route": "/how-it-works",
-    "performance": 93,
+    "performance": 88,
     "accessibility": 100,
     "bestPractices": 100,
     "seo": 100,
-    "benchmark": 1027,
-    "lcp": "2.5 s",
+    "benchmark": 876,
+    "lcp": "2.6 s",
     "cls": "0",
-    "tbt": "170 ms",
+    "tbt": "360 ms",
     "failing": [
       "largest-contentful-paint",
-      "speed-index",
+      "total-blocking-time",
       "max-potential-fid",
       "largest-contentful-paint-element",
       "render-blocking-resources",
       "unused-javascript",
       "legacy-javascript",
-      "forced-reflow-insight",
       "legacy-javascript-insight",
       "network-dependency-tree-insight",
       "render-blocking-insight"
     ],
     "runs": [
-      93,
-      93,
-      95
+      78,
+      88,
+      91
     ]
   },
   {
     "route": "/security",
-    "performance": 91,
+    "performance": 81,
     "accessibility": 100,
     "bestPractices": 100,
     "seo": 100,
-    "benchmark": 1251,
+    "benchmark": 798,
     "lcp": "2.6 s",
     "cls": "0",
-    "tbt": "230 ms",
+    "tbt": "610 ms",
     "failing": [
       "largest-contentful-paint",
-      "speed-index",
       "total-blocking-time",
       "max-potential-fid",
+      "mainthread-work-breakdown",
       "largest-contentful-paint-element",
       "render-blocking-resources",
       "unused-javascript",
@@ -110,21 +112,21 @@
       "render-blocking-insight"
     ],
     "runs": [
-      89,
-      91,
-      92
+      79,
+      81,
+      82
     ]
   },
   {
     "route": "/company",
-    "performance": 93,
+    "performance": 91,
     "accessibility": 100,
     "bestPractices": 100,
     "seo": 100,
-    "benchmark": 1081,
-    "lcp": "2.6 s",
+    "benchmark": 865,
+    "lcp": "2.5 s",
     "cls": "0",
-    "tbt": "220 ms",
+    "tbt": "290 ms",
     "failing": [
       "largest-contentful-paint",
       "total-blocking-time",
@@ -139,51 +141,57 @@
       "render-blocking-insight"
     ],
     "runs": [
-      89,
-      93,
-      96
+      91,
+      91,
+      93
     ]
   },
   {
     "route": "/book",
-    "performance": 94,
+    "performance": 84,
     "accessibility": 100,
     "bestPractices": 100,
     "seo": 100,
-    "benchmark": 888,
-    "lcp": "2.4 s",
+    "benchmark": 833,
+    "lcp": "2.6 s",
     "cls": "0",
-    "tbt": "180 ms",
+    "tbt": "490 ms",
     "failing": [
-      "speed-index",
+      "largest-contentful-paint",
+      "total-blocking-time",
       "max-potential-fid",
+      "mainthread-work-breakdown",
+      "largest-contentful-paint-element",
       "render-blocking-resources",
       "unused-javascript",
       "legacy-javascript",
+      "bf-cache",
       "forced-reflow-insight",
       "legacy-javascript-insight",
       "network-dependency-tree-insight",
       "render-blocking-insight"
     ],
     "runs": [
-      92,
-      94,
-      94
+      76,
+      84,
+      85
     ]
   },
   {
     "route": "/privacy",
-    "performance": 94,
+    "performance": 84,
     "accessibility": 100,
     "bestPractices": 100,
     "seo": 100,
-    "benchmark": 1015,
-    "lcp": "2.4 s",
+    "benchmark": 808,
+    "lcp": "2.6 s",
     "cls": "0",
-    "tbt": "210 ms",
+    "tbt": "510 ms",
     "failing": [
+      "largest-contentful-paint",
       "total-blocking-time",
       "max-potential-fid",
+      "largest-contentful-paint-element",
       "render-blocking-resources",
       "unused-javascript",
       "legacy-javascript",
@@ -193,34 +201,39 @@
       "render-blocking-insight"
     ],
     "runs": [
-      92,
-      94,
-      95
+      69,
+      84,
+      88
     ]
   },
   {
     "route": "/terms",
-    "performance": 95,
+    "performance": 75,
     "accessibility": 100,
     "bestPractices": 100,
     "seo": 100,
-    "benchmark": 931,
-    "lcp": "2.4 s",
+    "benchmark": 767,
+    "lcp": "2.7 s",
     "cls": "0",
-    "tbt": "190 ms",
+    "tbt": "920 ms",
     "failing": [
+      "largest-contentful-paint",
+      "total-blocking-time",
       "max-potential-fid",
+      "mainthread-work-breakdown",
+      "largest-contentful-paint-element",
       "render-blocking-resources",
       "unused-javascript",
       "legacy-javascript",
+      "forced-reflow-insight",
       "legacy-javascript-insight",
       "network-dependency-tree-insight",
       "render-blocking-insight"
     ],
     "runs": [
-      90,
-      95,
-      95
+      70,
+      75,
+      75
     ]
   }
 ]

@@ -4,15 +4,15 @@ import { Analytics } from '@vercel/analytics/next';
 import { ClickTracker } from '@/components/ClickTracker';
 import { Footer } from '@/components/Footer';
 import { Header } from '@/components/Header';
-import { SITE } from '@/lib/site';
+import { RevealObserver } from '@/components/RevealObserver';
+import { OPEN_GRAPH, SITE } from '@/lib/site';
 import { COLOR } from '@/lib/tokens';
 import './globals.css';
 
-// Self-hosted at build time by next/font; the width axis gives the semi-condensed display cut.
+// Self-hosted at build time by next/font.
 const instrument = Instrument_Sans({
   // Only Latin is preloaded; Latin Extended still loads on demand via unicode-range.
   subsets: ['latin'],
-  axes: ['wdth'],
   variable: '--font-instrument',
   display: 'swap',
 });
@@ -24,22 +24,19 @@ const noindex = (process.env.VERCEL_ENV && process.env.VERCEL_ENV !== 'productio
 export const metadata: Metadata = {
   metadataBase: new URL(SITE.url),
   title: {
-    default: 'Devista AI: the operating layer between your systems',
-    template: '%s | Devista AI',
+    default: `${SITE.name}: the operating layer between your systems`,
+    template: `%s | ${SITE.name}`,
   },
   description: SITE.description,
   applicationName: SITE.name,
-  openGraph: {
-    type: 'website',
-    siteName: SITE.name,
-    locale: 'en',
-  },
+  openGraph: OPEN_GRAPH,
   twitter: { card: 'summary_large_image' },
   robots: noindex ? { index: false, follow: false } : { index: true, follow: true },
 };
 
 export const viewport: Viewport = {
   themeColor: COLOR.paper,
+  colorScheme: 'light',
 };
 
 const organization = {
@@ -47,13 +44,22 @@ const organization = {
   '@type': 'Organization',
   name: SITE.name,
   url: SITE.url,
-  logo: `${SITE.url}/icon.svg`,
+  logo: `${SITE.url}/apple-icon`,
   description: SITE.description,
 };
 
+// Runs before first paint: arms the scroll reveal, and disarms it if RevealObserver has not
+// started within three seconds, so a failed script can never leave content hidden.
+const REVEAL_SCRIPT =
+  "(function(){var d=document.documentElement;d.setAttribute('data-reveal-ready','');" +
+  "setTimeout(function(){if(!window.__reveal)d.removeAttribute('data-reveal-ready')},3000)})()";
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={instrument.variable}>
+    <html lang="en" className={instrument.variable} suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: REVEAL_SCRIPT }} />
+      </head>
       <body>
         <Header />
         <main id="main" tabIndex={-1} className="outline-none">
@@ -62,6 +68,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Footer />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organization) }} />
         <ClickTracker />
+        <RevealObserver />
         {process.env.VERCEL ? <Analytics /> : null}
       </body>
     </html>

@@ -2,12 +2,13 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { PageIntro } from '@/components/PageIntro';
 import { DraftNotice, Prose } from '@/components/Prose';
+import { OPEN_GRAPH, SITE } from '@/lib/site';
 
 export const metadata: Metadata = {
   title: 'Privacy notice',
-  description: 'What Devista collects when you book an operations audit, why, where it goes, how long it is kept, and how to have it deleted.',
+  description: `What ${SITE.shortName} collects when you book an operations audit, why, where it goes, how long it is kept, and how to have it deleted.`,
   alternates: { canonical: '/privacy' },
-  openGraph: { title: 'Privacy notice | Devista AI' },
+  openGraph: { ...OPEN_GRAPH, title: `Privacy notice | ${SITE.name}` },
 };
 
 export default function PrivacyPage() {
@@ -19,7 +20,7 @@ export default function PrivacyPage() {
         lede="What we collect when you book an operations audit, why we collect it, and what you can ask us to do with it."
       />
       <Prose>
-        <DraftNotice updated="29 September 2026" />
+        <DraftNotice updated="6 October 2026" />
         <h2>What we collect</h2>
         <p>When you book an operations audit, we collect the details you enter in the form:</p>
         <ul>
@@ -35,8 +36,15 @@ export default function PrivacyPage() {
         </p>
         <h2>Where it goes</h2>
         <p>
-          Your request is sent by email to the Devista team through an email delivery provider, which processes it on our
+          Your request is sent by email to the {SITE.shortName} team through an email delivery provider, which processes it on our
           behalf only to deliver it.
+        </p>
+        <h2>Email updates</h2>
+        <p>
+          If you subscribe to email updates at the foot of any page, we keep your email address and the date you
+          subscribed, on the server that runs this website. We use it only to send you updates from {SITE.shortName}, and
+          we keep it until you unsubscribe. Every update includes a way to unsubscribe, and you can also ask us to remove
+          your address by replying to any update.
         </p>
         <h2>Site analytics</h2>
         <p>

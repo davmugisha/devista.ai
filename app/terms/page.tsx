@@ -1,12 +1,13 @@
 import type { Metadata } from 'next';
 import { PageIntro } from '@/components/PageIntro';
 import { DraftNotice, Prose } from '@/components/Prose';
+import { OPEN_GRAPH, SITE } from '@/lib/site';
 
 export const metadata: Metadata = {
   title: 'Terms of use',
-  description: 'The terms that apply when you use the Devista website, including how to read the examples and illustrations it contains.',
+  description: `The terms that apply when you use the ${SITE.shortName} website, including how to read the examples and illustrations it contains.`,
   alternates: { canonical: '/terms' },
-  openGraph: { title: 'Terms of use | Devista AI' },
+  openGraph: { ...OPEN_GRAPH, title: `Terms of use | ${SITE.name}` },
 };
 
 export default function TermsPage() {
@@ -17,7 +18,7 @@ export default function TermsPage() {
         <DraftNotice updated="29 September 2026" />
         <h2>About this website</h2>
         <p>
-          This website describes Devista and the operations audit we offer. It is provided for information. Any work we
+          This website describes {SITE.shortName} and the operations audit we offer. It is provided for information. Any work we
           do for your company is governed by a separate written agreement, not by these terms.
         </p>
         <h2>Examples and illustrations</h2>
@@ -32,7 +33,7 @@ export default function TermsPage() {
         </p>
         <h2>Content</h2>
         <p>
-          The text, design and illustrations on this site belong to Devista. You may share links to it freely.
+          The text, design and illustrations on this site belong to {SITE.shortName}. You may share links to it freely.
         </p>
         <h2>Changes</h2>
         <p>We may update these terms. The date at the top shows when they last changed.</p>

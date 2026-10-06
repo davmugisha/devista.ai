@@ -1,0 +1,10 @@
+[Unit]
+Description=Check the saydeed.com certificate every 20 minutes until it is live
+
+[Timer]
+OnActiveSec=2min
+OnBootSec=5min
+OnUnitActiveSec=20min
+
+[Install]
+WantedBy=timers.target

@@ -5,19 +5,19 @@ type Variant = 'primary' | 'secondary' | 'quiet';
 type Size = 'md' | 'sm';
 
 const base =
-  'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-control font-medium tracking-snug ' +
-  'transition-[background-color,border-color,color,transform] duration-150 ease-out active:translate-y-px ' +
-  'disabled:pointer-events-none disabled:opacity-50 motion-reduce:transition-none';
+  'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-dot font-medium tracking-snug ' +
+  'transition-[background-color,border-color,color,box-shadow,transform] duration-200 ease-out active:translate-y-px ' +
+  'disabled:pointer-events-none disabled:opacity-50';
 
 const variants: Record<Variant, string> = {
-  primary: 'bg-signal text-paper hover:bg-signal-strong',
-  secondary: 'border border-rule-strong bg-paper text-ink hover:border-ink hover:bg-mist',
-  quiet: 'text-ink underline decoration-rule-strong underline-offset-4 hover:decoration-ink',
+  primary: 'bg-ink text-white shadow-float hover:bg-signal-strong',
+  secondary: 'border border-white/90 bg-mist/75 text-ink shadow-float backdrop-blur-sm hover:border-rule-strong hover:bg-mist',
+  quiet: 'text-ink underline decoration-rule-strong underline-offset-4 hover:decoration-signal-bright',
 };
 
 const sizes: Record<Size, string> = {
-  md: 'h-12 px-5 text-base',
-  sm: 'h-10 px-3 text-sm',
+  md: 'h-12 px-6 text-base',
+  sm: 'h-10 px-4 text-sm',
 };
 
 export function buttonClass(variant: Variant = 'primary', size: Size = 'md', extra = '') {

@@ -1,33 +1,59 @@
-import type { ReactNode } from 'react';
+import type { CSSProperties, ReactNode } from 'react';
 
-type Props = {
+/** The small tag above every section heading. */
+export function Chip({ children, className = '' }: { children: ReactNode; className?: string }) {
+  return (
+    <span className={'inline-flex items-center gap-2 rounded-control border border-rule bg-mist px-3 py-1 text-sm font-medium text-ink ' + className}>
+      {children}
+    </span>
+  );
+}
+
+/** Stagger helper for [data-reveal] children: delay in milliseconds. */
+export const delay = (ms: number) => ({ '--d': `${ms}ms` }) as CSSProperties;
+
+type HeadProps = {
   id: string;
+  chip?: ReactNode;
   title: ReactNode;
   lede?: ReactNode;
-  tone?: 'paper' | 'mist';
-  /** h2 on the homepage and deeper pages; h1 only when a section opens a page. */
   as?: 'h1' | 'h2';
-  children?: ReactNode;
-  className?: string;
-  /** Skip layout and paint until near the viewport. Only for sections well below the fold. */
-  defer?: boolean;
+  align?: 'center' | 'left';
 };
 
-/** A page section that answers one buyer question: a heading, an optional one-sentence lede, content. */
-export function Section({ id, title, lede, tone = 'paper', as: H = 'h2', children, className = '', defer = false }: Props) {
+/** Chip, heading and one-sentence lede. Centred by default. */
+export function SectionHead({ id, chip, title, lede, as: H = 'h2', align = 'center' }: HeadProps) {
+  const center = align === 'center';
   return (
-    <section
-      id={id}
-      aria-labelledby={`${id}-title`}
-      className={(tone === 'mist' ? 'bg-mist ' : 'bg-paper ') + (defer ? 'defer-render ' : '') + 'py-16 md:py-24 ' + className}
-    >
-      <div className="mx-auto max-w-page px-4 md:px-8">
-        <div className="max-w-narrow">
-          <H id={`${id}-title`} className="text-3xl font-display tracking-display text-ink">
-            {title}
-          </H>
-          {lede ? <p className="mt-4 max-w-measure text-md text-graphite">{lede}</p> : null}
+    <div className={center ? 'mx-auto flex max-w-heading flex-col items-center text-center' : 'max-w-heading'}>
+      {chip ? (
+        <div data-reveal>
+          <Chip>{chip}</Chip>
         </div>
+      ) : null}
+      <H id={`${id}-title`} data-reveal style={delay(80)} className="mt-5 text-4xl font-display tracking-display text-ink">
+        {title}
+      </H>
+      {lede ? (
+        <p data-reveal style={delay(160)} className={'mt-5 max-w-narrow text-lg text-graphite ' + (center ? 'mx-auto' : '')}>
+          {lede}
+        </p>
+      ) : null}
+    </div>
+  );
+}
+
+type Props = HeadProps & {
+  children?: ReactNode;
+  className?: string;
+};
+
+/** A page section that answers one buyer question: chip, heading, lede, then its content. */
+export function Section({ id, children, className = '', ...head }: Props) {
+  return (
+    <section id={id} aria-labelledby={`${id}-title`} className={'relative py-16 md:py-24 ' + className}>
+      <div className="mx-auto max-w-page px-4 md:px-8">
+        <SectionHead id={id} {...head} />
         {children}
       </div>
     </section>

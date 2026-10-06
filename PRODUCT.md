@@ -2,9 +2,9 @@
 
 <!-- impeccable:product-schema 1 -->
 
-Every fact below comes from the owner's written briefs (2026-09-23 and both 2026-09-24
-revisions) and the site copy. The owner skipped the interview; confirm or correct any line
-marked (inferred).
+Product facts below come from the owner's written briefs (2026-09-23 and both 2026-09-24
+revisions) and the site copy. The visual direction reflects the owner's 2026-09-30 reference
+image. The owner skipped the interview; confirm or correct any line marked (inferred).
 
 ## Platform
 
@@ -52,9 +52,9 @@ accounting, support desk, chat).
 
 ## Brand Commitments
 
-- Name and wordmark: DEVISTA.AI with an emerald badge mark (#10B981).
-- Obsidian canvas (#090A0F), matte surfaces (#14161F), 1px technical borders (#1E2028).
-- Emerald for actions and live states; amber (#F59E0B) for budget caps, spend and tiers.
+- Name and wordmark: DEVISTA.AI with a deep cyan badge mark (#086B91).
+- Bright canvas (#F6FBFE), white surfaces (#FFFFFF), pale cyan panels (#EAF5FA) and fine blue-grey borders (#D5E5EC).
+- Dark navy for primary actions, deep cyan for active states and amber for waiting or escalated states.
 - Voice: plain business English, sentence case; selling ahead of engineering.
 
 ## Evidence on Hand
