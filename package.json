@@ -1,12 +1,13 @@
 {
-  "name": "devista-ai",
+  "name": "saydeed-site",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "booking:auth": "node scripts/google-calendar-auth.mjs"
   },
   "dependencies": {
     "@vercel/analytics": "^2.0.1",

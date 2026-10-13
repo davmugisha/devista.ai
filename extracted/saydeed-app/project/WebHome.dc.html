@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Home (web)</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;600&amp;family=Quicksand:wght@500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#EEF5F9;-webkit-font-smoothing:antialiased;caret-color:#086B91}
+::selection{background:#D6EFF8;color:#102A39}
+html{scrollbar-color:#B9CFDA #EEF5F9}
+a{color:#086B91;text-decoration:none}a:hover{color:#064F6B}
+button,input,textarea{font-family:inherit}
+button{border:0;padding:0;cursor:pointer}
+input::placeholder,textarea::placeholder{color:#4F6875}
+:focus-visible{outline:2px solid #086B91;outline-offset:2px}
+.i{fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.f{fill:currentColor;stroke:none}
+.mono{font-family:'JetBrains Mono',ui-monospace,Menlo,monospace;font-variant-numeric:tabular-nums}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.rail-item:not([aria-current="page"]):hover{background:#EEF5F9!important}
+.btn-accent{transition:background-color .15s ease}.btn-accent:hover{background:#064F6B!important;color:#FFFFFF!important}
+.btn-soft{transition:background-color .15s ease}.btn-soft:hover{background:#C3E5F2!important}
+.row{transition:background-color .15s ease}.row:hover{background:#F5FAFC!important}
+.narrow-only{display:none!important}
+@media (max-width:760px){.rail-list>a{flex:1 1 auto!important}.rail-list:not(.rail-open)>a:not(.rail-core):not([aria-current="page"]){display:none!important}.rail-more{display:flex!important}.rail-actions{display:flex!important}.rail-head,.rail-extra,.tb-label,.tb-kbd,.tb-actions{display:none!important}.narrow-only{display:flex!important}.is-hidden-narrow{display:none!important}.two-col{grid-template-columns:minmax(0,1fr)!important}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</helmet>
+<div style="box-sizing: border-box; width: 100%; background: #EEF5F9; color: #102A39; font-family: 'Quicksand', ui-rounded, system-ui, sans-serif; display: flex; flex-wrap: wrap; align-items: stretch">
+<div style="flex: 1 1 248px; min-width: 0; background: #FFFFFF; border-right: 1px solid #C9DCE5">
+<dc-import name="WebRail" active="home" hint-size="100%,900px"></dc-import>
+</div>
+<div style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column">
+<dc-import name="WebTopBar" hint-size="100%,72px"></dc-import>
+<main style="box-sizing: border-box; width: 100%; max-width: 1240px; padding: 32px clamp(16px, 3vw, 40px) 64px; display: flex; flex-direction: column; gap: 28px">
+<div style="display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px">
+<div style="display: flex; flex-direction: column; gap: 6px">
+<h1 style="margin: 0; font-size: 34px; line-height: 1.15; font-weight: 700; letter-spacing: -0.01em">Good morning, Samuel</h1>
+<p style="margin: 0; font-size: 16px; font-weight: 600; color: #405C6B">Thursday 24 September · Branshs LLC · 12 agents at work, <span style="color: #9A5A00; font-weight: 700">{{waitingLabel}}</span></p>
+</div>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-start">
+<div style="flex: 999 1 520px; min-width: 0; display: flex; flex-direction: column; gap: 24px">
+<section aria-labelledby="needs-h" style="border-radius: 22px; background: #FFFFFF; box-shadow: 0 0 0 1px #C9DCE5; overflow: hidden">
+<div style="padding: 18px 20px 10px; display: flex; align-items: center; justify-content: space-between; gap: 12px">
+<h2 id="needs-h" style="margin: 0; font-size: 19px; font-weight: 700; display: flex; align-items: center; gap: 10px">Needs you<span class="mono" style="min-width: 24px; height: 24px; padding: 0 7px; box-sizing: border-box; border-radius: 12px; background: #FFE9C2; color: #7A4A00; font-size: 12px; font-weight: 600; display: inline-flex; align-items: center; justify-content: center">{{waiting}}</span></h2>
+<a href="WebInbox.dc.html" style="font-size: 14px; font-weight: 700">Open Inbox</a>
+</div>
+<ul style="margin: 0; padding: 0; list-style: none">
+<sc-for list="{{needs}}" as="n" hint-placeholder-count="3">
+<li class="row" style="box-sizing: border-box; padding: 14px 20px; box-shadow: inset 0 1px 0 #E3EFF5; display: flex; flex-wrap: wrap; align-items: center; gap: 12px 16px">
+<span class="mono" style="flex-shrink: 0; width: 40px; height: 40px; border-radius: 12px; background: {{n.tileBg}}; color: {{n.tileFg}}; font-size: 11px; font-weight: 600; display: flex; align-items: center; justify-content: center">{{n.who}}</span>
+<span style="flex: 1 1 240px; min-width: 0; display: flex; flex-direction: column; gap: 2px">
+<span style="font-size: 16px; font-weight: 700">{{n.title}}</span>
+<span style="font-size: 14px; font-weight: 600; color: #405C6B">{{n.sub}}</span>
+</span>
+<sc-if value="{{n.pending}}" hint-placeholder-val="{{ true }}">
+<span style="display: flex; gap: 8px">
+<a href="WebInbox.dc.html" class="btn-soft" style="height: 40px; box-sizing: border-box; padding: 0 16px; border-radius: 20px; background: #E3EFF5; color: #102A39; font-size: 14px; font-weight: 700; display: flex; align-items: center">Review</a>
+<button type="button" class="btn-accent" onClick="{{n.approve}}" style="height: 40px; padding: 0 16px; border-radius: 20px; background: #086B91; color: #FFFFFF; font-size: 14px; font-weight: 700">{{n.action}}</button>
+</span>
+</sc-if>
+<sc-if value="{{n.done}}" hint-placeholder-val="{{ false }}">
+<span role="status" style="display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 700; color: #086B91">
+<svg class="i" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" style="stroke-width: 2.5"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg>{{n.doneText}}
+<button type="button" onClick="{{n.undo}}" style="height: 32px; padding: 0 12px; border-radius: 16px; background: #E3EFF5; color: #102A39; font-size: 13px; font-weight: 700">Undo</button>
+</span>
+</sc-if>
+</li>
+</sc-for>
+</ul>
+<sc-if value="{{allClear}}" hint-placeholder-val="{{ false }}">
+<p style="margin: 0; padding: 4px 20px 20px; font-size: 15px; font-weight: 600; color: #405C6B">You are clear for now. Chief of Staff will bring the next decision here.</p>
+</sc-if>
+</section>
+<section aria-labelledby="numbers-h" style="display: flex; flex-direction: column; gap: 12px">
+<h2 id="numbers-h" style="margin: 0; font-size: 19px; font-weight: 700">The numbers today</h2>
+<div style="border-radius: 22px; background: #FFFFFF; box-shadow: 0 0 0 1px #C9DCE5; display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr))">
+<div style="padding: 18px 20px; box-shadow: 1px 0 0 #E3EFF5; display: flex; flex-direction: column; gap: 4px">
+<span style="font-size: 14px; font-weight: 700; color: #405C6B">Cash in bank</span>
+<span class="mono" style="font-size: 26px; font-weight: 600">$18,420</span>
+<span style="font-size: 13px; font-weight: 600; color: #086B91"><span class="mono">+$2,100</span> this week</span>
+</div>
+<div style="padding: 18px 20px; box-shadow: 1px 0 0 #E3EFF5; display: flex; flex-direction: column; gap: 4px">
+<span style="font-size: 14px; font-weight: 700; color: #405C6B">Runway</span>
+<span class="mono" style="font-size: 26px; font-weight: 600">4.2 mo</span>
+<span style="display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: #405C6B"><span role="meter" aria-label="Runway against the 6 month goal" aria-valuemin="0" aria-valuemax="6" aria-valuenow="4.2" style="flex-grow: 1; height: 6px; border-radius: 3px; background: #E3EFF5; overflow: hidden"><span style="display: block; width: 70%; height: 6px; background: #086B91"></span></span>goal <span class="mono">6</span></span>
+</div>
+<div style="padding: 18px 20px; box-shadow: 1px 0 0 #E3EFF5; display: flex; flex-direction: column; gap: 4px">
+<span style="font-size: 14px; font-weight: 700; color: #405C6B">Revenue, September</span>
+<span class="mono" style="font-size: 26px; font-weight: 600">$7,850</span>
+<span style="font-size: 13px; font-weight: 600; color: #405C6B"><span class="mono">$4,800</span> more if Umoja signs</span>
+</div>
+<div style="padding: 18px 20px; display: flex; flex-direction: column; gap: 4px">
+<span style="font-size: 14px; font-weight: 700; color: #405C6B">Agent spend today</span>
+<span class="mono" style="font-size: 26px; font-weight: 600">$4.20 <span style="font-size: 16px; color: #4F6875">/ $15</span></span>
+<span style="font-size: 13px; font-weight: 600; color: #405C6B">Capped by you, 28% used</span>
+</div>
+</div>
+</section>
+<section aria-labelledby="agents-h" style="display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px"><h2 id="agents-h" style="margin: 0; font-size: 19px; font-weight: 700">Agents at work</h2><span style="font-size: 14px; font-weight: 600; color: #405C6B">12 working · 2 idle</span></div>
+<ul style="margin: 0; padding: 0; list-style: none; border-radius: 22px; background: #FFFFFF; box-shadow: 0 0 0 1px #C9DCE5; overflow: hidden">
+<sc-for list="{{agents}}" as="a" hint-placeholder-count="4">
+<li style="padding: 14px 20px; box-shadow: inset 0 -1px 0 #E3EFF5; display: flex; align-items: center; gap: 14px">
+<span class="mono" style="flex-shrink: 0; width: 38px; height: 38px; border-radius: 12px; background: #D6EFF8; color: #06445C; font-size: 11px; font-weight: 600; display: flex; align-items: center; justify-content: center">{{a.code}}</span>
+<span style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 15px; font-weight: 700">{{a.name}}</span><span style="font-size: 14px; font-weight: 600; color: #405C6B">{{a.doing}}</span></span>
+<span style="flex-shrink: 0; display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 700; color: {{a.stateFg}}"><span style="width: 8px; height: 8px; border-radius: 50%; background: {{a.stateFg}}"></span>{{a.state}}</span>
+</li>
+</sc-for>
+</ul>
+</section>
+</div>
+<aside style="flex: 1 1 320px; min-width: 0; display: flex; flex-direction: column; gap: 24px">
+<section aria-labelledby="map-h" style="padding: 20px; border-radius: 22px; background: #FFFFFF; box-shadow: 0 0 0 1px #C9DCE5; display: flex; flex-direction: column; gap: 14px">
+<div style="display: flex; flex-direction: column; gap: 4px">
+<h2 id="map-h" style="margin: 0; font-size: 19px; font-weight: 700">Brain Map</h2>
+<p style="margin: 0; font-size: 14px; line-height: 1.45; font-weight: 600; color: #405C6B">Your company, live. Amber nodes are waiting on you.</p>
+</div>
+<div style="align-self: center; width: 280px; height: 280px">
+<dc-import name="Brain" size="280" highlights="{{waiting}}" hint-size="280px,280px"></dc-import>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 14px; font-size: 13px; font-weight: 700; color: #2D4858">
+<span style="display: flex; align-items: center; gap: 6px"><span style="width: 10px; height: 10px; border-radius: 50%; background: #9A5A00"></span>Needs your decision</span>
+<span style="display: flex; align-items: center; gap: 6px"><span style="width: 10px; height: 10px; border-radius: 50%; background: #102A39"></span>Agent or work</span>
+</div>
+<div style="padding: 12px 14px; border-radius: 14px; background: #EEF5F9; display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 600; color: #2D4858">
+<span style="flex-shrink: 0; width: 8px; height: 8px; border-radius: 50%; background: #086B91"></span>
+<span><span style="font-weight: 700; color: #102A39">CFO agent</span> is reconciling September invoices</span>
+</div>
+</section>
+<a href="WebMarketplace.dc.html" class="btn-soft" style="padding: 18px 20px; border-radius: 22px; background: #E8F6FB; box-shadow: 0 0 0 1px #BFE3F0; color: #102A39; display: flex; flex-direction: column; gap: 10px">
+<span style="display: flex; align-items: center; gap: 12px">
+<span style="flex-shrink: 0; width: 44px; height: 44px; border-radius: 14px; background: #D6EFF8; color: #086B91; display: flex; align-items: center; justify-content: center"><svg class="i" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3.5" width="7" height="6" rx="2"></rect><rect x="14" y="14.5" width="7" height="6" rx="2"></rect><path d="M6.5 9.5v2.5a3.5 3.5 0 0 0 3.5 3.5h4"></path></svg></span>
+<span style="display: flex; flex-direction: column; gap: 1px"><span style="font-size: 16px; font-weight: 700">Stop chasing invoices by hand</span><span style="font-size: 13px; font-weight: 600; color: #405C6B">Invoice chaser · Marketplace · $49</span></span>
+</span>
+<span style="font-size: 14px; line-height: 1.45; font-weight: 600; color: #2D4858">You chased 3 overdue invoices this week. Chief of Staff found a workflow that drafts them and waits for your yes.</span>
+<span style="font-size: 14px; font-weight: 700; color: #086B91">See it in the Marketplace</span>
+</a>
+</aside>
+</div>
+</main>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1053}}'>
+// Example decisions waiting on the owner, the same three as the phone Inbox.
+var NEEDS = [
+  { key: 'remind', who: 'BIL', title: 'Send 2 payment reminders', sub: 'Billing agent · $3,650 overdue from Kivu Coffee and Nyota Labs', action: 'Approve and send', doneText: 'Sent. CFO agent tracks payment.' },
+  { key: 'umoja', who: 'PRO', title: 'Review the Umoja proposal', sub: 'Proposal writer · $4,800, six weeks of work', action: 'Approve and send', doneText: 'Sent to Umoja.' },
+  { key: 'portal', who: 'DEL', title: 'Pick a portal launch date', sub: 'Delivery lead · suggests Wednesday 7 October', action: 'Accept 7 October', doneText: 'Launch set for 7 October.' }
+];
+var AGENTS = [
+  { code: 'CFO', name: 'CFO agent', doing: 'Reconciling September invoices', state: 'Working', stateFg: '#086B91' },
+  { code: 'SAL', name: 'Sales lead', doing: 'Drafting 4 follow-ups from Tuesday’s calls', state: 'Working', stateFg: '#086B91' },
+  { code: 'DEL', name: 'Delivery lead', doing: 'Waiting on you: portal launch date', state: 'Waiting', stateFg: '#9A5A00' },
+  { code: 'BIL', name: 'Billing agent', doing: 'Holding 2 reminders for your approval', state: 'Waiting', stateFg: '#9A5A00' }
+];
+
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { done: {} };
+  }
+  renderVals() {
+    var self = this;
+    var done = this.state.done;
+    var mark = function (key, value) {
+      var next = Object.assign({}, self.state.done);
+      next[key] = value;
+      self.setState({ done: next });
+    };
+    var waiting = NEEDS.filter(function (n) { return !done[n.key]; }).length;
+    return {
+      waiting: waiting,
+      waitingLabel: waiting === 0 ? 'nothing needs you' : waiting === 1 ? '1 needs you' : waiting + ' need you',
+      allClear: waiting === 0,
+      needs: NEEDS.map(function (n) {
+        var isDone = !!done[n.key];
+        return {
+          who: n.who, title: n.title, sub: n.sub, action: n.action, doneText: n.doneText,
+          pending: !isDone, done: isDone,
+          tileBg: isDone ? '#E8F6FB' : '#FFE9C2',
+          tileFg: isDone ? '#086B91' : '#7A4A00',
+          approve: function () { mark(n.key, true); },
+          undo: function () { mark(n.key, false); }
+        };
+      }),
+      agents: AGENTS
+    };
+  }
+}
+</script>
+</body>
+</html>

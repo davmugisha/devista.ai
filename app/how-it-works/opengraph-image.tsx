@@ -1,6 +1,6 @@
 import { OG_SIZE, renderOg } from '@/lib/og';
 
-export const alt = 'Start with one department. Expand when it proves itself.';
+export const alt = 'One free call, then agents installed in 7 days.';
 export const size = OG_SIZE;
 export const contentType = 'image/png';
 

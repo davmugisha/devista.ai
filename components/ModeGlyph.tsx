@@ -3,11 +3,13 @@ import type { Mode } from '@/lib/workflows';
 /**
  * Who does a step, encoded by shape: a person is a solid circle, AI-assisted work is a
  * half-filled circle (shared between a person and AI), and an agent is a solid diamond.
- * Drawn in the current text colour; always paired with a text label.
+ * Drawn in the current text colour, or with `tinted` in the mode's own colour (a person in
+ * `hold`, AI in `signal-bright`); always paired with a text label.
  */
-export function ModeGlyph({ mode, className = 'size-3' }: { mode: Mode; className?: string }) {
+export function ModeGlyph({ mode, tinted = false, className = 'size-3' }: { mode: Mode; tinted?: boolean; className?: string }) {
+  const tone = tinted ? (mode === 'person' ? ' text-hold' : ' text-signal-bright') : '';
   return (
-    <svg viewBox="0 0 12 12" aria-hidden="true" className={'shrink-0 ' + className}>
+    <svg viewBox="0 0 12 12" aria-hidden="true" className={'shrink-0 ' + className + tone}>
       {mode === 'person' && <circle cx="6" cy="6" r="5.25" className="fill-current" />}
       {mode === 'assisted' && (
         <>

@@ -3,9 +3,12 @@
 
 import { BOOKING } from './booking-config';
 import { DIAL_CODES } from './booking-countries';
-import { EMAIL_MAX, isEmail } from './email';
+import { EMAIL_MAX, emailError } from './email';
 
-export const LIMITS = { firstName: 80, lastName: 80, email: EMAIL_MAX, phone: 20, company: 160, topic: 2000 } as const;
+export const LIMITS = { firstName: 80, lastName: 80, email: EMAIL_MAX, phone: 20, company: 160, site: 200, topic: 2000 } as const;
+
+/** The task description has to say enough to prepare the call: a sentence or two. */
+export const TOPIC_MIN = 40;
 
 export type DetailsInput = {
   firstName: string;
@@ -15,7 +18,10 @@ export type DetailsInput = {
   phoneRegion: string;
   phone: string;
   company: string;
+  /** The agency's website. Not called "website": that name belongs to the honeypot. */
+  site: string;
   teamSize: string;
+  revenue: string;
   topic: string;
 };
 export type DetailField = keyof DetailsInput;
@@ -28,13 +34,17 @@ export const EMPTY_DETAILS: DetailsInput = {
   phoneRegion: '',
   phone: '',
   company: '',
+  site: '',
   teamSize: '',
+  revenue: '',
   topic: '',
 };
 
 export const DETAIL_FIELDS = Object.keys(EMPTY_DETAILS) as DetailField[];
 
 const PHONE_CHARS = /^[\d\s().-]+$/;
+// A domain with an optional scheme and path, such as agency.com or https://www.agency.co.uk/about.
+const SITE_SHAPE = /^(https?:\/\/)?([a-z0-9-]+\.)+[a-z]{2,}(\/\S*)?$/i;
 
 const tooLong = (what: string, max: number) => `Shorten ${what} to ${max} characters or fewer.`;
 
@@ -50,10 +60,7 @@ export function fieldError(field: DetailField, raw: string | undefined, all: Par
       if (v.length > LIMITS.lastName) return tooLong('your last name', LIMITS.lastName);
       return;
     case 'email':
-      if (!v) return 'Enter your work email. The calendar invite is sent there.';
-      if (v.length > LIMITS.email) return 'This email address is too long. Check it and try again.';
-      if (!isEmail(v)) return 'Enter an email address in the format name@company.com.';
-      return;
+      return emailError(v, 'Enter your work email. The calendar invite is sent there.');
     case 'phoneRegion':
       if (v && !(v in DIAL_CODES)) return 'Choose a country code from the list.';
       return;
@@ -66,12 +73,24 @@ export function fieldError(field: DetailField, raw: string | undefined, all: Par
       return;
     }
     case 'company':
+      if (!v) return 'Enter your agency or company name.';
       if (v.length > LIMITS.company) return tooLong('the company name', LIMITS.company);
+      return;
+    case 'site':
+      if (!v) return;
+      if (v.length > LIMITS.site) return tooLong('the website address', LIMITS.site);
+      if (!SITE_SHAPE.test(v)) return 'Enter a website address such as youragency.com.';
       return;
     case 'teamSize':
       if (v && !BOOKING.teamSizes.some((o) => o.value === v)) return 'Choose a team size from the list.';
       return;
+    case 'revenue':
+      if (!v) return 'Choose a revenue range. Prefer not to say is fine.';
+      if (!BOOKING.revenueRanges.some((o) => o.value === v)) return 'Choose a revenue range from the list.';
+      return;
     case 'topic':
+      if (!v) return 'Tell us the one task you would most like agents to take over.';
+      if (v.length < TOPIC_MIN) return `Add a little more: at least ${TOPIC_MIN} characters, so we can prepare for your call.`;
       if (v.length > LIMITS.topic) return `Keep this under ${LIMITS.topic} characters. You can say more on the call.`;
       return;
   }

@@ -1,6 +1,8 @@
-// Example workflows for the "who does each step" interactive. Every step uses only the
-// capabilities the owner confirmed as live: agents working under rules, AI-assisted drafting,
-// approval gates and escalation to a named role. Systems are named generically, not by vendor.
+// Example workflows for the "who does each step" interactive, written for a small agency.
+// Every step is built from the same four parts: agents working under rules, AI-assisted drafting,
+// approval gates and escalation to a named role. Roles are generic (agency owner, account
+// manager, strategist) and systems are named by kind, not by vendor. These show how a team could
+// set a workflow up. They are examples, not results.
 
 export type Mode = 'person' | 'assisted' | 'agent';
 
@@ -10,11 +12,17 @@ export type Step =
 
 export type Workflow = {
   id: string;
+  /** The part of the agency the workflow belongs to, such as Sales or Client work. */
   department: string;
   name: string;
+  /** A short label for the picker tab. Falls back to the name. */
+  tab?: string;
   summary: string;
   steps: Step[];
 };
+
+/** The modes from most human to most automated, the order every list and legend uses. */
+export const MODE_ORDER: readonly Mode[] = ['person', 'assisted', 'agent'];
 
 export const MODES: Record<Mode, { label: string; short: string; description: string }> = {
   person: {
@@ -36,185 +44,148 @@ export const MODES: Record<Mode, { label: string; short: string; description: st
 
 export const WORKFLOWS: Workflow[] = [
   {
-    id: 'finance',
-    department: 'Finance',
-    name: 'Supplier invoice approval',
-    summary: 'From invoice received to payment scheduled, with nothing paid before it is approved.',
+    id: 'leads',
+    department: 'Sales',
+    name: 'Lead research and outreach drafts',
+    tab: 'Lead research',
+    summary: 'From a profile you set to a batch of outreach drafts, with nothing sent until a person approves each message.',
     steps: [
       {
         kind: 'step',
-        mode: 'agent',
-        title: 'Capture the invoice',
-        detail: 'Reads each invoice from the accounts inbox and records supplier, amounts, tax and due date.',
-        system: 'Accounts inbox',
+        mode: 'person',
+        title: 'Set the target profile',
+        detail: 'The agency owner describes the kind of business to reach, where to look for them and what to leave out.',
       },
       {
         kind: 'step',
         mode: 'agent',
-        title: 'Match it to the order',
-        detail: 'Checks the invoice against the purchase order and the goods receipt.',
-        escalation: 'A mismatch above your tolerance goes to the accounts payable lead.',
+        title: 'Find matching prospects',
+        detail: 'Searches the places you named and lists each prospect that fits the profile, with a link to where it was found.',
+        system: 'Spreadsheet',
+        escalation: 'A prospect already in your CRM, or on your do-not-contact list, goes to the agency owner instead of the list.',
       },
       {
         kind: 'step',
         mode: 'assisted',
-        title: 'Code and prepare the entry',
-        detail: 'AI suggests the cost center and ledger account. An accounts payable clerk confirms them.',
-        system: 'Accounting system',
+        title: 'Draft the outreach messages',
+        detail: 'AI writes a first message for each prospect from your notes on tone and offer. A strategist edits every draft.',
+        system: 'Document tool',
       },
       {
         kind: 'gate',
         title: 'Approval',
-        detail: 'The budget owner approves. Above the approval limit, the CFO approves as well.',
+        detail: 'The agency owner approves every message. Nothing is sent without approval.',
       },
       {
         kind: 'step',
         mode: 'agent',
-        title: 'Schedule the payment',
-        detail: 'Adds the approved invoice to the next payment run. Nothing is scheduled without approval.',
-        system: 'Payments',
-      },
-      {
-        kind: 'step',
-        mode: 'person',
-        title: 'Review exceptions',
-        detail: 'The finance lead reviews every escalation each week and adjusts the rules.',
-      },
-    ],
-  },
-  {
-    id: 'sales',
-    department: 'Sales',
-    name: 'New customer onboarding',
-    summary: 'From deal won to kickoff, with the account manager signing off everything the customer sees.',
-    steps: [
-      {
-        kind: 'step',
-        mode: 'agent',
-        title: 'Open the onboarding record',
-        detail: 'When a deal is marked won, collects the contract terms, contacts and start date.',
+        title: 'Log the approved messages',
+        detail: 'Records each approved message against its prospect and creates a follow-up task.',
         system: 'CRM',
       },
       {
         kind: 'step',
-        mode: 'assisted',
-        title: 'Prepare the welcome pack',
-        detail: 'AI drafts the welcome email and kickoff agenda from the contract. The account manager edits them.',
-      },
-      {
-        kind: 'gate',
-        title: 'Approval',
-        detail: 'The account manager approves anything that goes to the customer.',
-      },
-      {
-        kind: 'step',
-        mode: 'agent',
-        title: 'Set up billing and projects',
-        detail: 'Creates the customer in the billing and project tools with the agreed terms.',
-        system: 'Billing, project tools',
-        escalation: 'Missing tax or billing details go to finance before anything is created.',
-      },
-      {
-        kind: 'step',
         mode: 'person',
-        title: 'Run the kickoff call',
-        detail: 'The account manager leads the call and agrees priorities with the customer.',
-      },
-      {
-        kind: 'step',
-        mode: 'agent',
-        title: 'Report progress',
-        detail: 'Adds onboarding status to the weekly leadership report.',
+        title: 'Send and follow up',
+        detail: 'Someone on the team sends the approved messages and handles every reply.',
+        system: 'Inbox',
       },
     ],
   },
   {
-    id: 'operations',
-    department: 'Operations',
-    name: 'Purchase requests',
-    summary: 'From request to purchase order, checked against budget and policy before anyone approves it.',
+    id: 'reports',
+    department: 'Client work',
+    name: 'Weekly client report',
+    tab: 'Client report',
+    summary: 'From the week’s numbers to a report the client receives, with an account manager checking it first.',
     steps: [
       {
         kind: 'step',
-        mode: 'person',
-        title: 'Request a purchase',
-        detail: 'An employee describes what they need and why.',
+        mode: 'agent',
+        title: 'Collect the numbers',
+        detail: 'Gathers the week’s figures for each client from the tools you name and puts them in one sheet.',
+        system: 'Spreadsheet, reporting tools',
+        escalation: 'A missing number, or one far from last week’s, goes to the account manager before it is used.',
       },
       {
         kind: 'step',
         mode: 'agent',
-        title: 'Check budget and policy',
-        detail: 'Checks the remaining budget, the purchasing policy and the approved supplier list.',
-        escalation: 'A supplier outside the approved list goes to the procurement lead.',
+        title: 'Fill in the report',
+        detail: 'Places the numbers in the client’s report template and marks what changed since last week.',
+        system: 'Document tool',
       },
       {
         kind: 'step',
         mode: 'assisted',
-        title: 'Compare quotes',
-        detail: 'AI compares the quotes and drafts a recommendation. The operations coordinator checks it.',
+        title: 'Draft the commentary',
+        detail: 'AI writes a short summary of what moved. The account manager corrects anything it got wrong.',
       },
       {
         kind: 'gate',
         title: 'Approval',
-        detail: 'The budget owner approves. Above the threshold you set, the COO approves as well.',
+        detail: 'The account manager checks every report. Nothing reaches a client before that.',
+      },
+      {
+        kind: 'step',
+        mode: 'person',
+        title: 'Send the report',
+        detail: 'The account manager sends it with a personal note and answers the client’s questions.',
+        system: 'Inbox',
       },
       {
         kind: 'step',
         mode: 'agent',
-        title: 'Raise the purchase order',
-        detail: 'Creates the purchase order in the ERP and sends it to the supplier.',
-        system: 'ERP',
-      },
-      {
-        kind: 'step',
-        mode: 'agent',
-        title: 'Track delivery',
-        detail: 'Follows up on late deliveries and keeps the requester informed.',
+        title: 'File it and prepare next week',
+        detail: 'Saves the sent report in the client folder and sets up next week’s sheet.',
+        system: 'Document tool',
       },
     ],
   },
   {
-    id: 'support',
-    department: 'Support',
-    name: 'Support ticket triage',
-    summary: 'Every ticket sorted in minutes, with complaints and refunds always handled by a person.',
+    id: 'proposals',
+    department: 'Sales',
+    name: 'Proposal from call notes',
+    tab: 'Proposal',
+    summary: 'From a sales call to a proposal ready to send, with a person editing and approving every word that goes out.',
     steps: [
       {
         kind: 'step',
-        mode: 'agent',
-        title: 'Sort incoming tickets',
-        detail: 'Classifies each ticket by topic, urgency and customer, and routes it to the right queue.',
-        system: 'Help desk',
-        escalation: 'Complaints, refund requests and anything legal go straight to the support lead.',
-      },
-      {
-        kind: 'step',
-        mode: 'agent',
-        title: 'Answer routine questions',
-        detail: 'Replies on its own only to question types you have approved, such as order status.',
+        mode: 'person',
+        title: 'Hold the call',
+        detail: 'The agency owner talks with the prospect and keeps notes.',
       },
       {
         kind: 'step',
         mode: 'assisted',
-        title: 'Draft the other replies',
-        detail: 'AI drafts answers from your knowledge base. A support specialist reviews each one before it is sent.',
+        title: 'Draft the proposal',
+        detail: 'AI drafts the proposal from the call notes and your template. A strategist edits it.',
+        system: 'Document tool',
+      },
+      {
+        kind: 'step',
+        mode: 'agent',
+        title: 'Check for gaps',
+        detail: 'Compares the draft with the template and the notes, and lists anything missing or unclear.',
+        escalation: 'Anything the notes do not cover goes to the strategist as a question, not a guess.',
       },
       {
         kind: 'gate',
         title: 'Approval',
-        detail: 'Refunds above your limit need the support lead to approve them.',
+        detail: 'The agency owner approves the proposal before it goes to the prospect.',
+      },
+      {
+        kind: 'step',
+        mode: 'agent',
+        title: 'File it and create the follow-up',
+        detail: 'Saves the proposal against the prospect and creates a follow-up task for the day you choose.',
+        system: 'CRM, document tool',
       },
       {
         kind: 'step',
         mode: 'person',
-        title: 'Handle escalations',
-        detail: 'The support lead owns complaints and exceptions from start to finish.',
-      },
-      {
-        kind: 'step',
-        mode: 'assisted',
-        title: 'Review weekly trends',
-        detail: 'AI summarizes recurring issues. The head of support decides what to fix.',
+        title: 'Send and talk it through',
+        detail: 'The agency owner sends the proposal and handles the questions that come back.',
+        system: 'Inbox',
       },
     ],
   },

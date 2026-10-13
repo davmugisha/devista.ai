@@ -12,3 +12,8 @@ export const COLOR = {
   glowCyan: '#26A9D6',
   glowDeep: '#B7EAF7',
 } as const;
+
+/** The dark theme (the default), from :root[data-theme="dark"]. Only the browser theme colour needs it. */
+export const COLOR_DARK = {
+  paper: '#0A161D',
+} as const;

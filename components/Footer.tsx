@@ -1,8 +1,10 @@
 import Link from 'next/link';
 import { ButtonLink } from './Button';
+import { ContactLink } from './ContactLink';
 import { Logo } from './Logo';
 import { NewsletterForm } from './NewsletterForm';
 import { SocialLinks } from './SocialLinks';
+import { ThemeToggle } from './ThemeToggle';
 import { CTA, LEGAL, SITE } from '@/lib/site';
 
 // Two balanced groups, so the columns pair up on a phone. Every link goes somewhere different;
@@ -13,7 +15,7 @@ const GROUPS = [
     links: [
       { label: 'Overview', href: '/product' },
       { label: 'How it works', href: '/how-it-works' },
-      { label: 'Example workflows', href: '/#idea' },
+      { label: 'Example workflows', href: '/how-it-works#workflows' },
       { label: 'Pricing', href: '/#pricing' },
     ],
   },
@@ -40,7 +42,7 @@ export function Footer() {
               Get updates by email
             </h2>
             <p className="mt-3 max-w-measure text-sm text-graphite">
-              Occasional notes on handoffs, approvals and the work between your systems, plus news from {SITE.shortName}.
+              Occasional notes on handing repeat work to AI agents, plus news from {SITE.shortName}.
             </p>
           </div>
           <NewsletterForm />
@@ -53,6 +55,9 @@ export function Footer() {
           <ButtonLink href={CTA.book.href} size="sm" track="footer" className="mt-6">
             {CTA.book.label}
           </ButtonLink>
+          <p className="mt-4 text-sm text-graphite">
+            Prefer email? Write to <ContactLink />
+          </p>
           <SocialLinks className="mt-8" />
         </div>
         <div className="grid grid-cols-2 gap-8 md:gap-16">
@@ -64,7 +69,7 @@ export function Footer() {
               <ul className="mt-5 space-y-3">
                 {group.links.map((link) => (
                   <li key={link.href}>
-                    <Link href={link.href} prefetch={false} className="rounded-chip text-sm text-graphite transition-colors hover:text-signal">
+                    <Link href={link.href} prefetch={false} className="rounded-chip text-sm text-graphite transition-colors hover:text-signal-bright">
                       {link.label}
                     </Link>
                   </li>
@@ -79,17 +84,20 @@ export function Footer() {
           <p>
             © {new Date().getFullYear()} {SITE.name}. All rights reserved.
           </p>
-          <nav aria-label="Legal">
-            <ul className="flex items-center gap-6">
-              {LEGAL.map((link) => (
-                <li key={link.href}>
-                  <Link href={link.href} prefetch={false} className="rounded-chip hover:text-ink">
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </nav>
+          <div className="flex items-center gap-6">
+            <nav aria-label="Legal">
+              <ul className="flex items-center gap-6">
+                {LEGAL.map((link) => (
+                  <li key={link.href}>
+                    <Link href={link.href} prefetch={false} className="rounded-chip hover:text-ink">
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+            <ThemeToggle />
+          </div>
         </div>
       </div>
     </footer>

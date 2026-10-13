@@ -1,8 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title">
-  <title id="title">Devista mark</title>
-  <g fill="#086B91">
-    <path d="M5 39c0-3 1.8-5.4 4.6-7l5.2-2.9c1.1-.6 2.2.1 2.2 1.4V60H5V39Z"/>
-    <path d="M20 30.4c0-1.2.6-2.2 1.7-2.8l6.3-3.7c1-.6 2 .1 2 1.3V60H20V30.4Z"/>
-    <path d="M23 5.8c0-1.2 1.1-1.9 2.2-1.5l17.3 7C54.3 16 61 24.2 61 35.2 61 49.5 50.4 60 36 60h-2V50h2.6C45.4 50 52 43.8 52 35.2c0-7.2-4.3-12.7-12.9-16.2L23 12.6V5.8Z"/>
-  </g>
-</svg>

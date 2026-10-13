@@ -7,14 +7,14 @@ import { ModeGlyph } from '@/components/ModeGlyph';
 import { PageIntro } from '@/components/PageIntro';
 import { AgentPermissions } from '@/components/screens/AgentPermissions';
 import { delay, Section } from '@/components/Section';
-import { CONTROLS, FAQ } from '@/lib/content';
-import { MODES, type Mode } from '@/lib/workflows';
+import { CONTROLS, FAQ, OFFERS } from '@/lib/content';
+import { MODES, MODE_ORDER } from '@/lib/workflows';
 import { OPEN_GRAPH, SITE } from '@/lib/site';
 
 export const metadata: Metadata = {
   title: 'Security and control',
   description:
-    `How ${SITE.shortName} keeps people in control: approvals, permissions, policies, escalation and a complete audit trail, plus the questions we answer in writing for your IT lead.`,
+    `How ${SITE.shortName} keeps people in control: approvals, permissions, rules, escalation and an activity record, plus what we put in writing about access before you pay.`,
   alternates: { canonical: '/security' },
   openGraph: { ...OPEN_GRAPH, title: `Security and control | ${SITE.name}` },
 };
@@ -22,15 +22,14 @@ export const metadata: Metadata = {
 // One icon per control, in the order CONTROLS lists them.
 const CONTROL_ICONS = [CircleCheck, KeyRound, Scale, Siren, ScrollText, Plug];
 
-const IT_QUESTIONS = [
-  `Where ${SITE.shortName} is hosted, and in which region your data is stored`,
-  'How data is protected in transit and at rest',
-  `Who at ${SITE.shortName} can access your data, and how that access is controlled and logged`,
-  `Which systems ${SITE.shortName} connects to, and with what level of access`,
-  'How long data is kept, and how it is returned or deleted',
+// What the buyer is told before paying. Each line restates the FAQ or the offer in lib/content.ts.
+const BEFORE_YOU_PAY = [
+  'Which access each agent needs, in writing, so you can say no to any of it',
+  'Which of your tools can be connected, and which cannot',
+  OFFERS[0].get[3],
 ];
 
-const PICK = new Set(['How is our data kept safe?', 'What happens when something goes wrong?', 'You are a young company. What if you disappear?']);
+const PICK = new Set(['How is our data kept safe?', 'Do we have to replace the tools we use?', 'Will the agents replace my team?']);
 
 export default function SecurityPage() {
   return (
@@ -41,7 +40,7 @@ export default function SecurityPage() {
         lede="People approve what matters. Agents act only within the rules and access you grant. Every action, by a person or an agent, is recorded."
       />
 
-      <Section id="control-model" chip="The control model" title={`Control runs through every part of ${SITE.shortName}.`} lede="Not a settings page added at the end: every workflow is built on these six.">
+      <Section id="control-model" chip="The control model" title="How you stay in control." lede="Six controls, described in plain words.">
         <ul className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {CONTROLS.map((c, i) => {
             const Icon = CONTROL_ICONS[i];
@@ -67,12 +66,12 @@ export default function SecurityPage() {
         <p className="mt-4 text-center text-xs text-slate">Illustrations with example data.</p>
       </Section>
 
-      <Section id="who-acts" chip="Who acts" title="Who is allowed to do what." lede="Every step of every workflow is assigned to one of three modes, and you decide which.">
+      <Section id="who-acts" chip="Who acts" title="Who is allowed to do what." lede="Every step of a workflow is assigned to one of three modes, and you decide which.">
         <ul className="mt-14 grid gap-4 md:grid-cols-3">
-          {(['person', 'assisted', 'agent'] as Mode[]).map((m, i) => (
+          {MODE_ORDER.map((m, i) => (
             <li key={m} data-reveal style={delay(i * 90)} className={'card p-7 ' + (m === 'agent' ? 'card-lit' : '')}>
               <span className="flex size-10 items-center justify-center rounded-dot border border-rule bg-panel">
-                <ModeGlyph mode={m} className={'size-4 ' + (m === 'person' ? 'text-hold' : 'text-signal-bright')} />
+                <ModeGlyph mode={m} tinted className="size-4" />
               </span>
               <h3 className="mt-5 text-lg font-display tracking-snug text-ink">{MODES[m].label}</h3>
               <p className="mt-2 text-sm text-graphite">{MODES[m].description}</p>
@@ -80,19 +79,19 @@ export default function SecurityPage() {
           ))}
         </ul>
         <p data-reveal className="mx-auto mt-8 max-w-narrow text-center text-base text-graphite">
-          Agents run work on their own only where it is repetitive and measurable, and only where the economics and
-          reliability justify it. Everything else stays with a person, with AI preparing the ground.
+          Agents work alone only on repeat work that has clear rules. Everything else stays with a person, with AI
+          preparing the first draft.
         </p>
       </Section>
 
       <Section
-        id="it-review"
-        chip="For your IT lead"
-        title="Answered in writing, before anything connects."
-        lede="Your IT or security lead can review these on your terms, and is welcome to join the operations audit."
+        id="before-you-pay"
+        chip="Before you pay"
+        title="What we put in front of you before you pay."
+        lede="Access comes first, and you can say no to any of it."
       >
         <ol data-reveal className="card mx-auto mt-14 max-w-narrow divide-y divide-rule p-2 sm:p-4">
-          {IT_QUESTIONS.map((q, i) => (
+          {BEFORE_YOU_PAY.map((q, i) => (
             <li key={q} className="flex items-start gap-4 px-3 py-4">
               <span className="tabular flex size-7 shrink-0 items-center justify-center rounded-control border border-rule bg-panel text-xs font-semibold text-signal-bright">
                 {i + 1}
@@ -108,8 +107,8 @@ export default function SecurityPage() {
       </Section>
 
       <CtaBand
-        title="Bring your IT lead to the audit."
-        lede="The operations audit is free and takes about two weeks. Security questions are answered in writing before anything connects."
+        title="Bring your questions to the free call."
+        lede="Ask what the agents can and cannot do, and what access they would need. You get the scope and price in writing before you pay."
       />
     </>
   );

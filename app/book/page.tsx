@@ -1,81 +1,89 @@
 import type { Metadata } from 'next';
-import { CalendarClock, Clock, Gift, ShieldCheck } from 'lucide-react';
-import { AuditDeliverables, RENDERED } from '@/components/AuditDeliverables';
-import { AuditOffer } from '@/components/AuditOffer';
-import { Chip, delay, Section } from '@/components/Section';
+import { CalendarClock, Check, Clock, FileCheck, ShieldCheck } from 'lucide-react';
+import { ContactLink } from '@/components/ContactLink';
+import { PageIntro } from '@/components/PageIntro';
+import { delay, Section } from '@/components/Section';
 import { BookingFlow } from './BookingFlow';
+import { BOOKING } from '@/lib/booking-config';
+import { OFFERS, STEPS } from '@/lib/content';
 import { OPEN_GRAPH, SITE } from '@/lib/site';
 
 export const metadata: Metadata = {
   title: 'Book a free call',
   description:
-    `Book a free introductory call with ${SITE.name} to discuss your workflows and the next step.`,
+    `Book a free ${BOOKING.durationMinutes} minute call with ${SITE.name} to find the one workflow worth starting with. You get the price and scope in writing before you pay.`,
   alternates: { canonical: '/book' },
   openGraph: { ...OPEN_GRAPH, title: `Book a free call | ${SITE.name}` },
 };
 
 const FACTS = [
-  { Icon: Gift, title: 'Free, no obligation', detail: 'You keep the findings either way.' },
-  { Icon: Clock, title: 'About two weeks', detail: 'One department or workflow.' },
-  { Icon: ShieldCheck, title: 'No system access needed', detail: 'We work from walkthroughs.' },
+  { Icon: Clock, text: `Free, ${BOOKING.durationMinutes} minutes` },
+  { Icon: CalendarClock, text: 'Times shown in your time zone' },
+  { Icon: ShieldCheck, text: 'No access to your systems needed' },
+  { Icon: FileCheck, text: 'Scope and price in writing before you pay' },
 ];
+
+const SETUP = OFFERS[0];
 
 export default function BookPage() {
   return (
     <>
-      <section aria-labelledby="page-title" className="hero-sky relative isolate overflow-hidden">
-        <div className="mx-auto max-w-page px-4 pb-20 pt-16 md:px-8 md:pb-28 md:pt-24">
-          <div className="text-center">
-            <Chip className="animate-hero">Book a free call</Chip>
-            <h1
-              id="page-title"
-              className="mx-auto mt-6 max-w-heading text-5xl font-display tracking-display text-ink animate-hero"
-              style={{ animationDelay: '80ms' }}
-            >
-              Let’s talk about the work you want to automate.
-            </h1>
-            <p className="mx-auto mt-6 max-w-narrow text-lg text-graphite animate-hero" style={{ animationDelay: '160ms' }}>
-              Tell us who you are, then choose a time for a free introductory call. We will discuss your workflows and where an agent could help first.
+      <PageIntro
+        chip="Book a free call"
+        title="Book your free call."
+        lede="Tell us about your agency, then pick a time. We look at the repeat work that costs your team the most and where agents could take it on first."
+        cta={false}
+      >
+        <div className="text-left">
+          <ul className="mx-auto mt-8 flex max-w-stage flex-wrap justify-center gap-x-6 gap-y-2 animate-hero" style={{ animationDelay: '240ms' }}>
+            {FACTS.map(({ Icon, text }) => (
+              <li key={text} className="flex items-center gap-2 text-sm text-graphite">
+                <Icon aria-hidden="true" className="size-4 shrink-0 text-signal-bright" strokeWidth={1.9} />
+                {text}
+              </li>
+            ))}
+          </ul>
+
+          <div className="mx-auto mt-8 max-w-stage">
+            <BookingFlow />
+            <p className="mt-6 text-center text-sm text-graphite">
+              No time that suits you? Email <ContactLink /> and we will find one.
             </p>
           </div>
+        </div>
+      </PageIntro>
 
-          <div className="mx-auto mt-14 max-w-narrow">
-            <ul className="grid gap-3 sm:grid-cols-2">
-              {[FACTS[0], {
-                Icon: CalendarClock,
-                title: 'Choose a time now',
-                detail: 'Book in your time zone.',
-              }, ...FACTS.slice(1)].map(({ Icon, title, detail }, i) => (
-                <li key={title} className="card flex items-center gap-4 p-5 animate-hero" style={{ animationDelay: `${240 + i * 60}ms` }}>
-                  <span className="flex size-10 shrink-0 items-center justify-center rounded-control border border-rule bg-panel">
-                    <Icon aria-hidden="true" className="size-5 text-signal-bright" strokeWidth={1.8} />
-                  </span>
-                  <div>
-                    <p className="text-sm font-semibold text-ink">{title}</p>
-                    <p className="text-sm text-graphite">{detail}</p>
-                  </div>
+      <Section
+        id="after-the-call"
+        chip="After the call"
+        title="What happens after the call."
+        lede="A written scope and a fixed price come first. The work starts once you have paid."
+      >
+        <div className="mt-14 grid gap-4 lg:grid-cols-12">
+          <ol className="grid gap-4 sm:grid-cols-2 lg:col-span-7">
+            {STEPS.map((s, i) => (
+              <li key={s.name} data-reveal style={delay((i % 2) * 90)} className="card p-6">
+                <p className="tabular text-sm font-semibold text-signal-bright">Step {i + 1}</p>
+                <h3 className="mt-3 text-lg font-display tracking-snug text-ink">{s.name}</h3>
+                <p className="mt-2 text-sm text-graphite">{s.detail}</p>
+              </li>
+            ))}
+          </ol>
+
+          <div data-reveal style={delay(120)} className="card card-lit flex flex-col p-7 lg:col-span-5">
+            <h3 className="text-md font-semibold text-ink">{SETUP.name}</h3>
+            <p className="mt-4 text-3xl font-display tracking-display text-ink">{SETUP.price}</p>
+            <p className="mt-2 text-sm text-graphite">{SETUP.priceNote}</p>
+            <ul className="mt-6 space-y-3">
+              {SETUP.get.map((line) => (
+                <li key={line} className="flex items-start gap-3 text-sm text-ink">
+                  <Check aria-hidden="true" className="mt-0.5 size-4 shrink-0 text-signal-bright" strokeWidth={2.2} />
+                  {line}
                 </li>
               ))}
             </ul>
+            <p className="mt-auto pt-6 text-xs text-slate">{SETUP.foot}</p>
           </div>
-
-          <div className="mx-auto mt-4 max-w-stage">
-            <BookingFlow />
-          </div>
-        </div>
-      </section>
-
-      <Section
-        id="offer"
-        chip="What the audit covers"
-        title="A structured look at one department."
-        lede="Run with the people who do the work. You keep everything it produces."
-      >
-        <div className="mt-14">
-          <AuditDeliverables />
-        </div>
-        <div data-reveal style={delay(80)} className="card card-quiet mt-10 p-6 md:p-10">
-          <AuditOffer except={RENDERED} />
         </div>
       </Section>
     </>

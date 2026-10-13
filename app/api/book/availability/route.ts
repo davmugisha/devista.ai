@@ -1,8 +1,8 @@
 import type { NextRequest } from 'next/server';
 import { openSlots } from '@/lib/booking-availability';
 import { BOOKING } from '@/lib/booking-config';
-import { allow, clientIp } from '@/lib/booking-guard';
-import { failure, json } from '@/lib/booking-http';
+import { allow, clientIp } from '@/lib/api-guard';
+import { failure, json } from '@/lib/api-http';
 import { groupByDate } from '@/lib/booking-slots';
 import { isDateKey, isMonthKey, isTimeZone } from '@/lib/booking-time';
 

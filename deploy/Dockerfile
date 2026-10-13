@@ -1,6 +1,6 @@
 # Production image of the site. Build from the repository root:
 #   docker build -f deploy/Dockerfile --build-arg NEXT_PUBLIC_SITE_URL=https://saydeed.com .
-# The site URL is baked in at build time and picks the brand (lib/brand.ts).
+# The site URL is baked in at build time (lib/brand.ts).
 
 FROM node:24-bookworm-slim AS deps
 WORKDIR /app
@@ -18,7 +18,7 @@ COPY . .
 RUN npm run build
 
 FROM node:24-bookworm-slim AS run
-LABEL org.opencontainers.image.title="devista-site"
+LABEL org.opencontainers.image.title="saydeed-site"
 WORKDIR /app
 ENV NODE_ENV=production \
     NEXT_TELEMETRY_DISABLED=1 \

@@ -1,0 +1,225 @@
+@import "tailwindcss";
+@import "@heroui/styles";
+
+/*
+ * Saydeed theme for HeroUI.
+ *
+ * HeroUI ships its default theme in the `theme` layer, so these overrides in `base` win without
+ * !important. Every value comes from the design (extracted/saydeed-app/README.md, "Colours"), which
+ * uses the saydeed.com palette. This file and lib/tokens.ts are the only places a colour literal
+ * may appear; components use the utilities these variables generate (bg-accent, text-muted,
+ * bg-accent-soft, text-ink-2 ...).
+ */
+@layer base {
+  :root,
+  .light,
+  [data-theme="light"] {
+    color-scheme: light;
+
+    --radius: 0.5rem;
+
+    /* Ground, surfaces and text */
+    --background: #EEF5F9;
+    --foreground: #102A39;
+    --surface: #FFFFFF;
+    --surface-foreground: #102A39;
+    --surface-secondary: #E3EFF5;
+    --surface-secondary-foreground: #102A39;
+    --surface-tertiary: #E8F6FB;
+    --surface-tertiary-foreground: #102A39;
+    --overlay: #FFFFFF;
+    --overlay-foreground: #102A39;
+    --muted: #4F6875;
+
+    /* Inset controls ("Review", "Undo", segmented tracks) */
+    --default: #E3EFF5;
+    --default-foreground: #102A39;
+    --default-hover: #D6E6EE;
+
+    /* Signal: the one accent */
+    --accent: #086B91;
+    --accent-foreground: #FFFFFF;
+    --accent-hover: #064F6B;
+    --accent-soft: #D6EFF8;
+    --accent-soft-foreground: #06445C;
+    --accent-soft-hover: #C3E5F2;
+
+    /* Hold: amber, for anything that needs the owner */
+    --warning: #9A5A00;
+    --warning-foreground: #FFFFFF;
+    --warning-hover: #7A4A00;
+    --warning-soft: #FFE9C2;
+    --warning-soft-foreground: #7A4A00;
+    --warning-soft-hover: #F2D49A;
+
+    --success: #13764A;
+    --success-foreground: #FFFFFF;
+    --success-soft: #DDF2E6;
+    --success-soft-foreground: #13764A;
+
+    /* Only the end-call button is red */
+    --danger: #C8323C;
+    --danger-foreground: #FFFFFF;
+
+    /* Lines, focus and links */
+    --border: #C9DCE5;
+    --separator: #E3EFF5;
+    --focus: #086B91;
+    --link: #086B91;
+
+    /* Form fields: white with a hairline */
+    --field-background: #FFFFFF;
+    --field-foreground: #102A39;
+    --field-placeholder: #4F6875;
+    --field-border: #C9DCE5;
+    --field-border-width: 1px;
+
+    --segment: #FFFFFF;
+    --segment-foreground: #102A39;
+
+    --backdrop: rgba(16, 42, 57, 0.42);
+    --scrollbar-thumb: #B9CFDA;
+
+    /* Cards carry a hairline ring instead of a drop shadow; overlays float */
+    --surface-shadow: 0 0 0 1px #C9DCE5;
+    --overlay-shadow: 0 12px 32px rgba(16, 42, 57, 0.18), 0 0 0 1px #C9DCE5;
+    --field-shadow: none;
+  }
+}
+
+/*
+ * Design roles HeroUI has no name for. They generate utilities such as text-ink-2 and bg-person.
+ * `static` keeps every variable in the output, because component CSS below reads some directly.
+ */
+@theme static {
+  --color-ink-2: #2D4858;
+  --color-ink-3: #405C6B;
+  --color-inset: #E3EFF5;
+  --color-hairline: #C9DCE5;
+  --color-track: #D6E6EE;
+  --color-selected: #E8F6FB;
+  --color-selected-ring: #BFE3F0;
+  --color-row-hover: #F5FAFC;
+  --color-accent-deep: #06445C;
+  --color-person: #E2E9F6;
+  --color-person-foreground: #2F4F86;
+  --color-warning-wash: #FFF6E3;
+  --color-warning-line: #F2D49A;
+  --color-company: #2F7D3B;
+  --color-company-light: #74CF74;
+
+  --shadow-ring: 0 0 0 1px #C9DCE5;
+  --shadow-ring-soft: 0 0 0 1px #E3EFF5;
+  --shadow-pop: 0 12px 32px rgba(16, 42, 57, 0.18), 0 0 0 1px #C9DCE5;
+  --shadow-lift: 0 1px 3px rgba(16, 42, 57, 0.18);
+  --shadow-phone: 0 30px 80px rgba(16, 42, 57, 0.28), 0 0 0 1px #C9DCE5;
+
+  --animate-pulse-dot: pulse-dot 2s ease-in-out infinite;
+
+  @keyframes pulse-dot {
+    0%,
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 0.35;
+      transform: scale(0.7);
+    }
+  }
+}
+
+/* Fonts come from next/font (app/layout.tsx), which sets these variables on <html>. */
+@theme inline {
+  --font-sans: var(--font-quicksand), ui-rounded, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, Menlo, monospace;
+}
+
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    caret-color: var(--accent);
+  }
+
+  ::selection {
+    background: var(--accent-soft);
+    color: var(--foreground);
+  }
+}
+
+/* Quicksand reads thin at medium weight; the design sets every control in bold. */
+@layer components {
+  .button,
+  .chip,
+  .tag,
+  .toggle-button,
+  .tabs__tab {
+    font-weight: 700;
+  }
+
+  /*
+   * The design's two segmented controls, on HeroUI <ToggleButtonGroup isDetached fullWidth>.
+   * segmented-accent: white track, the selected segment fills with the accent (Buy | Sell, phone
+   * Work | Code, the call visuals). segmented-raised: inset track, the selected segment is a raised
+   * white pill (web rail Work | Code).
+   */
+  .segmented-accent,
+  .segmented-raised {
+    padding: 3px;
+    gap: 3px;
+    border-radius: 9999px;
+  }
+
+  .segmented-accent {
+    background: var(--surface);
+  }
+
+  .segmented-raised {
+    background: var(--default);
+  }
+
+  /* As specific as HeroUI's first/last-child radius rules, and later, so every segment is a pill. */
+  .toggle-button-group.segmented-accent .toggle-button,
+  .toggle-button-group.segmented-raised .toggle-button {
+    --toggle-button-bg: transparent;
+    --toggle-button-bg-hover: var(--default);
+    --toggle-button-bg-pressed: var(--default-hover);
+    --toggle-button-fg: var(--color-ink-3);
+    border-radius: 9999px;
+  }
+
+  .segmented-accent .toggle-button {
+    --toggle-button-bg-selected: var(--accent);
+    --toggle-button-bg-selected-hover: var(--accent-hover);
+    --toggle-button-bg-selected-pressed: var(--accent-hover);
+    --toggle-button-fg-selected: var(--accent-foreground);
+  }
+
+  .segmented-raised .toggle-button {
+    --toggle-button-bg-hover: var(--color-track);
+    --toggle-button-bg-selected: var(--surface);
+    --toggle-button-bg-selected-hover: var(--surface);
+    --toggle-button-bg-selected-pressed: var(--surface);
+    --toggle-button-fg-selected: var(--foreground);
+  }
+
+  .segmented-raised .toggle-button[data-selected="true"] {
+    box-shadow: var(--shadow-lift);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

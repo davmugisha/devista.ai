@@ -53,6 +53,7 @@ export function MobileMenu() {
               <Link
                 href={item.href}
                 prefetch={false}
+                onClick={() => setOpen(false)}
                 aria-current={pathname === item.href ? 'page' : undefined}
                 className="flex h-12 items-center text-md font-medium text-ink aria-[current=page]:text-signal-bright"
               >

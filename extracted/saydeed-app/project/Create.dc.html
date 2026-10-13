@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Create</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;600&amp;family=Quicksand:wght@500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#EEF5F9;-webkit-font-smoothing:antialiased}
+a{color:#086B91;text-decoration:none}a:hover{color:#064F6B}
+button,input{font-family:inherit}
+button{border:0;padding:0;cursor:pointer}
+input::placeholder{color:#4F6875}
+.i{fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.f{fill:currentColor;stroke:none}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+</style>
+</helmet>
+<div style="position: relative; width: 390px; height: 844px; overflow: hidden; background: #EEF5F9; color: #102A39; font-family: 'Quicksand', ui-rounded, system-ui, sans-serif">
+<div style="position: absolute; top: 0; left: 0; width: 390px; height: 844px">
+<dc-import name="Main" still="{{ true }}" hint-size="390px,844px"></dc-import>
+</div>
+<a href="Main.dc.html" aria-label="Close" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(16, 42, 57, 0.42)"></a>
+<section role="dialog" aria-label="Create" style="position: absolute; left: 0; right: 0; bottom: 0; box-sizing: border-box; padding: 12px 20px 32px; border-radius: 32px 32px 0 0; background: #FFFFFF; display: flex; flex-direction: column; gap: 16px">
+<div style="align-self: center; width: 40px; height: 5px; border-radius: 3px; background: #C9DCE5"></div>
+<div style="display: flex; align-items: center; justify-content: space-between">
+<h1 style="margin: 0; font-size: 24px; font-weight: 700">Create</h1>
+<a href="Main.dc.html" aria-label="Close" style="width: 44px; height: 44px; border-radius: 50%; background: #E3EFF5; color: #102A39; display: flex; align-items: center; justify-content: center">
+<svg class="i" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg>
+</a>
+</div>
+<div style="display: flex; flex-direction: column; gap: 8px">
+<div style="height: 60px; box-sizing: border-box; padding: 0 8px 0 18px; border-radius: 30px; background: #E3EFF5; box-shadow: inset 0 0 0 1px #C9DCE5; display: flex; align-items: center; gap: 8px">
+<label class="sr" for="create-say">Describe what you need</label>
+<input id="create-say" type="text" placeholder="Hire a bookkeeping agent under $200/mo" style="flex-grow: 1; min-width: 0; height: 44px; border: 0; outline: none; background: transparent; color: #102A39; font-size: 15px; font-weight: 600">
+<button type="button" aria-label="Say it" style="flex-shrink: 0; width: 44px; height: 44px; border-radius: 50%; background: #D6EFF8; color: #086B91; display: flex; align-items: center; justify-content: center">
+<svg class="i" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"></rect><path d="M5 11a7 7 0 0 0 14 0M12 18v3"></path></svg>
+</button>
+</div>
+<div style="padding: 0 18px; font-size: 13px; font-weight: 600; color: #4F6875">Chief of Staff sets it up and asks you before anything runs.</div>
+</div>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px">
+<button type="button" style="height: 88px; box-sizing: border-box; padding: 14px 16px; border-radius: 22px; background: #E3EFF5; color: #102A39; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-between; text-align: left">
+<svg class="i" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" style="flex-shrink: 0; color: #086B91"><path d="M4 7l1.5 1.5L8 6M4 13l1.5 1.5L8 12M4 19l1.5 1.5L8 18M11 7.5h9M11 13.5h9M11 19.5h9"></path></svg>
+<span style="display: flex; flex-direction: column; gap: 1px"><span style="font-size: 15px; font-weight: 700">New task</span><span style="font-size: 12px; font-weight: 600; color: #4F6875">For an agent or a person</span></span>
+</button>
+<button type="button" style="height: 88px; box-sizing: border-box; padding: 14px 16px; border-radius: 22px; background: #E3EFF5; color: #102A39; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-between; text-align: left">
+<svg class="i" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" style="flex-shrink: 0; color: #086B91"><rect x="5" y="7" width="14" height="11" rx="3.5"></rect><path d="M12 7V4M9.5 12v1M14.5 12v1"></path></svg>
+<span style="display: flex; flex-direction: column; gap: 1px"><span style="font-size: 15px; font-weight: 700">Hire an agent</span><span style="font-size: 12px; font-weight: 600; color: #4F6875">From a role or a skill</span></span>
+</button>
+<button type="button" style="height: 88px; box-sizing: border-box; padding: 14px 16px; border-radius: 22px; background: #E3EFF5; color: #102A39; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-between; text-align: left">
+<svg class="i" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" style="flex-shrink: 0; color: #086B91"><circle cx="12" cy="12" r="8.5"></circle><circle cx="12" cy="12" r="4.5"></circle><circle class="f" cx="12" cy="12" r="1.3"></circle></svg>
+<span style="display: flex; flex-direction: column; gap: 1px"><span style="font-size: 15px; font-weight: 700">New goal</span><span style="font-size: 12px; font-weight: 600; color: #4F6875">All work traces to it</span></span>
+</button>
+<button type="button" style="height: 88px; box-sizing: border-box; padding: 14px 16px; border-radius: 22px; background: #E3EFF5; color: #102A39; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-between; text-align: left">
+<svg class="i" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" style="flex-shrink: 0; color: #086B91"><circle cx="9" cy="8.5" r="3.2"></circle><path d="M3.5 19a5.5 5.5 0 0 1 11 0"></path><path d="M15.5 5.6a3.2 3.2 0 0 1 0 5.8M17.5 14.2a5.5 5.5 0 0 1 3 4.8"></path></svg>
+<span style="display: flex; flex-direction: column; gap: 1px"><span style="font-size: 15px; font-weight: 700">Group chat</span><span style="font-size: 12px; font-weight: 600; color: #4F6875">Agents and people</span></span>
+</button>
+<button type="button" style="height: 88px; box-sizing: border-box; padding: 14px 16px; border-radius: 22px; background: #E3EFF5; color: #102A39; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-between; text-align: left">
+<svg class="i" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" style="flex-shrink: 0; color: #086B91"><rect x="3.5" y="5" width="17" height="15" rx="3"></rect><path d="M3.5 10h17M8 3v4M16 3v4"></path></svg>
+<span style="display: flex; flex-direction: column; gap: 1px"><span style="font-size: 15px; font-weight: 700">Schedule a call</span><span style="font-size: 12px; font-weight: 600; color: #4F6875">With any agent</span></span>
+</button>
+<button type="button" style="height: 88px; box-sizing: border-box; padding: 14px 16px; border-radius: 22px; background: #E3EFF5; color: #102A39; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-between; text-align: left">
+<svg class="i" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" style="flex-shrink: 0; color: #086B91"><path d="M6 3.5h8l4 4V20a.5.5 0 0 1-.5.5h-11A.5.5 0 0 1 6 20z"></path><path d="M12 11v6M9 14l3-3 3 3"></path></svg>
+<span style="display: flex; flex-direction: column; gap: 1px"><span style="font-size: 15px; font-weight: 700">Add knowledge</span><span style="font-size: 12px; font-weight: 600; color: #4F6875">Docs, links, files</span></span>
+</button>
+<a href="Marketplace.dc.html" style="height: 88px; box-sizing: border-box; padding: 14px 16px; border-radius: 22px; background: #E3EFF5; color: #102A39; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-between">
+<svg class="i" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" style="flex-shrink: 0; color: #086B91"><path d="M3.5 9.5L5 4.5h14l1.5 5"></path><path d="M3.5 9.5a2.83 2.83 0 0 0 5.67 0a2.83 2.83 0 0 0 5.66 0a2.83 2.83 0 0 0 5.67 0"></path><path d="M5 12.5v7h14v-7M10 19.5v-4h4v4"></path></svg>
+<span style="display: flex; flex-direction: column; gap: 1px"><span style="font-size: 15px; font-weight: 700">Marketplace</span><span style="font-size: 12px; font-weight: 600; color: #4F6875">Buy workflows, tools</span></span>
+</a>
+<a href="MarketSell.dc.html" style="height: 88px; box-sizing: border-box; padding: 14px 16px; border-radius: 22px; background: #E3EFF5; color: #102A39; display: flex; flex-direction: column; align-items: flex-start; justify-content: space-between">
+<svg class="i" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" style="flex-shrink: 0; color: #086B91"><path d="M3.5 12.2V4.5a1 1 0 0 1 1-1h7.7l8.3 8.3-8.7 8.7z"></path><circle cx="8" cy="8" r="1.4"></circle></svg>
+<span style="display: flex; flex-direction: column; gap: 1px"><span style="font-size: 15px; font-weight: 700">Sell what you built</span><span style="font-size: 12px; font-weight: 600; color: #4F6875">List it on Marketplace</span></span>
+</a>
+</div>
+</section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

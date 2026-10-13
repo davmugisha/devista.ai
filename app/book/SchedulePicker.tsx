@@ -4,11 +4,12 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { buttonClass } from '@/components/Button';
 import { Chevron, controlClass, Field } from '@/components/Field';
-import { BOOKING, MS_DAY, MS_HOUR } from '@/lib/booking-config';
-import { fetchDay, fetchMonth, formatCivilDate, formatRange, formatTime, tzName, weekdayNames, type Slot } from '@/lib/booking-client';
+import { BookingClosedError, fetchDay, fetchMonth, formatCivilDate, formatRange, formatTime, tzName, weekdayNames, type Slot } from '@/lib/booking-client';
+import { bookableWindow } from '@/lib/booking-slots';
 import { dateKey, dateKeyInZone } from '@/lib/booking-time';
 
-type Load<T> = { status: 'loading' } | { status: 'error' } | { status: 'ready'; data: T };
+type Load<T> = { status: 'loading' } | { status: 'error' } | { status: 'closed' } | { status: 'ready'; data: T };
+const failed = (e: unknown): Load<never> => ({ status: e instanceof BookingClosedError ? 'closed' : 'error' });
 
 type Props = {
   tz: string;
@@ -43,13 +44,10 @@ const spinner = (
 export function SchedulePicker({ tz, timeZones, onTzChange, date, onDate, slot, onSlot, refreshKey, notice, bookingFor, pending, error, onBack, onBook }: Props) {
   // The visitor's clock is read once, when the picker first appears in the browser.
   const [now] = useState(() => Date.now());
-  const bounds = useMemo(
-    () => ({
-      first: dateKeyInZone(now + BOOKING.minNoticeHours * MS_HOUR, tz),
-      last: dateKeyInZone(now + BOOKING.maxDaysAhead * MS_DAY, tz),
-    }),
-    [now, tz],
-  );
+  const bounds = useMemo(() => {
+    const { from, to } = bookableWindow(now);
+    return { first: dateKeyInZone(from, tz), last: dateKeyInZone(to, tz) };
+  }, [now, tz]);
   const today = dateKeyInZone(now, tz);
   const weekdays = useMemo(weekdayNames, []);
 
@@ -73,7 +71,7 @@ export function SchedulePicker({ tz, timeZones, onTzChange, date, onDate, slot, 
     setMonths((m) => ({ ...m, [monthId]: { status: 'loading' } }));
     fetchMonth(month, tz).then(
       (data) => setMonths((m) => ({ ...m, [monthId]: { status: 'ready', data } })),
-      () => setMonths((m) => ({ ...m, [monthId]: { status: 'error' } })),
+      (e) => setMonths((m) => ({ ...m, [monthId]: failed(e) })),
     );
   }, [monthId, month, tz]);
 
@@ -83,7 +81,7 @@ export function SchedulePicker({ tz, timeZones, onTzChange, date, onDate, slot, 
     setDays((d) => ({ ...d, [dayId]: { status: 'loading' } }));
     fetchDay(date, tz).then(
       (data) => setDays((d) => ({ ...d, [dayId]: { status: 'ready', data } })),
-      () => setDays((d) => ({ ...d, [dayId]: { status: 'error' } })),
+      (e) => setDays((d) => ({ ...d, [dayId]: failed(e) })),
     );
   }, [dayId, date, tz]);
 
@@ -250,6 +248,11 @@ export function SchedulePicker({ tz, timeZones, onTzChange, date, onDate, slot, 
               Loading open days
             </p>
           ) : null}
+          {monthState.status === 'closed' ? (
+            <p role="status" className="mt-3 text-sm text-hold">
+              Online booking is not open yet. Please check back soon.
+            </p>
+          ) : null}
           {monthState.status === 'error' ? (
             <div role="alert" className="mt-3 text-sm text-alert">
               We could not load open days.{' '}
@@ -275,6 +278,11 @@ export function SchedulePicker({ tz, timeZones, onTzChange, date, onDate, slot, 
                 <p role="status" className="mt-3 flex items-center gap-2 text-sm text-graphite">
                   {spinner}
                   Loading times
+                </p>
+              ) : null}
+              {dayState.status === 'closed' ? (
+                <p role="status" className="mt-3 text-sm text-hold">
+                  Online booking is not open yet.
                 </p>
               ) : null}
               {dayState.status === 'error' ? (

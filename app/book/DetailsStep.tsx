@@ -2,12 +2,12 @@
 
 import { useMemo, useRef, useState, type FormEvent } from 'react';
 import { buttonClass } from '@/components/Button';
-import { Chevron, controlClass, describedBy, Field } from '@/components/Field';
+import { Chevron, controlClass, describedBy, Field, Honeypot } from '@/components/Field';
 import { track } from '@/lib/analytics';
 import { regionNames } from '@/lib/booking-client';
 import { BOOKING } from '@/lib/booking-config';
 import { DIAL_CODES, REGIONS } from '@/lib/booking-countries';
-import { DETAIL_FIELDS, detailErrors, LIMITS, type DetailField, type DetailsInput } from '@/lib/booking-validate';
+import { DETAIL_FIELDS, detailErrors, LIMITS, TOPIC_MIN, type DetailField, type DetailsInput } from '@/lib/booking-validate';
 
 type Props = {
   values: DetailsInput;
@@ -19,6 +19,9 @@ type Props = {
   /** Called with the honeypot value once every answer is valid. */
   onNext: (honeypot: string) => void;
 };
+
+/** Controls stay compact so the whole form fits on one laptop screen. */
+const H = 'h-11';
 
 export function DetailsStep({ values, onChange, error, revealAll, onNext }: Props) {
   const [touched, setTouched] = useState<Partial<Record<DetailField, boolean>>>({});
@@ -37,6 +40,18 @@ export function DetailsStep({ values, onChange, error, revealAll, onNext }: Prop
   const shown = (f: DetailField) => (touched[f] || revealAll ? errors[f] : undefined);
   const set = (f: DetailField) => (e: { target: { value: string } }) => onChange({ ...values, [f]: e.target.value });
   const blur = (f: DetailField) => () => setTouched((t) => ({ ...t, [f]: true }));
+  /** The props every control shares: value, change and blur handlers, and its error state. */
+  const bind = (f: DetailField, id: string, hint = false) => ({
+    id,
+    name: f,
+    value: values[f],
+    onChange: set(f),
+    onBlur: blur(f),
+    'aria-invalid': !!shown(f),
+    'aria-describedby': describedBy(id, hint),
+  });
+
+  const topicLength = values.topic.trim().length;
 
   const onStart = () => {
     if (started.current) return;
@@ -58,10 +73,10 @@ export function DetailsStep({ values, onChange, error, revealAll, onNext }: Prop
 
   return (
     <form onSubmit={submit} onFocus={onStart} noValidate aria-describedby="details-note">
-      <h2 id="step-1-title" tabIndex={-1} className="text-2xl font-display tracking-display text-ink outline-none">
+      <h2 id="step-1-title" tabIndex={-1} className="text-xl font-display tracking-display text-ink outline-none">
         Your details
       </h2>
-      <p className="mt-2 text-sm text-graphite">Tell us who we are meeting. Next, you pick a day and time.</p>
+      <p className="mt-1 text-sm text-graphite">Tell us about you and your agency. Next, you pick a day and time.</p>
 
       {error ? (
         <div role="alert" className="mt-5 rounded-control border border-alert bg-alert-tint p-4 animate-arrive">
@@ -70,123 +85,84 @@ export function DetailsStep({ values, onChange, error, revealAll, onNext }: Prop
         </div>
       ) : null}
 
-      <div className="mt-6 space-y-5">
-        <div className="grid gap-5 sm:grid-cols-2">
+      <div className="mt-5 space-y-4">
+        <div className="grid gap-4 sm:grid-cols-2">
           <Field id="f-first" label="First name" error={shown('firstName')}>
-            <input
-              id="f-first"
-              name="firstName"
-              autoComplete="given-name"
-              maxLength={LIMITS.firstName}
-              value={values.firstName}
-              onChange={set('firstName')}
-              onBlur={blur('firstName')}
-              aria-invalid={!!shown('firstName')}
-              aria-describedby={describedBy('f-first')}
-              aria-required="true"
-              className={controlClass(!!shown('firstName'), 'h-12')}
-            />
+            <input {...bind('firstName', 'f-first')} autoComplete="given-name" maxLength={LIMITS.firstName} aria-required="true" className={controlClass(!!shown('firstName'), H)} />
           </Field>
           <Field id="f-last" label="Last name" optional error={shown('lastName')}>
+            <input {...bind('lastName', 'f-last')} autoComplete="family-name" maxLength={LIMITS.lastName} className={controlClass(!!shown('lastName'), H)} />
+          </Field>
+        </div>
+
+        <div className="grid gap-4 sm:grid-cols-2">
+          <Field id="f-email" label="Work email" error={shown('email')}>
             <input
-              id="f-last"
-              name="lastName"
-              autoComplete="family-name"
-              maxLength={LIMITS.lastName}
-              value={values.lastName}
-              onChange={set('lastName')}
-              onBlur={blur('lastName')}
-              aria-invalid={!!shown('lastName')}
-              aria-describedby={describedBy('f-last')}
-              className={controlClass(!!shown('lastName'), 'h-12')}
+              {...bind('email', 'f-email')}
+              type="email"
+              inputMode="email"
+              autoComplete="email"
+              maxLength={LIMITS.email}
+              aria-required="true"
+              className={controlClass(!!shown('email'), H)}
+            />
+          </Field>
+          <Field id="f-phone" label="Phone" optional error={shown('phone') ?? shown('phoneRegion')}>
+            <div className="grid grid-cols-[8.5rem_minmax(0,1fr)] gap-2">
+              <div className="relative">
+                <select
+                  name="phoneRegion"
+                  aria-label="Country code"
+                  value={values.phoneRegion}
+                  onChange={set('phoneRegion')}
+                  onBlur={blur('phoneRegion')}
+                  aria-invalid={!!shown('phone') || !!shown('phoneRegion')}
+                  aria-describedby={describedBy('f-phone')}
+                  className={controlClass(!!shown('phoneRegion'), H + ' appearance-none truncate pl-3 pr-8')}
+                >
+                  <option value="">Code</option>
+                  {countries.map((c) => (
+                    <option key={c.region} value={c.region}>
+                      {c.label}
+                    </option>
+                  ))}
+                </select>
+                <Chevron />
+              </div>
+              <input
+                {...bind('phone', 'f-phone')}
+                type="tel"
+                inputMode="tel"
+                autoComplete="tel-national"
+                maxLength={LIMITS.phone}
+                className={controlClass(!!shown('phone'), H)}
+              />
+            </div>
+          </Field>
+        </div>
+
+        <div className="grid gap-4 sm:grid-cols-2">
+          <Field id="f-company" label="Agency or company" error={shown('company')}>
+            <input {...bind('company', 'f-company')} autoComplete="organization" maxLength={LIMITS.company} aria-required="true" className={controlClass(!!shown('company'), H)} />
+          </Field>
+          <Field id="f-site" label="Website" optional error={shown('site')}>
+            <input
+              {...bind('site', 'f-site')}
+              type="text"
+              inputMode="url"
+              autoComplete="url"
+              spellCheck={false}
+              placeholder="youragency.com"
+              maxLength={LIMITS.site}
+              className={controlClass(!!shown('site'), H)}
             />
           </Field>
         </div>
 
-        <Field id="f-email" label="Work email" error={shown('email')}>
-          <input
-            id="f-email"
-            name="email"
-            type="email"
-            inputMode="email"
-            autoComplete="email"
-            maxLength={LIMITS.email}
-            value={values.email}
-            onChange={set('email')}
-            onBlur={blur('email')}
-            aria-invalid={!!shown('email')}
-            aria-describedby={describedBy('f-email')}
-            aria-required="true"
-            className={controlClass(!!shown('email'), 'h-12')}
-          />
-        </Field>
-
-        <Field id="f-phone" label="Phone" optional error={shown('phone') ?? shown('phoneRegion')}>
-          <div className="grid gap-2 sm:grid-cols-[13rem_minmax(0,1fr)]">
-            <div className="relative">
-              <select
-                name="phoneRegion"
-                aria-label="Country code"
-                value={values.phoneRegion}
-                onChange={set('phoneRegion')}
-                onBlur={blur('phoneRegion')}
-                aria-invalid={!!shown('phone') || !!shown('phoneRegion')}
-                aria-describedby={describedBy('f-phone')}
-                className={controlClass(!!shown('phoneRegion'), 'h-12 appearance-none pr-10')}
-              >
-                <option value="">Country code</option>
-                {countries.map((c) => (
-                  <option key={c.region} value={c.region}>
-                    {c.label}
-                  </option>
-                ))}
-              </select>
-              <Chevron />
-            </div>
-            <input
-              id="f-phone"
-              name="phone"
-              type="tel"
-              inputMode="tel"
-              autoComplete="tel-national"
-              maxLength={LIMITS.phone}
-              value={values.phone}
-              onChange={set('phone')}
-              onBlur={blur('phone')}
-              aria-invalid={!!shown('phone')}
-              aria-describedby={describedBy('f-phone')}
-              className={controlClass(!!shown('phone'), 'h-12')}
-            />
-          </div>
-        </Field>
-
-        <div className="grid gap-5 sm:grid-cols-2">
-          <Field id="f-company" label="Company" optional error={shown('company')}>
-            <input
-              id="f-company"
-              name="company"
-              autoComplete="organization"
-              maxLength={LIMITS.company}
-              value={values.company}
-              onChange={set('company')}
-              onBlur={blur('company')}
-              aria-invalid={!!shown('company')}
-              aria-describedby={describedBy('f-company')}
-              className={controlClass(!!shown('company'), 'h-12')}
-            />
-          </Field>
+        <div className="grid gap-4 sm:grid-cols-2">
           <Field id="f-team" label="Team size" optional error={shown('teamSize')}>
             <div className="relative">
-              <select
-                id="f-team"
-                name="teamSize"
-                value={values.teamSize}
-                onChange={set('teamSize')}
-                onBlur={blur('teamSize')}
-                aria-invalid={!!shown('teamSize')}
-                aria-describedby={describedBy('f-team')}
-                className={controlClass(!!shown('teamSize'), 'h-12 appearance-none pr-10')}
-              >
+              <select {...bind('teamSize', 'f-team')} className={controlClass(!!shown('teamSize'), H + ' appearance-none pr-10')}>
                 <option value="">Choose one</option>
                 {BOOKING.teamSizes.map((o) => (
                   <option key={o.value} value={o.value}>
@@ -197,38 +173,43 @@ export function DetailsStep({ values, onChange, error, revealAll, onNext }: Prop
               <Chevron />
             </div>
           </Field>
+          <Field id="f-revenue" label="Annual revenue" error={shown('revenue')}>
+            <div className="relative">
+              <select {...bind('revenue', 'f-revenue')} aria-required="true" className={controlClass(!!shown('revenue'), H + ' appearance-none pr-10')}>
+                <option value="">Choose a range</option>
+                {BOOKING.revenueRanges.map((o) => (
+                  <option key={o.value} value={o.value}>
+                    {o.label}
+                  </option>
+                ))}
+              </select>
+              <Chevron />
+            </div>
+          </Field>
         </div>
 
-        <Field id="f-topic" label={BOOKING.topicLabel} optional hint={BOOKING.topicHint} error={shown('topic')}>
+        <Field id="f-topic" label={BOOKING.topicLabel} hint={`${BOOKING.topicHint} At least ${TOPIC_MIN} characters.`} error={shown('topic')}>
           <textarea
-            id="f-topic"
-            name="topic"
-            rows={4}
+            {...bind('topic', 'f-topic', true)}
+            rows={3}
             maxLength={LIMITS.topic}
-            value={values.topic}
-            onChange={set('topic')}
-            onBlur={blur('topic')}
-            aria-invalid={!!shown('topic')}
-            aria-describedby={describedBy('f-topic', true)}
+            aria-required="true"
             className={controlClass(!!shown('topic'), 'resize-y py-3')}
           />
+          <p aria-hidden="true" className={'tabular mt-1 text-right text-xs ' + (topicLength >= TOPIC_MIN ? 'text-signal-bright' : 'text-slate')}>
+            {topicLength >= TOPIC_MIN ? 'Enough to prepare your call' : `${topicLength} of ${TOPIC_MIN} characters`}
+          </p>
         </Field>
 
-        {/* Honeypot, hidden from people and assistive technology. */}
-        <div aria-hidden="true" className="sr-only">
-          <label htmlFor="f-website">Website</label>
-          <input id="f-website" name="website" tabIndex={-1} autoComplete="off" defaultValue="" />
-        </div>
+        <Honeypot id="f-website" />
 
-        <div className="border-t border-rule pt-6">
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-end">
-            <button type="submit" className={buttonClass('primary', 'md', 'w-full sm:w-auto')}>
-              Next: pick a time
-            </button>
-          </div>
-          <p id="details-note" className="mt-3 text-sm text-graphite">
-            We only use this to set up your call.
+        <div className="flex flex-col gap-3 border-t border-rule pt-5 sm:flex-row sm:items-center sm:justify-between">
+          <p id="details-note" className="text-sm text-graphite">
+            We only use this to prepare your call.
           </p>
+          <button type="submit" className={buttonClass('primary', 'md', 'w-full sm:w-auto')}>
+            Next: pick a time
+          </button>
         </div>
       </div>
     </form>

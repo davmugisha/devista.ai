@@ -2,12 +2,13 @@
 
 import { CalendarDays, Check, Clock, Video } from 'lucide-react';
 import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
-import { Mark } from '@/components/Logo';
+import Image from 'next/image';
 import { track } from '@/lib/analytics';
 import { browserTimeZone, formatDayShort, formatRange, languageRegion, postBooking, timeZoneOptions, tzName, type Slot } from '@/lib/booking-client';
 import { BOOKING } from '@/lib/booking-config';
 import { DIAL_CODES } from '@/lib/booking-countries';
 import { EMPTY_DETAILS, type DetailsInput } from '@/lib/booking-validate';
+import { FOUNDER } from '@/lib/site';
 import { ConfirmedStep } from './ConfirmedStep';
 import { DetailsStep } from './DetailsStep';
 import { SchedulePicker } from './SchedulePicker';
@@ -83,7 +84,7 @@ function Flow({ onRestart }: { onRestart: () => void }) {
     setPending(false);
 
     if (result.ok) {
-      track('form_submit', { form: 'book', teamSize: values.teamSize || 'unset' });
+      track('form_submit', { form: 'book', teamSize: values.teamSize || 'unset', revenue: values.revenue });
       setBooked({ start: result.start, end: result.end, meetLink: result.meetLink, firstName: values.firstName.trim(), email: values.email.trim(), tz });
       setStep(3);
       return;
@@ -112,15 +113,18 @@ function Flow({ onRestart }: { onRestart: () => void }) {
   }
 
   return (
-    <div id="calendar" className="card card-lit animate-hero lg:grid lg:grid-cols-[20rem_minmax(0,1fr)]" style={{ animationDelay: '480ms' }}>
-      <aside aria-label="About the call" className="border-b border-rule p-5 sm:p-8 lg:border-b-0 lg:border-r">
+    <div id="calendar" className="card card-lit animate-hero lg:grid lg:grid-cols-[17rem_minmax(0,1fr)]" style={{ animationDelay: '480ms' }}>
+      <aside aria-label="About the call" className="border-b border-rule p-5 sm:p-6 lg:border-b-0 lg:border-r">
         <div className="flex items-center gap-3">
-          <span className="flex size-12 shrink-0 items-center justify-center rounded-dot border border-rule bg-panel">
-            <Mark className="size-6" />
+          <span className="relative flex size-11 shrink-0 items-center justify-center overflow-hidden rounded-dot border border-rule bg-panel text-sm font-semibold text-signal-bright">
+            {FOUNDER.photo ? <Image src={FOUNDER.photo} alt="" fill sizes="44px" className="object-cover" /> : FOUNDER.initials}
           </span>
-          <p className="text-base font-semibold text-ink">{BOOKING.hostName}</p>
+          <div>
+            <p className="text-sm font-semibold text-ink">{BOOKING.hostName}</p>
+            <p className="text-xs text-graphite">{FOUNDER.role}</p>
+          </div>
         </div>
-        <h2 className="mt-5 text-2xl font-display tracking-display text-ink">Book a free call</h2>
+        <h2 className="mt-5 text-xl font-display tracking-display text-ink">Book a free call</h2>
         <ul className="mt-4 space-y-2 text-sm text-graphite">
           <li className="flex items-center gap-2">
             <Clock aria-hidden="true" className="size-4 shrink-0 text-signal-bright" />
@@ -143,9 +147,10 @@ function Flow({ onRestart }: { onRestart: () => void }) {
             ) : null}
           </li>
         </ul>
-        <p className="mt-5 text-base text-graphite">{BOOKING.description}</p>
-        <h3 className="mt-6 text-sm font-semibold text-ink">On the call</h3>
-        <ul className="mt-3 space-y-3">
+        {/* Below the large layout the page's facts row covers this, so the form starts sooner. */}
+        <p className="mt-5 hidden text-sm text-graphite lg:block">{BOOKING.description}</p>
+        <h3 className="mt-6 hidden text-sm font-semibold text-ink lg:block">On the call</h3>
+        <ul className="mt-3 hidden space-y-3 lg:block">
           {BOOKING.onTheCall.map((item) => (
             <li key={item} className="grid grid-cols-[auto_1fr] gap-x-3 text-sm text-graphite">
               <Check aria-hidden="true" className="mt-1 size-4 text-signal-bright" strokeWidth={2.2} />
@@ -155,7 +160,7 @@ function Flow({ onRestart }: { onRestart: () => void }) {
         </ul>
       </aside>
 
-      <div className="min-w-0 p-5 sm:p-8">
+      <div className="min-w-0 p-5 sm:p-6 lg:p-8">
         <ol aria-label="Booking steps" className="flex items-center gap-2 sm:gap-3">
           {STEPS.map((label, i) => {
             const n = (i + 1) as Step;
@@ -182,7 +187,7 @@ function Flow({ onRestart }: { onRestart: () => void }) {
           })}
         </ol>
 
-        <div className="mt-8">
+        <div className="mt-6">
           {browser ? (
             <>
               <div hidden={step !== 1}>

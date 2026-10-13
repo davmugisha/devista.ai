@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Interactive Call</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;600&amp;family=Quicksand:wght@500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#EEF5F9;-webkit-font-smoothing:antialiased}
+a{color:#086B91;text-decoration:none}a:hover{color:#064F6B}
+button{font-family:inherit;border:0;padding:0;cursor:pointer}
+.i{fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.f{fill:currentColor;stroke:none}
+.mono{font-family:'JetBrains Mono',ui-monospace,Menlo,monospace}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.35;transform:scale(.7)}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+</helmet>
+<div style="position: relative; width: 390px; height: 844px; overflow: hidden; background: #EEF5F9; color: #102A39; font-family: 'Quicksand', ui-rounded, system-ui, sans-serif">
+<header style="position: absolute; top: 52px; left: 16px; right: 16px; height: 48px; display: flex; align-items: center; justify-content: space-between">
+<a href="Main.dc.html" aria-label="Minimize call" style="width: 48px; height: 48px; border-radius: 50%; background: #FFFFFF; color: #102A39; display: flex; align-items: center; justify-content: center">
+<svg class="i" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg>
+</a>
+<div style="display: flex; flex-direction: column; align-items: center; gap: 2px">
+<h1 style="margin: 0; font-size: 16px; font-weight: 700">Chief of Staff</h1>
+<div style="display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; color: #4F6875"><span style="width: 7px; height: 7px; border-radius: 50%; background: #086B91; animation: pulse 1.6s ease-in-out infinite"></span><span class="mono">03:12</span></div>
+</div>
+<button type="button" onClick="{{toggleCc}}" aria-pressed="{{cc}}" aria-label="Live captions" style="width: 48px; height: 48px; border-radius: 50%; background: {{ccBg}}; color: {{ccFg}}; display: flex; align-items: center; justify-content: center">
+<svg class="i" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="3.5"></rect><path d="M10.5 10a2.2 2.2 0 1 0 0 4M16.5 10a2.2 2.2 0 1 0 0 4"></path></svg>
+</button>
+</header>
+<div style="position: absolute; top: 110px; left: 105px; width: 180px; height: 180px">
+<dc-import name="Brain" size="180" highlights="0" speaking="{{ true }}" hint-size="180px,180px"></dc-import>
+</div>
+<div style="position: absolute; top: 304px; left: 20px; width: 350px; height: 278px">
+<div style="position: absolute; top: -16px; left: 32px; right: 32px; height: 60px; border-radius: 24px; background: #FFFFFF"></div>
+<div style="position: absolute; top: -8px; left: 16px; right: 16px; height: 60px; border-radius: 24px; background: #E3EFF5"></div>
+<div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; box-sizing: border-box; padding: 18px; border-radius: 26px; background: #E3EFF5; display: flex; flex-direction: column; gap: 12px">
+<sc-if value="{{isRun}}" hint-placeholder-val="{{ true }}"><div style="display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; align-items: flex-start; justify-content: space-between">
+<div style="display: flex; flex-direction: column; gap: 4px">
+<span style="font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #4F6875">Cash runway</span>
+<span style="display: flex; align-items: baseline; gap: 8px"><span class="mono" style="font-size: 26px; font-weight: 600; color: #405C6B">4.2</span><span style="font-size: 18px; color: #4F6875">→</span><span class="mono" style="font-size: 26px; font-weight: 600; color: #086B91">5.1</span><span style="font-size: 14px; font-weight: 600; color: #405C6B">months</span></span>
+</div>
+<button type="button" aria-label="Pin to dashboard" style="flex-shrink: 0; width: 44px; height: 44px; border-radius: 50%; background: #E3EFF5; color: #102A39; display: flex; align-items: center; justify-content: center">
+<svg class="i" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 4h6l-1 5 3 3v2H7v-2l3-3z"></path><path d="M12 14v6"></path></svg>
+</button>
+</div>
+<svg width="314" height="116" viewBox="0 0 314 116" aria-label="Cash runway, today versus both invoices paid" role="img">
+<path d="M12 110H302" style="fill: none; stroke: #C9DCE5; stroke-width: 1"></path>
+<polyline points="12,26.5 70,46.4 128,66.3 186,86.1 244,106 255.6,110" style="fill: none; stroke: #4F6875; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round"></polyline>
+<polyline points="12,10 70,29.6 128,49.2 186,68.8 244,88.4 302,108" style="fill: none; stroke: #086B91; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round"></polyline>
+<circle cx="255.6" cy="110" r="4" style="fill: #4F6875"></circle>
+<circle cx="302" cy="108" r="4" style="fill: #086B91"></circle>
+</svg>
+<div style="display: flex; justify-content: space-between; padding: 0 2px; font-size: 11px; font-weight: 700; color: #4F6875"><span>Oct</span><span>Nov</span><span>Dec</span><span>Jan</span><span>Feb</span><span>Mar</span></div>
+<div style="display: flex; gap: 16px; font-size: 12px; font-weight: 700; color: #405C6B">
+<span style="display: flex; align-items: center; gap: 6px"><span style="width: 14px; height: 3px; border-radius: 2px; background: #4F6875"></span>Today</span>
+<span style="display: flex; align-items: center; gap: 6px"><span style="width: 14px; height: 3px; border-radius: 2px; background: #086B91"></span>Both invoices paid</span>
+</div>
+</div></sc-if>
+<sc-if value="{{isInv}}" hint-placeholder-val="{{ false }}"><div style="display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; align-items: flex-start; justify-content: space-between">
+<div style="display: flex; flex-direction: column; gap: 4px">
+<span style="font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #4F6875">Overdue invoices</span>
+<span class="mono" style="font-size: 26px; font-weight: 600; color: #9A5A00">$3,650</span>
+</div>
+<button type="button" aria-label="Pin to dashboard" style="flex-shrink: 0; width: 44px; height: 44px; border-radius: 50%; background: #E3EFF5; color: #102A39; display: flex; align-items: center; justify-content: center">
+<svg class="i" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 4h6l-1 5 3 3v2H7v-2l3-3z"></path><path d="M12 14v6"></path></svg>
+</button>
+</div>
+<div style="display: flex; flex-direction: column">
+<div style="display: flex; align-items: center; justify-content: space-between; padding: 9px 0; border-top: 1px solid #C9DCE5"><span style="font-size: 15px; font-weight: 600">Kivu Coffee Co. <span style="color: #4F6875">· 14 days</span></span><span class="mono" style="font-size: 14px">$1,200</span></div>
+<div style="display: flex; align-items: center; justify-content: space-between; padding: 9px 0; border-top: 1px solid #C9DCE5"><span style="font-size: 15px; font-weight: 600">Nyota Labs <span style="color: #4F6875">· 6 days</span></span><span class="mono" style="font-size: 14px">$2,450</span></div>
+</div>
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 10px">
+<span style="font-size: 13px; font-weight: 600; color: #405C6B">Say “send them” or tap</span>
+<a href="Approval.dc.html" style="height: 44px; padding: 0 18px; border-radius: 22px; background: #086B91; color: #FFFFFF; font-size: 15px; font-weight: 700; display: flex; align-items: center">Approve</a>
+</div>
+</div></sc-if>
+<sc-if value="{{isPro}}" hint-placeholder-val="{{ false }}"><div style="display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; align-items: flex-start; justify-content: space-between">
+<div style="display: flex; flex-direction: column; gap: 4px">
+<span style="font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #4F6875">Proposal · v2</span>
+<span style="font-size: 22px; font-weight: 700">Umoja Retail</span>
+</div>
+<button type="button" aria-label="Pin to dashboard" style="flex-shrink: 0; width: 44px; height: 44px; border-radius: 50%; background: #E3EFF5; color: #102A39; display: flex; align-items: center; justify-content: center">
+<svg class="i" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 4h6l-1 5 3 3v2H7v-2l3-3z"></path><path d="M12 14v6"></path></svg>
+</button>
+</div>
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px">
+<div style="padding: 10px 12px; border-radius: 16px; background: #FFFFFF; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 11px; font-weight: 700; color: #4F6875">Scope</span><span style="font-size: 14px; font-weight: 700">3 workflows</span></div>
+<div style="padding: 10px 12px; border-radius: 16px; background: #FFFFFF; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 11px; font-weight: 700; color: #4F6875">Timeline</span><span style="font-size: 14px; font-weight: 700">6 weeks</span></div>
+<div style="padding: 10px 12px; border-radius: 16px; background: #FFFFFF; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 11px; font-weight: 700; color: #4F6875">Fee</span><span class="mono" style="font-size: 14px; font-weight: 600">$4,800</span></div>
+</div>
+<div style="font-size: 14px; line-height: 1.45; font-weight: 600; color: #405C6B">Written by Proposal writer from the discovery call notes. Pricing checked by CFO agent.</div>
+<div style="display: flex; gap: 8px">
+<a href="Approval.dc.html" style="height: 44px; padding: 0 18px; border-radius: 22px; background: #086B91; color: #FFFFFF; font-size: 15px; font-weight: 700; display: flex; align-items: center">Review</a>
+<a href="Chat.dc.html" style="height: 44px; padding: 0 18px; border-radius: 22px; background: #E3EFF5; color: #102A39; font-size: 15px; font-weight: 700; display: flex; align-items: center">Open in chat</a>
+</div>
+</div></sc-if>
+</div>
+</div>
+<div style="position: absolute; top: 592px; left: 28px; right: 28px; height: 64px; display: flex; flex-direction: column; align-items: center; justify-content: center">
+<sc-if value="{{cc}}" hint-placeholder-val="{{ true }}">
+<p style="margin: 0; text-align: center; font-size: 16px; line-height: 1.45; font-weight: 600; color: #102A39; text-wrap: balance">{{caption}}</p>
+</sc-if>
+</div>
+<div style="position: absolute; top: 666px; left: 0; right: 0; display: flex; justify-content: center; gap: 8px">
+<sc-for list="{{thumbs}}" as="t" hint-placeholder-count="3">
+<button type="button" onClick="{{t.pick}}" aria-pressed="{{t.on}}" style="height: 44px; padding: 0 16px; border-radius: 22px; background: {{t.bg}}; color: {{t.fg}}; font-size: 14px; font-weight: 700">{{t.label}}</button>
+</sc-for>
+</div>
+<div style="position: absolute; left: 28px; right: 28px; bottom: 26px; display: flex; justify-content: space-between; align-items: flex-start">
+<div style="display: flex; flex-direction: column; align-items: center; gap: 6px">
+<button type="button" onClick="{{toggleMute}}" aria-pressed="{{muted}}" aria-label="Mute microphone" style="width: 62px; height: 62px; border-radius: 50%; background: {{muteBg}}; color: {{muteFg}}; display: flex; align-items: center; justify-content: center">
+<sc-if value="{{notMuted}}" hint-placeholder-val="{{ true }}"><svg class="i" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"></rect><path d="M5 11a7 7 0 0 0 14 0M12 18v3"></path></svg></sc-if>
+<sc-if value="{{muted}}" hint-placeholder-val="{{ false }}"><svg class="i" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"></rect><path d="M5 11a7 7 0 0 0 14 0M12 18v3M4 4l16 16"></path></svg></sc-if>
+</button>
+<span style="font-size: 12px; font-weight: 700; color: #405C6B">{{muteLabel}}</span>
+</div>
+<div style="display: flex; flex-direction: column; align-items: center; gap: 6px">
+<button type="button" aria-label="Speaker" style="width: 62px; height: 62px; border-radius: 50%; background: #E3EFF5; color: #102A39; display: flex; align-items: center; justify-content: center">
+<svg class="i" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"></path><path d="M16 9a4 4 0 0 1 0 6M18.5 6.5a7.5 7.5 0 0 1 0 11"></path></svg>
+</button>
+<span style="font-size: 12px; font-weight: 700; color: #405C6B">Speaker</span>
+</div>
+<a href="Chat.dc.html" style="display: flex; flex-direction: column; align-items: center; gap: 6px; color: #405C6B; font-size: 12px; font-weight: 700">
+<span style="width: 62px; height: 62px; border-radius: 50%; background: #E3EFF5; color: #102A39; display: flex; align-items: center; justify-content: center">
+<svg class="i" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 11.5A7.5 7.5 0 1 0 15.8 17.64L19.6 19.4L18.3 14.67A7.5 7.5 0 0 0 19 11.5Z"></path><circle class="f" cx="9" cy="11.5" r="1.25"></circle><circle class="f" cx="14" cy="11.5" r="1.25"></circle></svg>
+</span>
+<span>Chat</span>
+</a>
+<a href="Main.dc.html" style="display: flex; flex-direction: column; align-items: center; gap: 6px; color: #405C6B; font-size: 12px; font-weight: 700">
+<span style="width: 62px; height: 62px; border-radius: 50%; background: #C8323C; color: #FFFFFF; display: flex; align-items: center; justify-content: center">
+<svg class="i" width="26" height="26" viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 14.2c5.2-4.9 13.8-4.9 19 0 .5.5.5 1.2 0 1.7l-2 2c-.4.4-1.1.5-1.6.1l-2.3-1.7c-.3-.2-.5-.6-.5-1v-2.3a13 13 0 0 0-6.2 0v2.3c0 .4-.2.8-.5 1l-2.3 1.7c-.5.4-1.2.3-1.6-.1l-2-2c-.5-.5-.5-1.2 0-1.7z"></path></svg>
+</span>
+<span>End</span>
+</a>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { v: 'run', muted: false, cc: true };
+  }
+  renderVals() {
+    var self = this;
+    var v = this.state.v, muted = this.state.muted, cc = this.state.cc;
+    var visuals = [
+      { key: 'inv', label: 'Invoices' },
+      { key: 'run', label: 'Runway' },
+      { key: 'pro', label: 'Proposal' }
+    ];
+    var captions = {
+      inv: 'Two invoices are overdue: Kivu Coffee at fourteen days, Nyota Labs at six.',
+      run: 'If both invoices land this week, runway moves from 4.2 to 5.1 months.',
+      pro: 'The Umoja proposal is ready: six weeks, $4,800. Want me to send it today?'
+    };
+    return {
+      thumbs: visuals.map(function (x) {
+        var on = x.key === v;
+        return {
+          label: x.label, on: on,
+          bg: on ? '#086B91' : '#FFFFFF',
+          fg: on ? '#FFFFFF' : '#2D4858',
+          pick: function () { self.setState({ v: x.key }); }
+        };
+      }),
+      isRun: v === 'run', isInv: v === 'inv', isPro: v === 'pro',
+      caption: captions[v],
+      cc: cc,
+      ccBg: cc ? '#D6EFF8' : '#FFFFFF',
+      ccFg: cc ? '#086B91' : '#405C6B',
+      toggleCc: function () { self.setState({ cc: !self.state.cc }); },
+      muted: muted,
+      notMuted: !muted,
+      muteBg: muted ? '#086B91' : '#E3EFF5',
+      muteFg: muted ? '#FFFFFF' : '#102A39',
+      muteLabel: muted ? 'Unmute' : 'Mute',
+      toggleMute: function () { self.setState({ muted: !self.state.muted }); }
+    };
+  }
+}
+</script>
+</body>
+</html>

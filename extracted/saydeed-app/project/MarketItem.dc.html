@@ -1,0 +1,303 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Marketplace listing</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;600&amp;family=Quicksand:wght@500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#EEF5F9;-webkit-font-smoothing:antialiased}
+</style>
+</helmet>
+<div style="position: relative; width: 390px; height: 844px; overflow: hidden; background: #EEF5F9; color: #102A39; font-family: 'Quicksand', ui-rounded, system-ui, sans-serif">
+<header style="position: absolute; top: 52px; left: 16px; right: 16px; height: 48px; display: flex; align-items: center; justify-content: space-between">
+<sc-if value="{{embedded}}" hint-placeholder-val="{{ false }}">
+<button type="button" onClick="{{back}}" aria-label="Back to Marketplace" style="width: 48px; height: 48px; border: 0; padding: 0; cursor: pointer; border-radius: 50%; background: #FFFFFF; color: #102A39; display: flex; align-items: center; justify-content: center">
+<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg>
+</button>
+</sc-if>
+<sc-if value="{{standalone}}" hint-placeholder-val="{{ true }}">
+<a href="Marketplace.dc.html" aria-label="Back to Marketplace" style="width: 48px; height: 48px; border-radius: 50%; background: #FFFFFF; color: #102A39; display: flex; align-items: center; justify-content: center; text-decoration: none">
+<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg>
+</a>
+</sc-if>
+<span style="font-size: 13px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #4F6875">Marketplace · {{kindLabel}}</span>
+<a href="Chat.dc.html" aria-label="Ask Chief of Staff about {{title}}" style="width: 48px; height: 48px; border-radius: 50%; background: #D6EFF8; color: #086B91; display: flex; align-items: center; justify-content: center; text-decoration: none">
+<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 11.5A7.5 7.5 0 1 0 15.8 17.64L19.6 19.4L18.3 14.67A7.5 7.5 0 0 0 19 11.5Z"></path><circle cx="9" cy="11.5" r="1.25" fill="currentColor" stroke="none"></circle><circle cx="14" cy="11.5" r="1.25" fill="currentColor" stroke="none"></circle></svg>
+</a>
+</header>
+<div style="position: absolute; top: 116px; left: 0; right: 0; bottom: 108px; overflow-y: auto; box-sizing: border-box; padding: 0 24px 24px; display: flex; flex-direction: column; gap: 22px; scrollbar-width: none">
+<div style="display: flex; align-items: center; gap: 16px">
+<span style="flex-shrink: 0; width: 68px; height: 68px; border-radius: {{tileRadius}}; background: {{tileBg}}; color: {{tileFg}}; display: flex; align-items: center; justify-content: center">
+<sc-if value="{{isWorkflow}}" hint-placeholder-val="{{ true }}"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3.5" width="7" height="6" rx="2"></rect><rect x="14" y="14.5" width="7" height="6" rx="2"></rect><path d="M6.5 9.5v2.5a3.5 3.5 0 0 0 3.5 3.5h4"></path></svg></sc-if>
+<sc-if value="{{isAgent}}" hint-placeholder-val="{{ false }}"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="7" width="14" height="11" rx="3.5"></rect><path d="M12 7V4M9.5 12v1M14.5 12v1"></path></svg></sc-if>
+<sc-if value="{{isSkill}}" hint-placeholder-val="{{ false }}"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 3L5 13.5h6L10 21l8-10.5h-6z"></path></svg></sc-if>
+<sc-if value="{{isPipeline}}" hint-placeholder-val="{{ false }}"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6.5h10.5a3 3 0 0 1 0 6h-5a3 3 0 0 0 0 6H20"></path><path d="M17.5 16l2.5 2.5-2.5 2.5"></path></svg></sc-if>
+<sc-if value="{{isTool}}" hint-placeholder-val="{{ false }}"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg></sc-if>
+<sc-if value="{{isExpert}}" hint-placeholder-val="{{ false }}"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="3.5"></circle><path d="M5 20a7 7 0 0 1 14 0"></path></svg></sc-if>
+</span>
+<div style="min-width: 0; display: flex; flex-direction: column; gap: 4px">
+<h1 style="margin: 0; font-size: 26px; line-height: 1.15; font-weight: 700">{{title}}</h1>
+<div style="font-size: 14px; font-weight: 600; color: #405C6B">by {{seller}}</div>
+<div style="display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 700; color: #2D4858">
+<svg width="14" height="14" viewBox="0 0 24 24" fill="#086B91" aria-hidden="true"><path d="M12 3.5l2.6 5.3 5.9.9-4.25 4.1 1 5.8L12 16.9l-5.25 2.7 1-5.8L3.5 9.7l5.9-.9z"></path></svg>
+<span style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-weight: 600">{{rating}}</span><span style="color: #4F6875; font-weight: 600">· {{reviews}} reviews</span>
+</div>
+</div>
+</div>
+<sc-if value="{{hasWhy}}" hint-placeholder-val="{{ true }}">
+<div style="padding: 14px 16px; border-radius: 20px; background: #E8F6FB; box-shadow: inset 0 0 0 1px #D6EFF8; display: flex; gap: 12px; align-items: flex-start">
+<span style="flex-shrink: 0; width: 30px; height: 30px; border-radius: 10px; background: #D6EFF8; color: #086B91; font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 10px; font-weight: 600; display: flex; align-items: center; justify-content: center">CoS</span>
+<span style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 13px; font-weight: 700; color: #086B91">Chief of Staff suggests it</span><span style="font-size: 14px; line-height: 1.4; font-weight: 600; color: #2D4858">{{why}}</span></span>
+</div>
+</sc-if>
+<p style="margin: 0; font-size: 16px; line-height: 1.5; font-weight: 500; color: #2D4858">{{blurb}}</p>
+<section aria-label="What it does" style="display: flex; flex-direction: column; gap: 10px">
+<h2 style="margin: 0; font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #4F6875">What it does</h2>
+<ol style="margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column">
+<sc-for list="{{steps}}" as="s" hint-placeholder-count="4">
+<li style="display: flex; gap: 12px">
+<span style="width: 12px; flex-shrink: 0; display: flex; flex-direction: column; align-items: center"><span style="width: 10px; height: 10px; margin-top: 5px; border-radius: 50%; background: #086B91"></span><span style="flex-grow: 1; width: 2px; background: {{s.line}}"></span></span>
+<span style="padding-bottom: 12px; font-size: 15px; line-height: 1.4; font-weight: 600">{{s.text}}</span>
+</li>
+</sc-for>
+</ol>
+</section>
+<section aria-label="Permissions" style="display: flex; flex-direction: column; gap: 10px">
+<h2 style="margin: 0; font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #4F6875">It will ask for</h2>
+<sc-for list="{{asks}}" as="a" hint-placeholder-count="3">
+<div style="display: flex; align-items: center; gap: 12px">
+<sc-if value="{{a.isRead}}" hint-placeholder-val="{{ true }}"><span style="flex-shrink: 0; width: 36px; height: 36px; border-radius: 12px; background: #E3EFF5; color: #2D4858; display: flex; align-items: center; justify-content: center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"></path><circle cx="12" cy="12" r="3"></circle></svg></span></sc-if>
+<sc-if value="{{a.isDraft}}" hint-placeholder-val="{{ false }}"><span style="flex-shrink: 0; width: 36px; height: 36px; border-radius: 12px; background: #D6EFF8; color: #086B91; display: flex; align-items: center; justify-content: center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"></path><path d="M13.5 6.5l4 4"></path></svg></span></sc-if>
+<sc-if value="{{a.isAct}}" hint-placeholder-val="{{ false }}"><span style="flex-shrink: 0; width: 36px; height: 36px; border-radius: 12px; background: #FFE9C2; color: #9A5A00; display: flex; align-items: center; justify-content: center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7 3v5.5c0 4.5-3 8-7 9.5-4-1.5-7-5-7-9.5V6z"></path><path d="M8.8 12l2.3 2.3 4.2-4.3"></path></svg></span></sc-if>
+<span style="display: flex; flex-direction: column; gap: 1px"><span style="font-size: 15px; font-weight: 700">{{a.text}}</span><span style="font-size: 12px; font-weight: 600; color: {{a.levelFg}}">{{a.level}}</span></span>
+</div>
+</sc-for>
+</section>
+<section aria-label="Plans" style="display: flex; flex-direction: column; gap: 10px">
+<h2 style="margin: 0; font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #4F6875">Choose a plan</h2>
+<div style="display: grid; grid-template-columns: repeat({{planCols}}, minmax(0, 1fr)); gap: 8px">
+<sc-for list="{{plans}}" as="p" hint-placeholder-count="3">
+<button type="button" onClick="{{p.pick}}" aria-pressed="{{p.on}}" style="height: 84px; box-sizing: border-box; padding: 12px; border: 0; cursor: pointer; font-family: inherit; text-align: left; border-radius: 20px; background: {{p.bg}}; box-shadow: inset 0 0 0 2px {{p.ring}}; color: #102A39; display: flex; flex-direction: column; justify-content: space-between">
+<span style="font-size: 13px; font-weight: 700; color: {{p.labelFg}}">{{p.label}}</span>
+<span style="display: flex; flex-direction: column; gap: 1px"><span style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 17px; font-weight: 600">{{p.price}}</span><span style="font-size: 11px; font-weight: 600; color: #4F6875">{{p.note}}</span></span>
+</button>
+</sc-for>
+</div>
+</section>
+</div>
+<div style="position: absolute; left: 0; right: 0; bottom: 0; height: 108px; background: #EEF5F9; box-shadow: 0 -1px 0 #FFFFFF"></div>
+<div style="position: absolute; left: 20px; right: 20px; bottom: 28px; height: 60px; display: flex; align-items: center; gap: 14px">
+<span style="flex-shrink: 0; display: flex; flex-direction: column; gap: 2px; padding-left: 4px"><span style="font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 20px; font-weight: 600">{{price}}</span><span style="font-size: 12px; font-weight: 600; color: #4F6875">{{planNote}}</span></span>
+<button type="button" onClick="{{openSheet}}" style="flex-grow: 1; height: 60px; border: 0; cursor: pointer; font-family: inherit; border-radius: 30px; background: #086B91; color: #FFFFFF; font-size: 17px; font-weight: 700">{{cta}}</button>
+</div>
+<sc-if value="{{sheetOpen}}" hint-placeholder-val="{{ false }}">
+<button type="button" onClick="{{closeSheet}}" aria-label="Close" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; border: 0; padding: 0; cursor: pointer; background: rgba(16, 42, 57, 0.42)"></button>
+<section role="dialog" aria-label="{{sheetLabel}}" style="position: absolute; left: 0; right: 0; bottom: 0; box-sizing: border-box; padding: 12px 20px 32px; border-radius: 32px 32px 0 0; background: #FFFFFF; display: flex; flex-direction: column; gap: 18px">
+<div style="align-self: center; width: 40px; height: 5px; border-radius: 3px; background: #C9DCE5"></div>
+<sc-if value="{{reviewing}}" hint-placeholder-val="{{ true }}">
+<div style="display: flex; flex-direction: column; gap: 8px">
+<div style="display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: #405C6B"><span style="width: 26px; height: 26px; border-radius: 9px; background: #D6EFF8; color: #086B91; font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 9px; font-weight: 600; display: flex; align-items: center; justify-content: center">CoS</span>Chief of Staff checked it</div>
+<h2 style="margin: 0; font-size: 24px; line-height: 1.2; font-weight: 700">{{title}} · {{planLabel}}</h2>
+</div>
+<div style="display: flex; flex-direction: column; gap: 12px">
+<sc-for list="{{checks}}" as="c" hint-placeholder-count="3">
+<div style="display: flex; gap: 12px; align-items: flex-start">
+<span style="flex-shrink: 0; width: 28px; height: 28px; border-radius: 50%; background: #E8F6FB; color: #086B91; display: flex; align-items: center; justify-content: center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span>
+<span style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 15px; font-weight: 700">{{c.title}}</span><span style="font-size: 13px; line-height: 1.4; font-weight: 600; color: #405C6B">{{c.sub}}</span></span>
+</div>
+</sc-for>
+</div>
+<div style="display: flex; gap: 10px; align-items: center">
+<button type="button" onClick="{{closeSheet}}" aria-label="Cancel" style="flex-shrink: 0; width: 60px; height: 60px; border: 0; padding: 0; cursor: pointer; border-radius: 50%; background: #E3EFF5; color: #102A39; display: flex; align-items: center; justify-content: center">
+<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg>
+</button>
+<button type="button" onClick="{{confirm}}" style="flex-grow: 1; height: 60px; border: 0; cursor: pointer; font-family: inherit; border-radius: 30px; background: #086B91; color: #FFFFFF; font-size: 17px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg>
+{{approveLabel}}
+</button>
+</div>
+</sc-if>
+<sc-if value="{{done}}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-direction: column; gap: 10px">
+<div style="display: flex; align-items: center; gap: 10px; font-size: 20px; font-weight: 700; color: #086B91"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg>{{doneTitle}}</div>
+<p style="margin: 0; font-size: 15px; line-height: 1.5; font-weight: 600; color: #2D4858">{{doneText}}</p>
+</div>
+<div style="display: flex; gap: 10px">
+<sc-if value="{{embedded}}" hint-placeholder-val="{{ false }}">
+<button type="button" onClick="{{back}}" style="height: 60px; padding: 0 22px; border: 0; cursor: pointer; font-family: inherit; border-radius: 30px; background: #E3EFF5; color: #102A39; font-size: 16px; font-weight: 700">Marketplace</button>
+</sc-if>
+<sc-if value="{{standalone}}" hint-placeholder-val="{{ true }}">
+<a href="Marketplace.dc.html" style="height: 60px; padding: 0 22px; box-sizing: border-box; border-radius: 30px; background: #E3EFF5; color: #102A39; font-size: 16px; font-weight: 700; display: flex; align-items: center; text-decoration: none">Marketplace</a>
+</sc-if>
+<a href="{{doneHref}}" style="flex-grow: 1; height: 60px; border-radius: 30px; background: #086B91; color: #FFFFFF; font-size: 17px; font-weight: 700; display: flex; align-items: center; justify-content: center; text-decoration: none">{{doneAction}}</a>
+</div>
+</sc-if>
+</section>
+</sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"listing":{"editor":"enum","options":["invoice-chaser","month-end","proposal-pro","receipt-reader","hiring-screen","crm-setup","support-triage","board-report"],"default":"invoice-chaser"},"onBack":{"editor":null},"$preview":{"width":390,"height":844}}'>
+// Example listings. Plans are [key, label, price, note, charged today].
+var CATALOG = {
+  'invoice-chaser': {
+    kind: 'workflow', title: 'Invoice chaser', seller: 'Ledgerline', rating: '4.8', reviews: '212',
+    why: 'You chased 3 overdue invoices by hand this week.',
+    blurb: 'Finds overdue invoices every morning and drafts a friendly reminder for each one. You approve before anything is sent.',
+    steps: ['Checks your books for invoices 7 days overdue', 'Drafts a reminder in your tone, one per client', 'Puts the drafts in Approvals for you', 'Hands paid invoices back to CFO agent'],
+    asks: [['read', 'Read invoices and clients'], ['draft', 'Draft emails as Billing agent'], ['act', 'Send email after you approve']],
+    plans: [['once', 'Buy once', '$49', 'Yours to keep', '$49'], ['month', 'Monthly', '$6/mo', 'Updates included', '$6'], ['trial', 'Try free', '14 days', 'Then $6/mo', '$0']],
+    doneTitle: 'Installed for Branshs LLC', doneText: 'Billing agent can use it now. Its first reminders wait in Approvals for you.', doneAction: 'Tell Billing agent', doneHref: 'Chat.dc.html'
+  },
+  'month-end': {
+    kind: 'pipeline', title: 'Month-end close', seller: 'Kora Ops', rating: '4.9', reviews: '86',
+    why: 'CFO agent spent 6 hours closing September by hand.',
+    blurb: 'Runs your month-end close as one pipeline: bank feeds in, matched books and a short close summary out.',
+    steps: ['Pulls every bank feed on the last working day', 'Matches payments to invoices and bills', 'Flags anything odd to CFO agent', 'Drafts the close summary for you to sign off'],
+    asks: [['read', 'Read bank feeds and books'], ['draft', 'Draft journal entries'], ['act', 'Post entries after you approve']],
+    plans: [['month', 'Monthly', '$19/mo', 'Cancel any time', '$19'], ['trial', 'Try free', '7 days', 'Then $19/mo', '$0']],
+    doneTitle: 'Installed for Branshs LLC', doneText: 'CFO agent runs it at the end of October. The close summary comes to you before anything is posted.', doneAction: 'Open Dashboard', doneHref: 'Dashboard.dc.html'
+  },
+  'proposal-pro': {
+    kind: 'agent', title: 'Proposal writer pro', seller: 'Mto Labs', rating: '4.7', reviews: '54',
+    why: '',
+    blurb: 'An agent with four skills: scoping, pricing tables, case notes and your house style. It joins your Org like any other agent.',
+    steps: ['Reads the call recap from Inbox', 'Scopes the work with your Delivery lead', 'Writes the proposal in your house style', 'Sends it to Approvals before the client sees it'],
+    asks: [['read', 'Read call recaps and Knowledge'], ['draft', 'Draft documents'], ['act', 'Email clients after you approve']],
+    plans: [['month', 'Monthly', '$29/mo', 'One agent seat', '$29'], ['trial', 'Try free', '14 days', 'Then $29/mo', '$0']],
+    doneTitle: 'Hired into your Org', doneText: 'Proposal writer pro reports to Chief of Staff. Its first proposal waits in Approvals for you.', doneAction: 'Say hello', doneHref: 'Chat.dc.html'
+  },
+  'receipt-reader': {
+    kind: 'tool', title: 'Receipt reader', seller: 'Pembe Data', rating: '4.6', reviews: '310',
+    why: '',
+    blurb: 'A tool any agent can call: it reads receipts and bills from photos or forwarded email into your books.',
+    steps: ['Takes a photo or a forwarded email', 'Reads vendor, date, amount and tax', 'Files it to the right expense line', 'Asks CFO agent when it is unsure'],
+    asks: [['read', 'Read receipts you send it'], ['draft', 'Write expense lines']],
+    plans: [['free', 'Pay per use', '$0.01', 'Per receipt read', '$0']],
+    doneTitle: 'Added for Branshs LLC', doneText: 'CFO agent and Billing agent can call it now. Usage shows under Agent spend.', doneAction: 'Open Dashboard', doneHref: 'Dashboard.dc.html'
+  },
+  'hiring-screen': {
+    kind: 'skill', title: 'Hiring screen', seller: 'Nuru People', rating: '4.5', reviews: '41',
+    why: '',
+    blurb: 'A skill any agent can learn: it scores applications against your role card and drafts kind replies.',
+    steps: ['Reads each new application', 'Scores it against your role card', 'Drafts a reply for every applicant', 'Shortlists the top five for you'],
+    asks: [['read', 'Read applications'], ['draft', 'Draft replies to applicants']],
+    plans: [['month', 'Monthly', '$9/mo', 'Every agent can use it', '$9'], ['once', 'Buy once', '$79', 'Yours to keep', '$79']],
+    doneTitle: 'Added to Skills', doneText: 'Any agent in your Org can use Hiring screen now. Shortlists come to Inbox.', doneAction: 'Open Inbox', doneHref: 'Hub.dc.html'
+  },
+  'crm-setup': {
+    kind: 'expert', title: 'Sales pipeline setup', seller: 'Imani K.', rating: '5.0', reviews: '23',
+    why: '',
+    blurb: 'A person, not an agent. Imani sets up your Sales agent and pipeline stages from the systems you already use, in two working days.',
+    steps: ['A 30 minute call to map how you sell', 'Sets up Sales agent and your pipeline stages', 'Brings in contacts from the systems you use', 'Hands over with a recorded walkthrough'],
+    asks: [['read', 'Read your contacts for 14 days'], ['act', 'Admin access to Sales for 14 days']],
+    plans: [['fixed', 'Fixed fee', '$600', 'Two working days', '$600'], ['hourly', 'Hourly', '$45/h', 'For smaller jobs', '$45']],
+    doneTitle: 'Setup call requested', doneText: 'Imani K. will offer call times in Inbox. Access starts only after the call.', doneAction: 'Open Inbox', doneHref: 'Hub.dc.html'
+  },
+  'support-triage': {
+    kind: 'workflow', title: 'Support triage', seller: 'Kora Ops', rating: '4.7', reviews: '128',
+    why: '',
+    blurb: 'Sorts new support email by urgency and topic, then hands each one to the right agent or person.',
+    steps: ['Reads new support email', 'Sorts it by urgency and topic', 'Routes it to the right agent or person', 'Escalates anything urgent to you'],
+    asks: [['read', 'Read the support inbox'], ['draft', 'Label, route and draft replies']],
+    plans: [['once', 'Buy once', '$39', 'Yours to keep', '$39'], ['month', 'Monthly', '$5/mo', 'Updates included', '$5']],
+    doneTitle: 'Installed for Branshs LLC', doneText: 'New support email is sorted from now on. Escalations land in Inbox.', doneAction: 'Open Inbox', doneHref: 'Hub.dc.html'
+  },
+  'board-report': {
+    kind: 'pipeline', title: 'Weekly board report', seller: 'Mto Labs', rating: '4.4', reviews: '67',
+    why: '',
+    blurb: 'Builds your Monday numbers report from Dashboard and writes three lines on what changed.',
+    steps: ['Pulls cash, revenue and runway from Dashboard', 'Writes three lines on what changed', 'Formats it for your board', 'Waits for you to send it'],
+    asks: [['read', 'Read Dashboard'], ['draft', 'Draft documents']],
+    plans: [['month', 'Monthly', '$15/mo', 'Cancel any time', '$15'], ['trial', 'Try free', '14 days', 'Then $15/mo', '$0']],
+    doneTitle: 'Installed for Branshs LLC', doneText: 'Your first report is drafted next Monday and waits in Approvals.', doneAction: 'Open Dashboard', doneHref: 'Dashboard.dc.html'
+  }
+};
+var KINDS = { workflow: 'Workflow', agent: 'Agent', skill: 'Skill', pipeline: 'Pipeline', tool: 'Tool', expert: 'Expert' };
+var LEVELS = {
+  read: { label: 'Read only', fg: '#4F6875' },
+  draft: { label: 'Drafts for you', fg: '#086B91' },
+  act: { label: 'Needs your approval each time', fg: '#9A5A00' }
+};
+
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { plan: null, stage: 'browse' };
+  }
+  componentDidUpdate(prev) {
+    if (prev.listing !== this.props.listing) this.setState({ plan: null, stage: 'browse' });
+  }
+  renderVals() {
+    var self = this;
+    var key = CATALOG[this.props.listing] ? this.props.listing : 'invoice-chaser';
+    var item = CATALOG[key];
+    var embedded = typeof this.props.onBack === 'function';
+    var plans = item.plans.map(function (p) { return { key: p[0], label: p[1], price: p[2], note: p[3], charge: p[4] }; });
+    var plan = plans.filter(function (p) { return p.key === self.state.plan; })[0] || plans[0];
+    var stage = this.state.stage;
+    var expert = item.kind === 'expert';
+    var verb = expert ? 'Request setup' : plan.key === 'trial' ? 'Start free trial' : plan.key === 'free' ? 'Add it' : 'Get it';
+    var approve = expert ? 'Approve and request' : plan.key === 'trial' ? 'Approve and start' : plan.key === 'free' ? 'Approve and add' : 'Approve and buy';
+    var budget = plan.key === 'trial'
+      ? { title: 'Free for now', sub: plan.note + '. Chief of Staff reminds you 3 days before it ends.' }
+      : plan.key === 'free'
+        ? { title: 'Nothing to pay today', sub: plan.price + ' ' + plan.note.toLowerCase() + ', counted in Agent spend' }
+        : { title: 'Fits your agent budget', sub: plan.charge + ' today, $300 left this month' };
+    var asks = item.asks.length + (item.asks.length === 1 ? ' permission' : ' permissions');
+    var checks = [
+      budget,
+      { title: asks + ', nothing more', sub: expert ? 'Access ends on its own after 14 days' : 'You can take them back any time in Skills' },
+      expert
+        ? { title: 'A person, checked by Saydeed', sub: item.seller + ' works inside your approvals like your own team' }
+        : { title: 'Runs under your approvals', sub: 'Nothing goes out without you' }
+    ];
+    return {
+      embedded: embedded,
+      standalone: !embedded,
+      back: function () { if (embedded) self.props.onBack(); },
+      title: item.title, seller: item.seller, rating: item.rating, reviews: item.reviews,
+      blurb: item.blurb, why: item.why, hasWhy: !!item.why,
+      kindLabel: KINDS[item.kind],
+      isWorkflow: item.kind === 'workflow', isAgent: item.kind === 'agent', isSkill: item.kind === 'skill',
+      isPipeline: item.kind === 'pipeline', isTool: item.kind === 'tool', isExpert: expert,
+      tileBg: expert ? '#E2E9F6' : '#D6EFF8',
+      tileFg: expert ? '#2F4F86' : '#086B91',
+      tileRadius: expert ? '50%' : '22px',
+      steps: item.steps.map(function (s, i) { return { text: s, line: i === item.steps.length - 1 ? 'transparent' : '#C9DCE5' }; }),
+      asks: item.asks.map(function (a) {
+        return { text: a[1], level: LEVELS[a[0]].label, levelFg: LEVELS[a[0]].fg, isRead: a[0] === 'read', isDraft: a[0] === 'draft', isAct: a[0] === 'act' };
+      }),
+      planCols: plans.length,
+      plans: plans.map(function (p) {
+        var on = p.key === plan.key;
+        return {
+          label: p.label, price: p.price, note: p.note, on: on,
+          bg: on ? '#E8F6FB' : '#FFFFFF',
+          ring: on ? '#086B91' : '#FFFFFF',
+          labelFg: on ? '#086B91' : '#405C6B',
+          pick: function () { self.setState({ plan: p.key }); }
+        };
+      }),
+      price: plan.price, planNote: plan.note, planLabel: plan.label,
+      cta: verb,
+      approveLabel: approve,
+      checks: checks,
+      sheetOpen: stage !== 'browse',
+      reviewing: stage === 'review',
+      done: stage === 'done',
+      sheetLabel: stage === 'done' ? item.doneTitle : 'Confirm ' + item.title,
+      doneTitle: item.doneTitle, doneText: item.doneText, doneAction: item.doneAction, doneHref: item.doneHref,
+      openSheet: function () { self.setState({ stage: 'review' }); },
+      closeSheet: function () { self.setState({ stage: 'browse' }); },
+      confirm: function () { self.setState({ stage: 'done' }); }
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -5,6 +5,7 @@
 import { appendFile, mkdir, readFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
+import { serialQueue } from './api-guard';
 import { SITE } from './site';
 
 export class StoreNotConfiguredError extends Error {}
@@ -22,11 +23,11 @@ function cell(value: string) {
 }
 
 // One write at a time, so two requests for the same address cannot both add it.
-let tail: Promise<unknown> = Promise.resolve();
+const serially = serialQueue();
 
 /** Adds the address unless it is already on the list. Resolves once it is safely on disk. */
 export function addSubscriber(email: string, now = new Date()): Promise<'added' | 'already'> {
-  const task = async () => {
+  return serially(async () => {
     const file = storePath();
     const entry = cell(email.trim().toLowerCase());
     let existing = '';
@@ -39,8 +40,5 @@ export function addSubscriber(email: string, now = new Date()): Promise<'added' 
     if (existing.split('\n').some((line) => line.endsWith(`,${entry}`))) return 'already' as const;
     await appendFile(file, `${existing ? '' : 'subscribed_at,email\n'}${now.toISOString()},${entry}\n`, 'utf8');
     return 'added' as const;
-  };
-  const run = tail.then(task, task);
-  tail = run.catch(() => undefined);
-  return run;
+  });
 }

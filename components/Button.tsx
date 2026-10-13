@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import type { ComponentProps, ReactNode } from 'react';
 
-type Variant = 'primary' | 'secondary' | 'quiet';
+type Variant = 'primary' | 'secondary' | 'quiet' | 'inverse';
 type Size = 'md' | 'sm';
 
 const base =
@@ -10,8 +10,11 @@ const base =
   'disabled:pointer-events-none disabled:opacity-50';
 
 const variants: Record<Variant, string> = {
-  primary: 'bg-ink text-white shadow-float hover:bg-signal-strong',
-  secondary: 'border border-white/90 bg-mist/75 text-ink shadow-float backdrop-blur-sm hover:border-rule-strong hover:bg-mist',
+  // Role colours only, so both themes work: ink and paper swap places in the dark theme.
+  primary: 'bg-ink text-paper shadow-float hover:bg-signal hover:text-on-signal',
+  secondary: 'border border-mist/90 bg-mist/75 text-ink shadow-float backdrop-blur-sm hover:border-rule-strong hover:bg-mist',
+  // For the always-dark deep surface (the featured offer), in both themes.
+  inverse: 'bg-white text-deep shadow-float hover:bg-white/85',
   quiet: 'text-ink underline decoration-rule-strong underline-offset-4 hover:decoration-signal-bright',
 };
 

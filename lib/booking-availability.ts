@@ -1,7 +1,7 @@
 // Open slots: the host's grid, minus the calendar's busy time and the buffer around it, minus
 // anything inside the notice period. Server only.
 
-import { BOOKING, MS_MINUTE } from './booking-config';
+import { BUFFER_MS } from './booking-config';
 import { getCalendar } from './booking-calendar';
 import { bookableWindow, freeSlots, gridSlots, type Interval } from './booking-slots';
 
@@ -19,9 +19,8 @@ export async function openSlots(now = Date.now()): Promise<Interval[]> {
   const grid = gridSlots(from, to);
   if (!grid.length) return [];
 
-  const pad = BOOKING.bufferMinutes * MS_MINUTE;
-  const start = grid[0].start - pad;
-  const end = grid[grid.length - 1].end + pad;
+  const start = grid[0].start - BUFFER_MS;
+  const end = grid[grid.length - 1].end + BUFFER_MS;
   const calendar = getCalendar();
   const key = `${calendar.kind}|${start}|${end}`;
 

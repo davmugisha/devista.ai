@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Brain orb</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0}
+</style>
+</helmet>
+<div style="position: relative; width: {{size}}px; height: {{size}}px; color: #102A39; font-family: 'Quicksand', ui-rounded, system-ui, sans-serif" aria-hidden="true">
+<sc-for list="{{edges}}" as="e" hint-placeholder-count="0">
+<div style="position: absolute; left: {{e.l}}px; top: {{e.t}}px; width: {{e.w}}px; height: 1px; background: #102A39; opacity: {{e.o}}; transform-origin: 0 50%; transform: rotate({{e.a}}rad)"></div>
+</sc-for>
+<sc-for list="{{halos}}" as="h" hint-placeholder-count="0">
+<div style="position: absolute; left: {{h.l}}px; top: {{h.t}}px; width: {{h.d}}px; height: {{h.d}}px; box-sizing: border-box; border-radius: 50%; border: 1.5px solid #9A5A00; opacity: {{h.o}}"></div>
+</sc-for>
+<sc-for list="{{nodes}}" as="n" hint-placeholder-count="0">
+<div style="position: absolute; left: {{n.l}}px; top: {{n.t}}px; width: {{n.d}}px; height: {{n.d}}px; border-radius: 50%; background: {{n.c}}; opacity: {{n.o}}; box-shadow: 0 0 {{n.g}}px {{n.c}}"></div>
+</sc-for>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"size":{"editor":"int","default":340,"min":120,"max":640,"section":"Orb"},"highlights":{"editor":"int","default":3,"min":0,"max":5,"section":"Orb"},"speaking":{"editor":"boolean","default":false,"section":"Motion"},"still":{"editor":"boolean","default":false,"section":"Motion"},"speed":{"editor":"range","default":0.16,"min":0,"max":0.6,"step":0.02,"section":"Motion"},"$preview":{"width":340,"height":340}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { t: 1.4 };
+  }
+  build() {
+    if (this.pts) return;
+    var N = 48, pts = [], seed = 11;
+    var rnd = function () { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; };
+    var golden = Math.PI * (3 - Math.sqrt(5));
+    for (var i = 0; i < N; i++) {
+      var y = 1 - (i / (N - 1)) * 2;
+      var rad = Math.sqrt(Math.max(0, 1 - y * y));
+      var th = golden * i + rnd() * 0.6;
+      var j = 0.8 + rnd() * 0.2;
+      pts.push({ x: Math.cos(th) * rad * j, y: y * j, z: Math.sin(th) * rad * j, s: 0.6 + rnd() * 0.9, ph: rnd() * 6.28 });
+    }
+    var edges = [], seen = {};
+    for (var a = 0; a < N; a++) {
+      var d = [];
+      for (var b = 0; b < N; b++) {
+        if (a === b) continue;
+        var dx = pts[a].x - pts[b].x, dy = pts[a].y - pts[b].y, dz = pts[a].z - pts[b].z;
+        d.push([dx * dx + dy * dy + dz * dz, b]);
+      }
+      d.sort(function (p, q) { return p[0] - q[0]; });
+      var k = rnd() < 0.35 ? 3 : 2;
+      for (var m = 0; m < k; m++) {
+        var o = d[m][1];
+        var key = a < o ? a + '-' + o : o + '-' + a;
+        if (!seen[key]) { seen[key] = 1; edges.push([a, o]); }
+      }
+    }
+    this.pts = pts;
+    this.edges = edges;
+    this.hot = [4, 21, 38, 30, 13];
+  }
+  componentDidMount() {
+    if (this.props.still) return;
+    var mq = window.matchMedia ? window.matchMedia('(prefers-reduced-motion: reduce)') : null;
+    if (mq && mq.matches) return;
+    var self = this, last = 0, start = null;
+    var tick = function (ts) {
+      self.raf = requestAnimationFrame(tick);
+      if (start === null) start = ts;
+      if (ts - last < 40) return;
+      last = ts;
+      self.setState({ t: 1.4 + (ts - start) / 1000 });
+    };
+    this.raf = requestAnimationFrame(tick);
+  }
+  componentWillUnmount() {
+    if (this.raf) cancelAnimationFrame(this.raf);
+  }
+  renderVals() {
+    this.build();
+    var size = Number(this.props.size) || 340;
+    var speed = this.props.speed == null ? 0.16 : Number(this.props.speed);
+    var hotCount = this.props.highlights == null ? 3 : Number(this.props.highlights);
+    var speaking = !!this.props.speaking;
+    var t = this.state.t;
+    var c = size / 2, R = size * 0.43, scale = size / 340;
+    var ang = t * speed, tilt = -0.32;
+    var ca = Math.cos(ang), sa = Math.sin(ang), ct = Math.cos(tilt), st = Math.sin(tilt);
+    var breathe = speaking ? 1 + 0.04 * Math.sin(t * 6.1) * Math.sin(t * 2.7 + 1) : 1 + 0.01 * Math.sin(t * 1.1);
+    var hot = {};
+    for (var h = 0; h < Math.min(hotCount, this.hot.length); h++) hot[this.hot[h]] = 1;
+    var P = this.pts.map(function (p, i) {
+      var w = speaking ? 1 + 0.07 * Math.sin(t * 5 + p.ph * 2) : 1;
+      var x = (p.x * ca + p.z * sa) * w;
+      var z0 = (-p.x * sa + p.z * ca) * w;
+      var y = (p.y * ct - z0 * st) * w;
+      var z = p.y * st + z0 * ct;
+      return { i: i, sx: c + x * R * breathe, sy: c + y * R * breathe, z: z, s: p.s, hot: !!hot[i] };
+    });
+    var edges = this.edges.map(function (e) {
+      var A = P[e[0]], B = P[e[1]];
+      var dx = B.sx - A.sx, dy = B.sy - A.sy;
+      var depth = ((A.z + B.z) / 2 + 1) / 2;
+      return {
+        l: A.sx.toFixed(1), t: (A.sy - 0.5).toFixed(1),
+        w: Math.sqrt(dx * dx + dy * dy).toFixed(1),
+        a: Math.atan2(dy, dx).toFixed(3),
+        o: (0.05 + depth * 0.3).toFixed(2)
+      };
+    });
+    var nodes = P.slice().sort(function (p, q) { return p.z - q.z; }).map(function (p) {
+      var depth = (p.z + 1) / 2;
+      var d = Math.max(2, (2 + depth * 5) * p.s * scale * (p.hot ? 1.5 : 1));
+      return {
+        l: (p.sx - d / 2).toFixed(1), t: (p.sy - d / 2).toFixed(1), d: d.toFixed(1),
+        o: (0.22 + depth * 0.78).toFixed(2),
+        c: p.hot ? '#9A5A00' : '#102A39',
+        g: (p.hot ? 10 * scale : depth * 6 * scale).toFixed(1)
+      };
+    });
+    var halos = P.filter(function (p) { return p.hot; }).map(function (p) {
+      var depth = (p.z + 1) / 2;
+      var k = (t * 0.9 + p.i * 0.37) % 1;
+      var d = (10 + k * 22) * scale;
+      return { l: (p.sx - d / 2).toFixed(1), t: (p.sy - d / 2).toFixed(1), d: d.toFixed(1), o: ((1 - k) * (0.3 + depth * 0.6)).toFixed(2) };
+    });
+    return { size: size, edges: edges, nodes: nodes, halos: halos };
+  }
+}
+</script>
+</body>
+</html>

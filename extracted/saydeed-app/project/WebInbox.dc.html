@@ -1,0 +1,332 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Inbox (web)</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;600&amp;family=Quicksand:wght@500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#EEF5F9;-webkit-font-smoothing:antialiased;caret-color:#086B91}
+::selection{background:#D6EFF8;color:#102A39}
+html{scrollbar-color:#B9CFDA #EEF5F9}
+a{color:#086B91;text-decoration:none}a:hover{color:#064F6B}
+button,input,textarea{font-family:inherit}
+button{border:0;padding:0;cursor:pointer}
+input::placeholder,textarea::placeholder{color:#4F6875}
+:focus-visible{outline:2px solid #086B91;outline-offset:2px}
+.i{fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.f{fill:currentColor;stroke:none}
+.mono{font-family:'JetBrains Mono',ui-monospace,Menlo,monospace;font-variant-numeric:tabular-nums}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.rail-item:not([aria-current="page"]):hover{background:#EEF5F9!important}
+.btn-accent{transition:background-color .15s ease}.btn-accent:hover{background:#064F6B!important;color:#FFFFFF!important}
+.btn-soft{transition:background-color .15s ease}.btn-soft:hover{background:#C3E5F2!important}
+.row{transition:background-color .15s ease}.row:hover{background:#F5FAFC}
+.narrow-only{display:none!important}
+@media (max-width:760px){.rail-list>a{flex:1 1 auto!important}.rail-list:not(.rail-open)>a:not(.rail-core):not([aria-current="page"]){display:none!important}.rail-more{display:flex!important}.rail-actions{display:flex!important}.rail-head,.rail-extra,.tb-label,.tb-kbd,.tb-actions,.wide-only{display:none!important}.narrow-only{display:flex!important}.is-hidden-narrow{display:none!important}.two-col{grid-template-columns:minmax(0,1fr)!important}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</helmet>
+<div style="box-sizing: border-box; width: 100%; background: #EEF5F9; color: #102A39; font-family: 'Quicksand', ui-rounded, system-ui, sans-serif; display: flex; flex-wrap: wrap; align-items: stretch">
+<div style="flex: 1 1 248px; min-width: 0; background: #FFFFFF; border-right: 1px solid #C9DCE5">
+<dc-import name="WebRail" active="inbox" hint-size="100%,900px"></dc-import>
+</div>
+<div style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column">
+<dc-import name="WebTopBar" hint-size="100%,72px"></dc-import>
+<main style="box-sizing: border-box; width: 100%; max-width: 1240px; padding: 28px clamp(16px, 3vw, 40px) 64px; display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start">
+<section aria-labelledby="inbox-h" class="{{listClass}}" style="flex: 1 1 320px; max-width: 440px; min-width: 0; display: flex; flex-direction: column; gap: 14px">
+<h1 id="inbox-h" style="margin: 0; font-size: 30px; line-height: 1.15; font-weight: 700">Inbox</h1>
+<div style="height: 46px; box-sizing: border-box; padding: 0 16px; border-radius: 23px; background: #FFFFFF; box-shadow: inset 0 0 0 1px #C9DCE5; display: flex; align-items: center; gap: 10px; color: #4F6875">
+<svg class="i" width="19" height="19" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"></circle><path d="M16 16l4 4"></path></svg>
+<label class="sr" for="inbox-search">Search the inbox</label>
+<input id="inbox-search" type="search" value="{{query}}" onChange="{{onQuery}}" placeholder="Search people, agents, calls" style="flex-grow: 1; min-width: 0; height: 40px; border: 0; outline: none; background: transparent; color: #102A39; font-size: 15px; font-weight: 600">
+</div>
+<div role="group" aria-label="Filter" style="display: flex; flex-wrap: wrap; gap: 6px">
+<sc-for list="{{chips}}" as="c" hint-placeholder-count="6">
+<button type="button" onClick="{{c.pick}}" aria-pressed="{{c.on}}" style="height: 36px; padding: 0 14px; border-radius: 18px; background: {{c.bg}}; box-shadow: inset 0 0 0 1px {{c.ring}}; color: {{c.fg}}; font-size: 14px; font-weight: 700; display: flex; align-items: center; gap: 6px">{{c.label}}<span class="mono" style="font-size: 12px; font-weight: 600">{{c.count}}</span></button>
+</sc-for>
+</div>
+<div style="border-radius: 20px; background: #FFFFFF; box-shadow: 0 0 0 1px #C9DCE5; overflow: hidden">
+<sc-for list="{{rows}}" as="r" hint-placeholder-count="8">
+<sc-if value="{{r.isHeading}}" hint-placeholder-val="{{ false }}">
+<h2 style="margin: 0; padding: 14px 16px 6px; font-size: 13px; font-weight: 700; color: {{r.headFg}}">{{r.heading}}</h2>
+</sc-if>
+<sc-if value="{{r.isItem}}" hint-placeholder-val="{{ true }}">
+<button type="button" class="row" onClick="{{r.pick}}" aria-current="{{r.cur}}" style="width: 100%; min-height: 68px; box-sizing: border-box; padding: 10px 16px; background: {{r.bg}}; box-shadow: inset 0 0 0 1px {{r.ring}}; color: #102A39; text-align: left; display: flex; align-items: center; gap: 12px">
+<span class="mono" style="flex-shrink: 0; width: 40px; height: 40px; border-radius: {{r.radius}}; background: {{r.tileBg}}; color: {{r.tileFg}}; font-size: {{r.tileSize}}; font-weight: 600; display: flex; align-items: center; justify-content: center"><sc-if value="{{r.isAlert}}" hint-placeholder-val="{{ false }}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 16a8 8 0 1 1 16 0"></path><path d="M12 16l4-5"></path><path d="M8 20h8"></path></svg></sc-if><sc-if value="{{r.hasInitials}}" hint-placeholder-val="{{ true }}">{{r.initials}}</sc-if></span>
+<span style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px">
+<span style="font-size: 15px; font-weight: 700; color: {{r.titleFg}}; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{r.title}}</span>
+<span style="font-size: 13px; font-weight: 600; color: #405C6B; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{r.sub}}</span>
+</span>
+<span style="flex-shrink: 0; display: flex; flex-direction: column; align-items: flex-end; gap: 6px">
+<span class="mono" style="font-size: 12px; color: #4F6875">{{r.time}}</span>
+<sc-if value="{{r.hasBadge}}" hint-placeholder-val="{{ false }}"><span style="min-width: 20px; height: 20px; padding: 0 6px; box-sizing: border-box; border-radius: 10px; background: {{r.badgeBg}}; color: #FFFFFF; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center"><sc-if value="{{r.badgeIcon}}" hint-placeholder-val="{{ false }}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="stroke-width: 2.5"><circle cx="12" cy="12" r="8.5"></circle><path d="M12 7.5v5M12 16v.01"></path></svg><span class="sr">Needs you</span></sc-if><sc-if value="{{r.badgeText}}" hint-placeholder-val="{{ true }}">{{r.badge}}</sc-if></span></sc-if>
+</span>
+</button>
+</sc-if>
+</sc-for>
+<sc-if value="{{empty}}" hint-placeholder-val="{{ false }}">
+<p style="margin: 0; padding: 20px 16px; font-size: 14px; font-weight: 600; color: #405C6B">Nothing here matches. Try another filter or ask Chief of Staff.</p>
+</sc-if>
+</div>
+</section>
+<section aria-label="{{detailLabel}}" class="{{detailClass}}" style="flex: 999 1 460px; min-width: 0; box-sizing: border-box; padding: 28px; border-radius: 24px; background: #FFFFFF; box-shadow: 0 0 0 1px #C9DCE5, 0 8px 24px rgba(16, 42, 57, 0.06); display: flex; flex-direction: column; gap: 22px">
+<button type="button" class="narrow-only" onClick="{{backToList}}" style="align-self: flex-start; height: 40px; padding: 0 16px 0 10px; border-radius: 20px; background: #E3EFF5; color: #102A39; font-size: 14px; font-weight: 700; align-items: center; gap: 6px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg>Back to Inbox</button>
+<sc-if value="{{isApproval}}" hint-placeholder-val="{{ true }}">
+<div style="display: flex; flex-direction: column; gap: 10px">
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 10px; font-size: 14px; font-weight: 600; color: #405C6B">
+<span class="mono" style="width: 30px; height: 30px; border-radius: 10px; background: #D6EFF8; color: #06445C; font-size: 11px; font-weight: 600; display: flex; align-items: center; justify-content: center">{{a.who}}</span>
+<span>{{a.asker}} asks · <span class="mono">{{a.time}}</span></span>
+<span style="height: 26px; padding: 0 10px; box-sizing: border-box; border-radius: 13px; background: {{a.stateBg}}; color: {{a.stateFg}}; font-size: 12px; font-weight: 700; display: flex; align-items: center">{{a.stateLabel}}</span>
+</div>
+<h2 style="margin: 0; font-size: 28px; line-height: 1.2; font-weight: 700">{{a.title}}</h2>
+</div>
+<div style="display: flex; flex-direction: column; gap: 8px">
+<h3 style="margin: 0; font-size: 14px; font-weight: 700; color: #405C6B">Traces to</h3>
+<ol style="margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column">
+<sc-for list="{{a.traces}}" as="t" hint-placeholder-count="2">
+<li style="display: flex; gap: 12px">
+<span style="width: 12px; flex-shrink: 0; display: flex; flex-direction: column; align-items: center"><span style="width: 10px; height: 10px; margin-top: 5px; border-radius: 50%; background: #086B91"></span><span style="flex-grow: 1; width: 2px; background: {{t.line}}"></span></span>
+<span style="padding-bottom: 12px; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 15px; font-weight: 700">{{t.title}}</span><span style="font-size: 13px; font-weight: 600; color: #4F6875">{{t.sub}}</span></span>
+</li>
+</sc-for>
+</ol>
+</div>
+<div style="padding: 20px; border-radius: 18px; background: #F2F8FB; display: flex; flex-direction: column; gap: 12px">
+<h3 style="margin: 0; font-size: 14px; font-weight: 700; color: #405C6B">{{a.previewTitle}}</h3>
+<dl style="margin: 0; display: grid; grid-template-columns: max-content 1fr; gap: 6px 16px; font-size: 14px; font-weight: 600">
+<sc-for list="{{a.fields}}" as="f" hint-placeholder-count="2">
+<dt style="color: #4F6875">{{f.k}}</dt><dd style="margin: 0">{{f.v}}</dd>
+</sc-for>
+</dl>
+<p style="margin: 0; max-width: 68ch; font-size: 15px; line-height: 1.55; font-weight: 500; color: #2D4858">{{a.body}}</p>
+<sc-if value="{{a.hasChoices}}" hint-placeholder-val="{{ false }}">
+<div role="group" aria-label="Launch date" style="display: flex; flex-wrap: wrap; gap: 8px">
+<sc-for list="{{a.choices}}" as="ch" hint-placeholder-count="3">
+<button type="button" onClick="{{ch.pick}}" aria-pressed="{{ch.on}}" style="height: 44px; padding: 0 16px; border-radius: 22px; background: {{ch.bg}}; box-shadow: inset 0 0 0 1px {{ch.ring}}; color: {{ch.fg}}; font-size: 14px; font-weight: 700">{{ch.label}}</button>
+</sc-for>
+</div>
+</sc-if>
+</div>
+<p style="margin: 0; display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 15px; font-weight: 600; color: #405C6B">
+<sc-for list="{{a.facts}}" as="x" hint-placeholder-count="3">
+<span><span style="font-weight: 700; color: {{x.fg}}">{{x.value}}</span> {{x.label}}</span>
+</sc-for>
+</p>
+<sc-if value="{{a.pending}}" hint-placeholder-val="{{ true }}">
+<div style="display: flex; flex-direction: column; gap: 10px">
+<button type="button" class="btn-accent" onClick="{{a.approve}}" style="width: 100%; height: 52px; padding: 0 22px; border-radius: 26px; background: #086B91; color: #FFFFFF; font-size: 16px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px">
+<svg class="i" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" style="stroke-width: 2.5"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg>{{a.approveLabel}}
+</button>
+<div style="display: flex; gap: 10px">
+<button type="button" onClick="{{a.ask}}" class="btn-soft" style="flex: 1 1 0; height: 48px; padding: 0 16px; border-radius: 24px; background: #D6EFF8; color: #06445C; font-size: 15px; font-weight: 700">Ask<span class="wide-only"> Chief of Staff</span> why</button>
+<button type="button" onClick="{{a.reject}}" style="flex: 1 1 0; height: 48px; padding: 0 16px; border-radius: 24px; background: #E3EFF5; color: #102A39; font-size: 15px; font-weight: 700">Reject</button>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{a.decided}}" hint-placeholder-val="{{ false }}">
+<div role="status" style="padding: 16px 18px; border-radius: 16px; background: {{a.resultBg}}; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px">
+<span style="font-size: 15px; font-weight: 700; color: {{a.resultFg}}">{{a.result}}</span>
+<span style="display: flex; gap: 8px">
+<button type="button" onClick="{{a.undo}}" style="height: 40px; padding: 0 16px; border-radius: 20px; background: #FFFFFF; color: #102A39; font-size: 14px; font-weight: 700">Undo</button>
+<sc-if value="{{hasNext}}" hint-placeholder-val="{{ true }}"><button type="button" class="btn-accent" onClick="{{goNext}}" style="height: 40px; padding: 0 16px; border-radius: 20px; background: #086B91; color: #FFFFFF; font-size: 14px; font-weight: 700">Next decision</button></sc-if>
+</span>
+</div>
+</sc-if>
+</sc-if>
+<sc-if value="{{isThread}}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; align-items: center; gap: 12px">
+<span class="mono" style="flex-shrink: 0; width: 44px; height: 44px; border-radius: {{c.radius}}; background: {{c.tileBg}}; color: {{c.tileFg}}; font-size: {{c.tileSize}}; font-weight: 600; display: flex; align-items: center; justify-content: center">{{c.initials}}</span>
+<div style="display: flex; flex-direction: column; gap: 2px"><h2 style="margin: 0; font-size: 24px; font-weight: 700">{{c.title}}</h2><span style="font-size: 14px; font-weight: 600; color: #405C6B">{{c.kind}}</span></div>
+</div>
+<ol aria-label="Messages" style="margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 10px">
+<sc-for list="{{c.messages}}" as="m" hint-placeholder-count="3">
+<li style="align-self: {{m.align}}; max-width: 78%; padding: 12px 16px; border-radius: {{m.radius}}; background: {{m.bg}}; color: {{m.fg}}; font-size: 15px; line-height: 1.5; font-weight: 600">{{m.text}}</li>
+</sc-for>
+</ol>
+<form onSubmit="{{send}}" style="margin: 0; display: flex; gap: 8px">
+<label class="sr" for="reply">Message {{c.title}}</label>
+<input id="reply" type="text" value="{{draft}}" onChange="{{onDraft}}" placeholder="Write to {{c.title}}" style="flex-grow: 1; min-width: 0; height: 52px; box-sizing: border-box; padding: 0 20px; border: 0; outline: none; border-radius: 26px; background: #EEF5F9; box-shadow: inset 0 0 0 1px #C9DCE5; color: #102A39; font-size: 15px; font-weight: 600">
+<button type="submit" class="btn-accent" style="height: 52px; padding: 0 22px; border-radius: 26px; background: #086B91; color: #FFFFFF; font-size: 15px; font-weight: 700">Send</button>
+</form>
+</sc-if>
+</section>
+</main>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1049}}'>
+// Example inbox, the same decisions and conversations as the phone Inbox.
+var APPROVALS = [
+  { key: 'remind', who: 'BIL', asker: 'Billing agent', time: '8:04', title: 'Send 2 payment reminders', sub: 'Billing agent · $3,650 overdue',
+    traces: [['Recover $3,650 overdue', 'Task · owned by CFO agent'], ['Q3 goal: 6 months of runway', 'Goal · set by you']],
+    previewTitle: 'Email 1 of 2', fields: [['To', 'Kivu Coffee Co. · Accounts'], ['Subject', 'Invoice #0142, a friendly reminder']],
+    body: 'Hi team, a quick reminder that invoice #0142 for $1,200 was due on 10 September. You can pay with the link below. If something is holding it up, just reply and we will sort it out.',
+    facts: [['2 emails', 'Will send', 'plain'], ['$0.03', 'Agent cost', 'plain'], ['No undo', 'Once sent', 'warn']],
+    approveLabel: 'Approve and send', approved: 'Sent. CFO agent will track payment.', rejected: 'Rejected. Billing agent will hold the reminders.' },
+  { key: 'umoja', who: 'PRO', asker: 'Proposal writer', time: '7:52', title: 'Review the Umoja proposal', sub: 'Proposal writer · $4,800',
+    traces: [['Win the Umoja client portal', 'Deal · owned by Sales lead'], ['Q3 goal: 6 months of runway', 'Goal · set by you']],
+    previewTitle: 'Proposal summary', fields: [['Client', 'Umoja Studio'], ['Scope', 'Client portal, six weeks'], ['Price', '$4,800, half up front']],
+    body: 'Written from Tuesday’s call recap in your house style. It covers the portal, two rounds of changes and a handover call. Delivery lead has checked the six-week plan.',
+    facts: [['1 document', 'Will send', 'plain'], ['$0.11', 'Agent cost', 'plain'], ['Client sees it', 'Once sent', 'warn']],
+    approveLabel: 'Approve and send', approved: 'Sent to Umoja. Proposal writer follows up on Monday.', rejected: 'Rejected. Proposal writer will wait for your notes.' },
+  { key: 'portal', who: 'DEL', asker: 'Delivery lead', time: '7:30', title: 'Pick a portal launch date', sub: 'Delivery lead · client portal',
+    traces: [['Launch the Kivu client portal', 'Project · owned by Delivery lead'], ['Q4 goal: 3 live client portals', 'Goal · set by you']],
+    previewTitle: 'Dates that work for the team', fields: [['Client', 'Kivu Coffee Co.'], ['Ready since', 'Friday 2 October']],
+    body: 'Testing is done. Delivery lead suggests a Wednesday launch so support is fully staffed for the first two days.',
+    choices: ['Mon 5 Oct', 'Wed 7 Oct', 'Mon 12 Oct'], defaultChoice: 1,
+    facts: [['3 options', 'Team is free', 'plain'], ['$0', 'Agent cost', 'plain'], ['Client is told', 'Once confirmed', 'warn']],
+    approveLabel: 'Confirm date', approved: 'Launch set. Delivery lead will tell the client.', rejected: 'Not yet. Delivery lead will ask again on Monday.' }
+];
+var THREADS = [
+  { key: 'cos', kind: 'agent', initials: 'CoS', title: 'Chief of Staff', sub: 'Morning brief: 3 things need you', time: '8:10', unread: 0, kindLabel: 'Agent · runs your other agents',
+    messages: [['them', 'Good morning, Samuel. Three things need you today.'], ['them', 'Billing agent drafted 2 payment reminders for $3,650 overdue. The Umoja proposal is ready, and Delivery lead needs a launch date for the Kivu portal.'], ['them', 'Everything else is on track. Agent spend is $4.20 of your $15 cap.']] },
+  { key: 'sales', kind: 'group', initials: 'SAL', title: 'Sales room', sub: 'Eric: I’ll take the Nyota call', time: '7:40', unread: 2, kindLabel: 'Group · Sales lead, Eric and you',
+    messages: [['them', 'Sales lead: Nyota Labs asked for a call this week.'], ['them', 'Eric: I’ll take the Nyota call.']] },
+  { key: 'call', kind: 'call', initials: 'CALL', title: 'Call with Chief of Staff', sub: '6 min · 3 visuals · 2 tasks created', time: 'Tue', unread: 0, kindLabel: 'Call recap',
+    messages: [['them', 'Recap: we went through September cash, the Umoja proposal and the portal plan.'], ['them', 'Tasks created: chase Kivu and Nyota invoices, draft the Umoja proposal.']] },
+  { key: 'aline', kind: 'human', initials: 'AM', title: 'Aline M.', sub: 'Signed contract is in the shared drive', time: 'Yest.', unread: 1, kindLabel: 'Person · Operations',
+    messages: [['them', 'Signed contract is in the shared drive.']] },
+  { key: 'cfo', kind: 'agent', initials: 'CFO', title: 'CFO agent', sub: 'September books closed, 2 anomalies flagged', time: 'Yest.', unread: 0, kindLabel: 'Agent · Finance',
+    messages: [['them', 'September books are closed. Two anomalies: a duplicate software bill and a refund with no matching invoice.']] },
+  { key: 'budget', kind: 'alert', initials: '', title: 'Budget alert', sub: 'Agent spend hit 80% of yesterday’s cap', time: '6:15', unread: 0, kindLabel: 'Alert',
+    messages: [['them', 'Agent spend hit 80% of yesterday’s cap. Nothing was stopped.']] }
+];
+var FILTERS = [
+  { key: 'all', label: 'All' }, { key: 'needs', label: 'Needs you' }, { key: 'agent', label: 'Agents' },
+  { key: 'human', label: 'People' }, { key: 'group', label: 'Groups' }, { key: 'call', label: 'Calls' }, { key: 'alert', label: 'Alerts' }
+];
+var LOOK = {
+  agent: { bg: '#D6EFF8', fg: '#06445C', radius: '12px' }, group: { bg: '#D6EFF8', fg: '#06445C', radius: '12px' },
+  call: { bg: '#D6EFF8', fg: '#06445C', radius: '12px' }, human: { bg: '#E2E9F6', fg: '#2F4F86', radius: '50%' },
+  alert: { bg: '#E3EFF5', fg: '#2D4858', radius: '12px' }, approval: { bg: '#FFE9C2', fg: '#7A4A00', radius: '12px' }
+};
+
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { filter: 'all', query: '', selected: 'remind', status: {}, choice: {}, extra: {}, draft: '', narrowDetail: false };
+  }
+  renderVals() {
+    var self = this;
+    var s = this.state;
+    var q = s.query.trim().toLowerCase();
+    var hit = function (x) { return !q || (x.title + ' ' + x.sub).toLowerCase().indexOf(q) !== -1; };
+    var set = function (field, key, value) { var next = Object.assign({}, s[field]); next[key] = value; var patch = {}; patch[field] = next; self.setState(patch); };
+    var showNeeds = s.filter === 'all' || s.filter === 'needs';
+    var needs = showNeeds ? APPROVALS.filter(hit) : [];
+    var convs = s.filter === 'needs' ? [] : THREADS.filter(function (t) { return (s.filter === 'all' || t.kind === s.filter) && hit(t); });
+    var pendingCount = APPROVALS.filter(function (a) { return !s.status[a.key]; }).length;
+    var rows = [];
+    var row = function (x, look, isApproval) {
+      var on = x.key === s.selected;
+      var decided = isApproval && s.status[x.key];
+      return {
+        isItem: true, isHeading: false, title: x.title, sub: x.sub, time: x.time,
+        initials: isApproval ? x.who : x.initials, tileBg: decided ? '#E8F6FB' : look.bg, tileFg: decided ? '#086B91' : look.fg, radius: look.radius,
+        tileSize: (isApproval ? x.who : x.initials).length > 3 ? '11px' : '11px',
+        bg: on ? '#E8F6FB' : '#FFFFFF', ring: on ? '#086B91' : 'transparent', titleFg: on ? '#086B91' : '#102A39', cur: on ? 'true' : 'false',
+        hasBadge: isApproval ? !decided : x.unread > 0, badge: String(x.unread || ''), badgeIcon: isApproval, badgeText: !isApproval,
+        isAlert: !isApproval && x.kind === 'alert', hasInitials: isApproval || x.kind !== 'alert', badgeBg: isApproval ? '#9A5A00' : '#086B91',
+        pick: function () { self.setState({ selected: x.key, draft: '', narrowDetail: true }); }
+      };
+    };
+    if (needs.length) {
+      rows.push({ isHeading: true, isItem: false, heading: 'Needs you', headFg: '#7A4A00' });
+      needs.forEach(function (a) { rows.push(row(a, LOOK.approval, true)); });
+    }
+    if (convs.length) {
+      rows.push({ isHeading: true, isItem: false, heading: 'Conversations', headFg: '#405C6B' });
+      convs.forEach(function (t) { rows.push(row(t, LOOK[t.kind], false)); });
+    }
+    var approval = APPROVALS.filter(function (a) { return a.key === s.selected; })[0];
+    var thread = THREADS.filter(function (t) { return t.key === s.selected; })[0];
+    var vals = {
+      query: s.query,
+      onQuery: function (e) { self.setState({ query: e.target.value }); },
+      chips: FILTERS.map(function (f) {
+        var on = f.key === s.filter;
+        var count = f.key === 'needs' ? String(pendingCount) : '';
+        return {
+          label: f.label, count: count, on: on,
+          bg: on ? '#086B91' : '#FFFFFF', fg: on ? '#FFFFFF' : '#2D4858', ring: on ? '#086B91' : '#C9DCE5',
+          pick: function () { self.setState({ filter: f.key }); }
+        };
+      }),
+      rows: rows,
+      listClass: s.narrowDetail ? 'is-hidden-narrow' : '',
+      detailClass: s.narrowDetail ? '' : 'is-hidden-narrow',
+      backToList: function () { self.setState({ narrowDetail: false }); },
+      empty: rows.length === 0,
+      isApproval: !!approval,
+      isThread: !!thread,
+      detailLabel: approval ? approval.title : thread.title,
+      a: {}, c: {}, draft: s.draft,
+      hasNext: APPROVALS.some(function (x) { return !s.status[x.key] && (!approval || x.key !== approval.key); }),
+      goNext: function () {
+        var next = APPROVALS.filter(function (x) { return !s.status[x.key]; })[0];
+        if (next) self.setState({ selected: next.key });
+      }
+    };
+    if (approval) {
+      var st = s.status[approval.key];
+      var choice = s.choice[approval.key] === undefined ? approval.defaultChoice : s.choice[approval.key];
+      vals.a = {
+        who: approval.who, asker: approval.asker, time: approval.time, title: approval.title,
+        stateLabel: st === 'approved' ? 'Approved' : st === 'rejected' ? 'Rejected' : 'Needs you',
+        stateBg: st === 'approved' ? '#E8F6FB' : st === 'rejected' ? '#E3EFF5' : '#FFE9C2',
+        stateFg: st === 'approved' ? '#086B91' : st === 'rejected' ? '#2D4858' : '#7A4A00',
+        traces: approval.traces.map(function (t, i) { return { title: t[0], sub: t[1], line: i === approval.traces.length - 1 ? 'transparent' : '#C9DCE5' }; }),
+        previewTitle: approval.previewTitle,
+        fields: approval.fields.map(function (f) { return { k: f[0], v: f[1] }; }),
+        body: approval.body,
+        hasChoices: !!approval.choices,
+        choices: (approval.choices || []).map(function (label, i) {
+          var on = i === choice;
+          return { label: label, on: on, bg: on ? '#086B91' : '#FFFFFF', fg: on ? '#FFFFFF' : '#102A39', ring: on ? '#086B91' : '#C9DCE5', pick: function () { set('choice', approval.key, i); } };
+        }),
+        facts: approval.facts.map(function (x) {
+          var warn = x[2] === 'warn';
+          return { value: x[0], label: x[1].toLowerCase(), fg: warn ? '#9A5A00' : '#102A39' };
+        }),
+        approveLabel: approval.approveLabel,
+        pending: !st, decided: !!st,
+        result: st === 'approved' ? (approval.choices ? 'Launch set for ' + approval.choices[choice] + '. Delivery lead will tell the client.' : approval.approved) : approval.rejected,
+        resultBg: st === 'approved' ? '#E8F6FB' : '#EEF5F9',
+        resultFg: st === 'approved' ? '#086B91' : '#2D4858',
+        approve: function () { set('status', approval.key, 'approved'); },
+        reject: function () { set('status', approval.key, 'rejected'); },
+        undo: function () { set('status', approval.key, undefined); },
+        ask: function (e) { if (e && e.preventDefault) e.preventDefault(); self.setState({ selected: 'cos' }); }
+      };
+    }
+    if (thread) {
+      var look = LOOK[thread.kind];
+      var sent = s.extra[thread.key] || [];
+      vals.c = {
+        title: thread.title, kind: thread.kindLabel, initials: thread.initials,
+        tileBg: look.bg, tileFg: look.fg, radius: look.radius, tileSize: thread.initials.length > 3 ? '11px' : '11px',
+        messages: thread.messages.concat(sent.map(function (t) { return ['you', t]; })).map(function (m) {
+          var you = m[0] === 'you';
+          return { text: m[1], align: you ? 'flex-end' : 'flex-start', bg: you ? '#086B91' : '#EEF5F9', fg: you ? '#FFFFFF' : '#102A39', radius: you ? '20px 20px 6px 20px' : '20px 20px 20px 6px' };
+        })
+      };
+      vals.onDraft = function (e) { self.setState({ draft: e.target.value }); };
+      vals.send = function (e) {
+        if (e && e.preventDefault) e.preventDefault();
+        var text = self.state.draft.trim();
+        if (!text) return;
+        set('extra', thread.key, sent.concat([text]));
+        self.setState({ draft: '' });
+      };
+    }
+    return vals;
+  }
+}
+</script>
+</body>
+</html>

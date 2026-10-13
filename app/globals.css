@@ -5,6 +5,8 @@
 
 /* The retired archive holds class names on purpose; never generate CSS from it. */
 @source not "../.unlazy";
+/* The app prototype is a separate Next.js project with its own theme. */
+@source not "../prototype";
 
 /*
  * Design tokens. This block is the only place colours, sizes, radii, shadows and easing are
@@ -42,6 +44,12 @@
   --color-alert-tint: #FFF0F1;
   --color-hold: #835900;
   --color-hold-tint: #FFF2D6;
+
+  /* A surface that stays dark in both themes (the featured offer), and the colour shadows are mixed
+     from, which stays dark when ink turns light. */
+  --color-deep: #0B2230;
+  --color-deep-2: #12384C;
+  --color-shade: #102A39;
 
   --color-white: #FFFFFF;
   --color-black: #000000;
@@ -112,7 +120,7 @@
   --radius-card: 22px;
   --radius-dot: 9999px;
 
-  --shadow-float: 0 1px 0 0 color-mix(in srgb, var(--color-white) 65%, transparent) inset, 0 28px 65px -34px color-mix(in srgb, var(--color-ink) 45%, transparent);
+  --shadow-float: 0 1px 0 0 color-mix(in srgb, var(--color-mist) 65%, transparent) inset, 0 28px 65px -34px color-mix(in srgb, var(--color-shade) 45%, transparent);
   --shadow-glow: 0 0 0 1px color-mix(in srgb, var(--color-glow) 50%, transparent), 0 12px 34px -14px color-mix(in srgb, var(--color-glow-cyan) 55%, transparent);
   --shadow-none: none;
 
@@ -122,6 +130,8 @@
 
   --aspect-product: 16 / 10;
   --aspect-video: 16 / 9;
+  /* The app's phone boards are 390 by 844. */
+  --aspect-phone: 390 / 844;
 
   --ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);
 
@@ -138,6 +148,38 @@
   --animate-hero: hero-in 1s var(--ease-out) backwards;
   --animate-grow: grow 2.4s var(--ease-out) infinite alternate;
   --animate-blink: blink 2.4s ease-in-out infinite;
+}
+
+/*
+ * Dark theme, the default: app/layout.tsx serves <html data-theme="dark">. The footer switch
+ * (components/ThemeToggle.tsx) removes it for light, and the script in app/layout.tsx restores a
+ * saved light choice before first paint. Same roles, darker values: components keep using role
+ * utilities (text-ink, bg-mist) and never raw white or black.
+ */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --color-paper: #0A161D;
+  --color-mist: #10212B;
+  --color-panel: #152D39;
+  --color-rule: #22404E;
+  --color-rule-strong: #6A8B9A;
+  --color-ink: #E6F2F7;
+  --color-graphite: #B4C8D2;
+  --color-slate: #93AEBB;
+  --color-signal: #0B7CA6;
+  --color-signal-strong: #8FDDF7;
+  --color-signal-bright: #5BC6EC;
+  --color-signal-tint: #0F3242;
+  --color-glow: #1E7898;
+  --color-glow-cyan: #1590BD;
+  --color-glow-deep: #134A5E;
+  --color-alert: #FF8F9B;
+  --color-alert-tint: #3A1A21;
+  --color-hold: #F0B653;
+  --color-hold-tint: #3A2B10;
+  --color-deep: #061118;
+  --color-deep-2: #0F2E3D;
+  --color-shade: #000000;
 }
 
 @keyframes spin { to { transform: rotate(360deg); } }
@@ -165,16 +207,6 @@
   to { transform: scaleX(1); }
 }
 @keyframes blink { 50% { opacity: 0.35; } }
-@keyframes twinkle {
-  0%, 100% { opacity: 0.35; }
-  50% { opacity: 0.9; }
-}
-@keyframes travel {
-  from { offset-distance: 0%; opacity: 0; }
-  10% { opacity: 1; }
-  90% { opacity: 1; }
-  to { offset-distance: 100%; opacity: 0; }
-}
 @keyframes check-in {
   0%, 12% { opacity: 0.25; }
   22%, 100% { opacity: 1; }
@@ -288,41 +320,6 @@
     background: radial-gradient(ellipse 67% 72% at 50% 78%, color-mix(in srgb, var(--color-glow-cyan) 66%, transparent), transparent 84%);
     filter: blur(var(--blur-xl));
   }
-  .hero-emphasis {
-    color: var(--color-signal);
-    text-decoration: underline;
-    text-decoration-color: color-mix(in srgb, var(--color-signal) 68%, transparent);
-    text-decoration-thickness: 2px;
-    text-underline-offset: 0.12em;
-  }
-
-  /* Faint decorative dots for the closing call to action. */
-  .stars, .stars::after {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    background-image:
-      radial-gradient(1px 1px at 12% 18%, var(--color-signal), transparent 70%),
-      radial-gradient(1px 1px at 67% 9%, var(--color-signal), transparent 70%),
-      radial-gradient(1px 1px at 38% 44%, var(--color-signal), transparent 70%),
-      radial-gradient(1px 1px at 84% 36%, var(--color-signal), transparent 70%),
-      radial-gradient(1px 1px at 22% 71%, var(--color-signal), transparent 70%),
-      radial-gradient(1px 1px at 55% 83%, var(--color-signal), transparent 70%),
-      radial-gradient(1px 1px at 91% 76%, var(--color-signal), transparent 70%),
-      radial-gradient(1px 1px at 5% 92%, var(--color-signal), transparent 70%);
-    background-size: 340px 340px;
-    opacity: 0.2;
-  }
-  .stars::after {
-    content: "";
-    background-size: 520px 520px;
-    background-position: 130px 70px;
-    animation: twinkle 5s ease-in-out infinite;
-  }
-  .stars-fade {
-    mask-image: radial-gradient(ellipse 80% 70% at 50% 40%, var(--color-black), transparent);
-  }
-
   /* A soft pool of light, placed by the parent. */
   .glow-pool {
     position: absolute;
@@ -340,7 +337,7 @@
     border: 1px solid var(--color-rule);
     border-radius: var(--radius-frame);
     background: linear-gradient(180deg, var(--color-mist), color-mix(in srgb, var(--color-panel) 38%, var(--color-mist)));
-    box-shadow: 0 12px 38px -30px color-mix(in srgb, var(--color-ink) 35%, transparent);
+    box-shadow: 0 12px 38px -30px color-mix(in srgb, var(--color-shade) 35%, transparent);
   }
   .card::after {
     content: "";
@@ -370,7 +367,7 @@
     border: 1px solid var(--color-rule);
     border-radius: var(--radius-frame);
     background: linear-gradient(145deg, color-mix(in srgb, var(--color-mist) 93%, transparent), color-mix(in srgb, var(--color-panel) 89%, transparent));
-    box-shadow: 0 1px 0 var(--color-white) inset, 0 24px 60px -42px color-mix(in srgb, var(--color-ink) 48%, transparent);
+    box-shadow: 0 1px 0 var(--color-mist) inset, 0 24px 60px -42px color-mix(in srgb, var(--color-shade) 48%, transparent);
     backdrop-filter: blur(var(--blur-md));
   }
   .glass-tile::before {
@@ -401,6 +398,49 @@
   }
   .roi-range { accent-color: var(--color-signal-bright); cursor: pointer; }
 
+  /* Slider with a filled track. The component sets --fill to the thumb's position (0% to 100%). */
+  .range {
+    display: block;
+    width: 100%;
+    height: 1.5rem;
+    appearance: none;
+    background: transparent;
+    cursor: pointer;
+  }
+  .range::-webkit-slider-runnable-track {
+    height: 6px;
+    border-radius: var(--radius-dot);
+    background: linear-gradient(90deg, var(--color-signal) var(--fill, 50%), var(--color-rule) var(--fill, 50%));
+  }
+  .range::-moz-range-track {
+    height: 6px;
+    border-radius: var(--radius-dot);
+    background: linear-gradient(90deg, var(--color-signal) var(--fill, 50%), var(--color-rule) var(--fill, 50%));
+  }
+  .range::-webkit-slider-thumb {
+    appearance: none;
+    width: 22px;
+    height: 22px;
+    margin-top: -8px;
+    border: 2px solid var(--color-signal);
+    border-radius: var(--radius-dot);
+    background: var(--color-mist);
+    box-shadow: 0 4px 12px -4px color-mix(in srgb, var(--color-shade) 45%, transparent);
+    transition: transform 150ms var(--ease-out);
+  }
+  .range::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+    border: 2px solid var(--color-signal);
+    border-radius: var(--radius-dot);
+    background: var(--color-mist);
+    box-shadow: 0 4px 12px -4px color-mix(in srgb, var(--color-shade) 45%, transparent);
+  }
+  .range:active::-webkit-slider-thumb { transform: scale(1.12); }
+  .range:focus-visible { outline: none; }
+  .range:focus-visible::-webkit-slider-thumb { outline: 2px solid var(--color-signal-bright); outline-offset: 2px; }
+  .range:focus-visible::-moz-range-thumb { outline: 2px solid var(--color-signal-bright); outline-offset: 2px; }
+
   /* Loading text that shimmers, for "analyzing" states inside illustrations. */
   .text-shimmer {
     background: linear-gradient(90deg, var(--color-slate) 0%, var(--color-ink) 50%, var(--color-slate) 100%);
@@ -414,27 +454,14 @@
   .fade-x {
     mask-image: linear-gradient(90deg, transparent, var(--color-black) 12%, var(--color-black) 88%, transparent);
   }
-  .fade-b {
-    mask-image: linear-gradient(180deg, var(--color-black) 60%, transparent);
-  }
-
-  /* Faint engineering grid behind a section. */
-  .grid-lines {
-    background-image:
-      linear-gradient(color-mix(in srgb, var(--color-white) 4%, transparent) 1px, transparent 1px),
-      linear-gradient(90deg, color-mix(in srgb, var(--color-white) 4%, transparent) 1px, transparent 1px);
-    background-size: 56px 56px;
-    mask-image: radial-gradient(ellipse 70% 60% at 50% 50%, var(--color-black), transparent);
-  }
 
   /* Mouse parallax for the hero's floating cards; --mx and --my run from -1 to 1. */
   .parallax-near { transform: translate3d(calc(var(--mx, 0) * 18px), calc(var(--my, 0) * 12px), 0); transition: transform 600ms var(--ease-out); }
   .parallax-far { transform: translate3d(calc(var(--mx, 0) * -10px), calc(var(--my, 0) * -8px), 0); transition: transform 600ms var(--ease-out); }
   .tilt { transform: perspective(1400px) rotateX(calc(6deg - var(--my, 0) * 2deg)) rotateY(calc(var(--mx, 0) * 3deg)); transition: transform 600ms var(--ease-out); }
 
-  /* Flowing connection lines and dots that travel along a path (offset-path set inline). */
+  /* Flowing connection lines. */
   .flow { stroke-dasharray: 4 6; animation: var(--animate-dash); }
-  .traveller { offset-rotate: 0deg; animation: travel 3.2s linear infinite; animation-delay: var(--d, 0ms); }
 
   .check-seq { animation: check-in 6s linear infinite; animation-delay: var(--d, 0ms); }
 
@@ -457,6 +484,4 @@
 
 @layer utilities {
   .tabular { font-variant-numeric: tabular-nums; }
-  /* Below-the-fold sections skip layout and paint until they near the viewport. */
-  .defer-render { content-visibility: auto; contain-intrinsic-size: auto 50rem; }
 }

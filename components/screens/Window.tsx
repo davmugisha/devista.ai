@@ -16,7 +16,7 @@ type Props = {
  */
 export function Window({ title, meta, label, className = '', children }: Props) {
   return (
-    <div role="img" aria-label={label} className={'overflow-hidden rounded-window border border-rule bg-mist text-left shadow-float ' + className}>
+    <div role="img" aria-label={label} data-app="window" className={'overflow-hidden rounded-window border border-rule bg-mist text-left shadow-float ' + className}>
       <div aria-hidden="true">
         <WindowBar title={title} meta={meta} />
         {children}
@@ -49,4 +49,25 @@ export function Status({ tone, children }: { tone: 'run' | 'wait' | 'done' | 'st
     stop: 'bg-alert-tint text-alert',
   } as const;
   return <span className={'inline-flex shrink-0 items-center rounded-chip px-2 py-px text-xs font-medium ' + tones[tone]}>{children}</span>;
+}
+
+/**
+ * Helpers that let a rendering's visible numbers and its screen reader label come from the same
+ * array, so the two can never disagree.
+ */
+
+/** "1 item" or "3 items": a count with its noun. */
+export function plural(n: number, one: string, many = one + 's'): string {
+  return `${n} ${n === 1 ? one : many}`;
+}
+
+/** "a", "a and b", "a, b and c". */
+export function joinList(items: readonly string[]): string {
+  if (items.length < 2) return items.join('');
+  return `${items.slice(0, -1).join(', ')} and ${items[items.length - 1]}`;
+}
+
+/** Lowercases the first letter, to splice a sentence-case label into a sentence. */
+export function lowerFirst(text: string): string {
+  return text.charAt(0).toLowerCase() + text.slice(1);
 }

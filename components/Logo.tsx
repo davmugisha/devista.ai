@@ -1,12 +1,12 @@
 import Link from 'next/link';
-import { BRAND_MARK_PATHS } from '@/lib/brand';
+import { BRAND } from '@/lib/brand';
 import { SITE } from '@/lib/site';
 
-/** The mark of the brand this domain serves (see lib/brand.ts), drawn as a crisp one-colour vector. */
+/** The Saydeed mark (see lib/brand.ts), drawn as a crisp one-colour vector. */
 export function Mark({ className = 'size-7' }: { className?: string }) {
   return (
-    <svg viewBox="0 0 64 64" aria-hidden="true" className={'shrink-0 fill-current text-signal ' + className}>
-      {BRAND_MARK_PATHS.map((path) => <path key={path} d={path} />)}
+    <svg viewBox="0 0 64 64" aria-hidden="true" className={'shrink-0 fill-current text-signal-bright ' + className}>
+      {BRAND.mark.map((path) => <path key={path} d={path} />)}
     </svg>
   );
 }

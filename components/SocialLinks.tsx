@@ -30,7 +30,7 @@ export function SocialLinks({ className = '' }: { className?: string }) {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={`${SITE.shortName} on ${icon.title}`}
-                className="flex size-10 items-center justify-center rounded-dot border border-rule bg-paper text-graphite transition-colors duration-150 hover:border-signal hover:bg-signal-tint hover:text-signal"
+                className="flex size-10 items-center justify-center rounded-dot border border-rule bg-paper text-graphite transition-colors duration-150 hover:border-signal hover:bg-signal-tint hover:text-signal-bright"
               >
                 <svg viewBox="0 0 24 24" aria-hidden="true" className="size-4 fill-current">
                   <path d={icon.path} fillRule={icon.evenOdd ? 'evenodd' : undefined} />

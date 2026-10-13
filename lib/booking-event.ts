@@ -4,6 +4,7 @@
 
 import { BOOKING } from './booking-config';
 import { LIMITS, phoneForDisplay, type DetailsInput } from './booking-validate';
+import { CONTACT } from './site';
 
 // Control characters and the Unicode line and paragraph separators.
 const CONTROL = /[\p{Cc}\p{Zl}\p{Zp}]/gu;
@@ -21,21 +22,39 @@ export function cleanBlock(s: string, max: number) {
   return neutralise(lines.join('\n').replace(/\n{3,}/g, '\n\n').trim()).slice(0, max);
 }
 
-const label = (value: string) => BOOKING.teamSizes.find((o) => o.value === value)?.label ?? '';
+export type Guest = { email: string; name: string };
+
+/**
+ * The guests on the event: the visitor first, then the host's own address (CONTACT.email), so each
+ * booking also lands in the host's inbox and the visitor sees that address on the invite. An
+ * address appears once, whatever its letter case, for the case where the host books a call.
+ */
+export function guestList(visitor: Guest): Guest[] {
+  const host: Guest = { email: CONTACT.email, name: BOOKING.hostName };
+  return visitor.email.toLowerCase() === host.email.toLowerCase() ? [visitor] : [visitor, host];
+}
+
+const label = (options: readonly { value: string; label: string }[], value: string) => options.find((o) => o.value === value)?.label ?? '';
+
+/** The visitor's full name, cleaned for the event title, description and attendee entry. */
+export function attendeeName(d: Pick<DetailsInput, 'firstName' | 'lastName'>) {
+  return cleanLine(`${d.firstName} ${d.lastName}`, LIMITS.firstName + LIMITS.lastName + 1);
+}
 
 export function eventTitle(d: Pick<DetailsInput, 'firstName' | 'lastName'>) {
-  const name = cleanLine(`${d.firstName} ${d.lastName}`, LIMITS.firstName + LIMITS.lastName + 1);
-  return `${BOOKING.callTitle} with ${name}`;
+  return `${BOOKING.callTitle} with ${attendeeName(d)}`;
 }
 
 export function eventDescription(d: DetailsInput, timezone: string) {
   const values: Record<string, string> = {
     business: BOOKING.businessName,
-    name: cleanLine(`${d.firstName} ${d.lastName}`, 200),
+    name: attendeeName(d),
     email: cleanLine(d.email, LIMITS.email),
     phone: cleanLine(phoneForDisplay(d), 40),
     company: cleanLine(d.company, LIMITS.company),
-    teamSize: label(d.teamSize),
+    site: cleanLine(d.site, LIMITS.site),
+    teamSize: label(BOOKING.teamSizes, d.teamSize),
+    revenue: label(BOOKING.revenueRanges, d.revenue),
     timezone: cleanLine(timezone, 64),
     topic: cleanBlock(d.topic, LIMITS.topic),
   };
@@ -52,9 +71,4 @@ export function eventDescription(d: DetailsInput, timezone: string) {
     })
     .filter((line): line is string => line !== null)
     .join('\n');
-}
-
-/** Display name for the attendee entry. */
-export function attendeeName(d: Pick<DetailsInput, 'firstName' | 'lastName'>) {
-  return cleanLine(`${d.firstName} ${d.lastName}`, 200);
 }

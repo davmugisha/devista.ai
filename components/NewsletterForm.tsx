@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useRef, useState, type FormEvent } from 'react';
 import { buttonClass } from './Button';
-import { controlClass, describedBy } from './Field';
+import { CheckBadge, controlClass, describedBy, Field, Honeypot } from './Field';
 import { track } from '@/lib/analytics';
 import { newsletterEmailError } from '@/lib/newsletter';
 
@@ -72,11 +72,7 @@ export function NewsletterForm() {
   if (status === 'done') {
     return (
       <p role="status" className="flex items-center gap-3 text-base text-ink">
-        <span className="flex size-8 shrink-0 items-center justify-center rounded-dot bg-signal-tint" aria-hidden="true">
-          <svg viewBox="0 0 16 16" className="size-4 fill-none stroke-signal" strokeWidth="2">
-            <path d="M3.5 8.5l3 3 6-7" />
-          </svg>
-        </span>
+        <CheckBadge />
         You’re subscribed. Thank you.
       </p>
     );
@@ -84,44 +80,36 @@ export function NewsletterForm() {
 
   return (
     <form noValidate onSubmit={onSubmit} onFocus={onStart} aria-label="Subscribe to email updates">
-      <label htmlFor={ID} className="block text-sm font-medium text-ink">
-        Email address
-      </label>
-      <div className="mt-2 flex flex-col gap-3 sm:flex-row">
-        <input
-          ref={input}
-          id={ID}
-          name="email"
-          type="email"
-          inputMode="email"
-          autoComplete="email"
-          placeholder="name@company.com"
-          value={email}
-          onChange={(e) => {
-            setEmail(e.target.value);
-            if (error) setError(newsletterEmailError(e.target.value));
-          }}
-          aria-invalid={error ? true : undefined}
-          aria-describedby={`${describedBy(ID)} ${ID}-note`}
-          className={controlClass(!!error, 'h-12 sm:flex-1')}
-        />
-        <button type="submit" disabled={status === 'sending'} className={buttonClass('primary', 'md')}>
-          {status === 'sending' ? 'Subscribing' : 'Subscribe'}
-        </button>
-      </div>
-      <p id={`${ID}-error`} className={error ? 'mt-2 text-sm text-alert' : 'sr-only'} aria-live="polite">
-        {error}
-      </p>
+      <Field id={ID} label="Email address" error={error}>
+        <div className="flex flex-col gap-3 sm:flex-row">
+          <input
+            ref={input}
+            id={ID}
+            name="email"
+            type="email"
+            inputMode="email"
+            autoComplete="email"
+            placeholder="name@example.com"
+            value={email}
+            onChange={(e) => {
+              setEmail(e.target.value);
+              if (error) setError(newsletterEmailError(e.target.value));
+            }}
+            aria-invalid={error ? true : undefined}
+            aria-describedby={`${describedBy(ID)} ${ID}-note`}
+            className={controlClass(!!error, 'h-12 sm:flex-1')}
+          />
+          <button type="submit" disabled={status === 'sending'} className={buttonClass('primary', 'md')}>
+            {status === 'sending' ? 'Subscribing' : 'Subscribe'}
+          </button>
+        </div>
+      </Field>
       {status === 'failed' ? (
         <p role="alert" className="mt-2 text-sm text-alert">
           {failure}
         </p>
       ) : null}
-      {/* Honeypot: hidden from people and assistive technology; bots that fill it are ignored. */}
-      <div aria-hidden="true" className="sr-only">
-        <label htmlFor="newsletter-website">Website</label>
-        <input ref={honeypot} id="newsletter-website" name="website" tabIndex={-1} autoComplete="off" defaultValue="" />
-      </div>
+      <Honeypot id="newsletter-website" ref={honeypot} />
       <p id={`${ID}-note`} className="mt-3 text-xs text-slate">
         We use your address only to send these updates. Unsubscribe at any time. See the{' '}
         <Link href="/privacy" prefetch={false} className="underline decoration-rule-strong underline-offset-2 hover:text-ink">

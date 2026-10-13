@@ -8,3 +8,11 @@ const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 export function isEmail(value: string) {
   return EMAIL.test(value);
 }
+
+/** What is wrong with an address, in words that say how to fix it; `empty` is the message for a blank one. */
+export function emailError(raw: string, empty: string): string | undefined {
+  const value = raw.trim();
+  if (!value) return empty;
+  if (value.length > EMAIL_MAX) return 'This email address is too long. Check it and try again.';
+  if (!isEmail(value)) return 'Enter an email address in the format name@example.com.';
+}

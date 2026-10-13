@@ -1,23 +1,23 @@
 import { ModeGlyph } from './ModeGlyph';
-import { Window } from './screens/Window';
+import { Window, joinList } from './screens/Window';
 import type { Mode } from '@/lib/workflows';
 
-const ENTRIES: { time: string; mode: Mode | 'rule'; who: string; what: string }[] = [
-  { time: '09:14', mode: 'agent', who: 'Invoice agent', what: 'Matched supplier invoice to purchase order and goods receipt' },
-  { time: '09:14', mode: 'rule', who: 'Policy', what: 'Amount above approval limit. Sent to the CFO' },
-  { time: '09:20', mode: 'assisted', who: 'Accounts payable clerk', what: 'Confirmed cost center suggested by AI' },
-  { time: '10:02', mode: 'person', who: 'CFO', what: 'Approved payment' },
-  { time: '10:02', mode: 'agent', who: 'Invoice agent', what: 'Added to the next payment run' },
+const ENTRIES: { time: string; mode: Mode | 'rule'; who: string; what: string; summary: string }[] = [
+  { time: '09:14', mode: 'agent', who: 'Research agent', what: 'Found a prospect that fits the profile and added it to the list', summary: 'found by an agent' },
+  { time: '09:15', mode: 'assisted', who: 'Strategist', what: 'Edited the outreach message that AI drafted', summary: 'drafted by AI and edited by a strategist' },
+  { time: '09:15', mode: 'rule', who: 'Rule', what: 'Every outreach message needs approval. Sent to the agency owner', summary: 'sent to the agency owner by a rule' },
+  { time: '10:02', mode: 'person', who: 'Agency owner', what: 'Approved the message', summary: 'approved by the agency owner' },
+  { time: '10:02', mode: 'agent', who: 'Research agent', what: 'Logged it in the CRM and set a follow-up task', summary: 'logged by the agent with a follow-up task' },
 ];
 
-/** An example audit trail: every step shows who acted and on whose authority. Captioned by the page. */
+/** An example activity record: every step shows who acted and on whose authority. Captioned by the page. */
 export function ActivityLog({ className = '' }: { className?: string }) {
   return (
     <Window
-      title="Audit trail"
-      meta="Supplier invoice, Finance"
+      title="Activity record"
+      meta="Outreach draft, Sales"
       className={className}
-      label="Example audit trail for one supplier invoice: matched by an agent, sent to the CFO by policy, coded by a clerk with AI help, approved by the CFO, then scheduled by the agent."
+      label={`Example activity record for one outreach message: ${joinList(ENTRIES.map((e) => e.summary))}.`}
     >
       <ol className="divide-y divide-rule">
         {ENTRIES.map((e, i) => (

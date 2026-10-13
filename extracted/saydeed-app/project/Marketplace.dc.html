@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Marketplace</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;600&amp;family=Quicksand:wght@500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#EEF5F9;-webkit-font-smoothing:antialiased}
+a{color:#086B91;text-decoration:none}a:hover{color:#064F6B}
+button,input{font-family:inherit}
+button{border:0;padding:0;cursor:pointer}
+input::placeholder{color:#4F6875}
+.i{fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.f{fill:currentColor;stroke:none}
+.mono{font-family:'JetBrains Mono',ui-monospace,Menlo,monospace}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.noscroll{scrollbar-width:none}.noscroll::-webkit-scrollbar{display:none}
+</style>
+</helmet>
+<div style="position: relative; width: 390px; height: 844px; overflow: hidden; background: #EEF5F9; color: #102A39; font-family: 'Quicksand', ui-rounded, system-ui, sans-serif">
+<header style="position: absolute; top: 52px; left: 16px; right: 16px; height: 52px; display: flex; align-items: center; gap: 12px">
+<a href="Main.dc.html" aria-label="Back to Brain Map" style="flex-shrink: 0; width: 48px; height: 48px; border-radius: 50%; background: #FFFFFF; color: #102A39; display: flex; align-items: center; justify-content: center">
+<svg class="i" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg>
+</a>
+<h1 style="margin: 0; flex-grow: 1; font-size: 26px; font-weight: 700">Marketplace</h1>
+<a href="Chat.dc.html" aria-label="Ask Chief of Staff to find something" style="flex-shrink: 0; width: 48px; height: 48px; border-radius: 50%; background: #D6EFF8; color: #086B91; display: flex; align-items: center; justify-content: center">
+<svg class="i" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 11.5A7.5 7.5 0 1 0 15.8 17.64L19.6 19.4L18.3 14.67A7.5 7.5 0 0 0 19 11.5Z"></path><circle class="f" cx="9" cy="11.5" r="1.25"></circle><circle class="f" cx="14" cy="11.5" r="1.25"></circle></svg>
+</a>
+</header>
+<div role="group" aria-label="Buy or sell" style="position: absolute; top: 116px; left: 16px; right: 16px; height: 52px; box-sizing: border-box; padding: 4px; border-radius: 26px; background: #FFFFFF; display: flex; gap: 4px">
+<button type="button" onClick="{{setBuy}}" aria-pressed="{{isBuy}}" style="flex-grow: 1; flex-basis: 0; height: 44px; border-radius: 22px; background: {{buyBg}}; color: {{buyFg}}; font-size: 15px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px">
+<svg class="i" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l-1.2 11a1.5 1.5 0 0 1-1.5 1.5H7.7a1.5 1.5 0 0 1-1.5-1.5z"></path><path d="M9 10V7a3 3 0 0 1 6 0v3"></path></svg>
+Buy
+</button>
+<button type="button" onClick="{{setSell}}" aria-pressed="{{isSell}}" style="flex-grow: 1; flex-basis: 0; height: 44px; border-radius: 22px; background: {{sellBg}}; color: {{sellFg}}; font-size: 15px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px">
+<svg class="i" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 12.2V4.5a1 1 0 0 1 1-1h7.7l8.3 8.3-8.7 8.7z"></path><circle cx="8" cy="8" r="1.4"></circle></svg>
+Sell
+</button>
+</div>
+<sc-if value="{{isBuy}}" hint-placeholder-val="{{ true }}">
+<div style="position: absolute; top: 182px; left: 16px; right: 16px; height: 48px; box-sizing: border-box; padding: 0 16px; border-radius: 24px; background: #FFFFFF; display: flex; align-items: center; gap: 10px; color: #4F6875">
+<svg class="i" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"></circle><path d="M16 16l4 4"></path></svg>
+<label class="sr" for="market-search">Search the marketplace</label>
+<input id="market-search" type="search" value="{{query}}" onChange="{{onQuery}}" placeholder="Search workflows, agents, tools" style="flex-grow: 1; min-width: 0; height: 44px; border: 0; outline: none; background: transparent; color: #102A39; font-size: 15px; font-weight: 600">
+</div>
+<div class="noscroll" role="group" aria-label="Categories" style="position: absolute; top: 244px; left: 0; right: 0; box-sizing: border-box; padding: 0 16px; display: flex; gap: 8px; overflow-x: auto">
+<sc-for list="{{chips}}" as="c" hint-placeholder-count="6">
+<button type="button" onClick="{{c.pick}}" aria-pressed="{{c.on}}" style="flex-shrink: 0; height: 44px; padding: 0 16px; border-radius: 22px; background: {{c.bg}}; color: {{c.fg}}; font-size: 14px; font-weight: 700; white-space: nowrap; display: flex; align-items: center; gap: 6px">
+<span>{{c.label}}</span><span class="mono" style="font-size: 12px; font-weight: 600; color: {{c.countFg}}">{{c.count}}</span>
+</button>
+</sc-for>
+</div>
+<div class="noscroll" style="position: absolute; top: 302px; left: 0; right: 0; bottom: 0; overflow-y: auto; box-sizing: border-box; padding: 0 16px 28px; display: flex; flex-direction: column; gap: 16px">
+<sc-if value="{{showFeatured}}" hint-placeholder-val="{{ true }}">
+<h2 style="margin: 0 0 -6px; font-size: 16px; font-weight: 700; color: #102A39">Suggested for Branshs LLC</h2>
+<button type="button" onClick="{{openFeatured}}" aria-label="Invoice chaser, workflow by Ledgerline, $49. Suggested because you chased 3 overdue invoices by hand this week." style="flex-shrink: 0; box-sizing: border-box; padding: 16px; border-radius: 24px; background: #E8F6FB; box-shadow: inset 0 0 0 1px #D6EFF8; color: #102A39; text-align: left; display: flex; flex-direction: column; gap: 12px">
+<span style="display: flex; align-items: center; gap: 12px">
+<span style="flex-shrink: 0; width: 52px; height: 52px; border-radius: 16px; background: #D6EFF8; color: #086B91; display: flex; align-items: center; justify-content: center"><svg class="i" width="26" height="26" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3.5" width="7" height="6" rx="2"></rect><rect x="14" y="14.5" width="7" height="6" rx="2"></rect><path d="M6.5 9.5v2.5a3.5 3.5 0 0 0 3.5 3.5h4"></path></svg></span>
+<span style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px"><span style="font-size: 18px; font-weight: 700">Invoice chaser</span><span style="font-size: 13px; font-weight: 600; color: #405C6B">Workflow · Ledgerline</span></span>
+<span class="mono" style="flex-shrink: 0; font-size: 16px; font-weight: 600">$49</span>
+</span>
+<span style="font-size: 14px; line-height: 1.4; font-weight: 600; color: #2D4858">You chased 3 overdue invoices by hand this week. This drafts the reminders and waits for your yes.</span>
+</button>
+</sc-if>
+<section aria-label="{{listTitle}}" style="display: flex; flex-direction: column">
+<h2 style="margin: 0 0 4px; font-size: 16px; font-weight: 700; color: #102A39">{{listTitle}} · <span class="mono">{{resultCount}}</span></h2>
+<sc-for list="{{rows}}" as="r" hint-placeholder-count="6">
+<button type="button" onClick="{{r.open}}" style="flex-shrink: 0; height: 72px; background: transparent; color: #102A39; text-align: left; display: flex; align-items: center; gap: 12px">
+<sc-if value="{{r.isExpert}}" hint-placeholder-val="{{ false }}">
+<span style="flex-shrink: 0; width: 48px; height: 48px; border-radius: 50%; background: #E2E9F6; color: #2F4F86; display: flex; align-items: center; justify-content: center"><svg class="i" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.5"></circle><path d="M5 20a7 7 0 0 1 14 0"></path></svg></span>
+</sc-if>
+<sc-if value="{{r.isBuilt}}" hint-placeholder-val="{{ true }}">
+<span style="flex-shrink: 0; width: 48px; height: 48px; border-radius: 15px; background: #D6EFF8; color: #086B91; display: flex; align-items: center; justify-content: center">
+<sc-if value="{{r.isWorkflow}}" hint-placeholder-val="{{ true }}"><svg class="i" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3.5" width="7" height="6" rx="2"></rect><rect x="14" y="14.5" width="7" height="6" rx="2"></rect><path d="M6.5 9.5v2.5a3.5 3.5 0 0 0 3.5 3.5h4"></path></svg></sc-if>
+<sc-if value="{{r.isAgent}}" hint-placeholder-val="{{ false }}"><svg class="i" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="7" width="14" height="11" rx="3.5"></rect><path d="M12 7V4M9.5 12v1M14.5 12v1"></path></svg></sc-if>
+<sc-if value="{{r.isSkill}}" hint-placeholder-val="{{ false }}"><svg class="i" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M13 3L5 13.5h6L10 21l8-10.5h-6z"></path></svg></sc-if>
+<sc-if value="{{r.isPipeline}}" hint-placeholder-val="{{ false }}"><svg class="i" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6.5h10.5a3 3 0 0 1 0 6h-5a3 3 0 0 0 0 6H20"></path><path d="M17.5 16l2.5 2.5-2.5 2.5"></path></svg></sc-if>
+<sc-if value="{{r.isTool}}" hint-placeholder-val="{{ false }}"><svg class="i" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg></sc-if>
+</span>
+</sc-if>
+<span style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px">
+<span style="font-size: 15px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{r.title}}</span>
+<span style="font-size: 13px; font-weight: 600; color: #405C6B; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{r.kindLabel}} · {{r.seller}}</span>
+</span>
+<span style="flex-shrink: 0; display: flex; flex-direction: column; align-items: flex-end; gap: 4px">
+<span class="mono" style="font-size: 14px; font-weight: 600">{{r.price}}</span>
+<span style="display: flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 700; color: #405C6B"><svg class="f" width="12" height="12" viewBox="0 0 24 24" aria-hidden="true" style="color: #086B91"><path d="M12 3.5l2.6 5.3 5.9.9-4.25 4.1 1 5.8L12 16.9l-5.25 2.7 1-5.8L3.5 9.7l5.9-.9z"></path></svg><span class="mono" style="font-weight: 600">{{r.rating}}</span></span>
+</span>
+</button>
+</sc-for>
+<sc-if value="{{noResults}}" hint-placeholder-val="{{ false }}">
+<div style="padding: 20px; border-radius: 22px; background: #FFFFFF; display: flex; flex-direction: column; gap: 10px">
+<span style="font-size: 16px; font-weight: 700">Nothing matches yet</span>
+<span style="font-size: 14px; line-height: 1.4; font-weight: 600; color: #405C6B">Chief of Staff can look further, or build it for you in Code.</span>
+<a href="Chat.dc.html" style="align-self: flex-start; height: 44px; padding: 0 18px; border-radius: 22px; background: #D6EFF8; color: #086B91; font-size: 15px; font-weight: 700; display: flex; align-items: center">Ask Chief of Staff</a>
+</div>
+</sc-if>
+</section>
+</div>
+</sc-if>
+<sc-if value="{{isSell}}" hint-placeholder-val="{{ false }}">
+<div class="noscroll" style="position: absolute; top: 182px; left: 0; right: 0; bottom: 108px; overflow-y: auto; box-sizing: border-box; padding: 0 16px 16px; display: flex; flex-direction: column; gap: 18px">
+<div style="flex-shrink: 0; padding: 18px; border-radius: 24px; background: #FFFFFF; display: flex; flex-direction: column; gap: 14px">
+<div style="display: flex; flex-direction: column; gap: 4px">
+<span style="font-size: 14px; font-weight: 700; color: #405C6B">Earned this month</span>
+<span class="mono" style="font-size: 34px; font-weight: 600">$412</span>
+<span style="font-size: 13px; font-weight: 600; color: #4F6875">After the marketplace fee · paid out on the 1st</span>
+</div>
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px">
+<div style="padding: 10px 12px; border-radius: 16px; background: #E3EFF5; display: flex; flex-direction: column; gap: 2px"><span class="mono" style="font-size: 16px; font-weight: 600">2</span><span style="font-size: 12px; font-weight: 600; color: #4F6875">Live listings</span></div>
+<div style="padding: 10px 12px; border-radius: 16px; background: #E3EFF5; display: flex; flex-direction: column; gap: 2px"><span class="mono" style="font-size: 16px; font-weight: 600">38</span><span style="font-size: 12px; font-weight: 600; color: #4F6875">Buyers</span></div>
+<div style="padding: 10px 12px; border-radius: 16px; background: #E3EFF5; display: flex; flex-direction: column; gap: 2px"><span class="mono" style="font-size: 16px; font-weight: 600">4.8</span><span style="font-size: 12px; font-weight: 600; color: #4F6875">Rating</span></div>
+</div>
+</div>
+<section aria-label="Needs you" style="display: flex; flex-direction: column">
+<h2 style="margin: 0 0 4px; font-size: 16px; font-weight: 700; color: #7A4A00; display: flex; align-items: center; gap: 8px"><span style="width: 8px; height: 8px; border-radius: 50%; background: #9A5A00"></span>Needs you</h2>
+<a href="Hub.dc.html" style="height: 64px; display: flex; align-items: center; gap: 12px; color: #102A39">
+<span style="flex-shrink: 0; width: 44px; height: 44px; border-radius: 14px; background: #FFE9C2; color: #9A5A00; display: flex; align-items: center; justify-content: center"><svg class="i" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 11.5A7.5 7.5 0 1 0 15.8 17.64L19.6 19.4L18.3 14.67A7.5 7.5 0 0 0 19 11.5Z"></path></svg></span>
+<span style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px"><span style="font-size: 15px; font-weight: 700">Answer a buyer question</span><span style="font-size: 13px; font-weight: 600; color: #405C6B; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">Amani Foods · Client portal checklist</span></span>
+<span class="mono" style="flex-shrink: 0; font-size: 12px; color: #4F6875">9:12</span>
+<svg class="i" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" style="flex-shrink: 0; color: #4F6875"><path d="M9 6l6 6-6 6"></path></svg>
+</a>
+</section>
+<section aria-label="Your listings" style="display: flex; flex-direction: column">
+<h2 style="margin: 0 0 4px; font-size: 16px; font-weight: 700; color: #102A39">Your listings</h2>
+<sc-for list="{{mine}}" as="m" hint-placeholder-count="4">
+<div style="height: 64px; display: flex; align-items: center; gap: 12px">
+<span style="flex-shrink: 0; width: 44px; height: 44px; border-radius: 14px; background: #D6EFF8; color: #086B91; display: flex; align-items: center; justify-content: center"><svg class="i" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 12.2V4.5a1 1 0 0 1 1-1h7.7l8.3 8.3-8.7 8.7z"></path><circle cx="8" cy="8" r="1.4"></circle></svg></span>
+<span style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px"><span style="font-size: 15px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{m.title}}</span><span style="font-size: 13px; font-weight: 600; color: #405C6B">{{m.sub}}</span></span>
+<span style="flex-shrink: 0; height: 26px; padding: 0 10px; box-sizing: border-box; border-radius: 13px; background: {{m.statusBg}}; color: {{m.statusFg}}; font-size: 12px; font-weight: 700; display: flex; align-items: center; gap: 6px"><span style="width: 6px; height: 6px; border-radius: 50%; background: {{m.statusFg}}"></span>{{m.status}}</span>
+</div>
+</sc-for>
+</section>
+</div>
+<a href="MarketSell.dc.html" style="position: absolute; left: 20px; right: 20px; bottom: 28px; height: 60px; border-radius: 30px; background: #086B91; color: #FFFFFF; font-size: 17px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px">
+<svg class="i" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true" style="stroke-width: 2.5"><path d="M12 5v14M5 12h14"></path></svg>
+Sell something you built
+</a>
+</sc-if>
+<sc-if value="{{isOpen}}" hint-placeholder-val="{{ false }}">
+<div style="position: absolute; top: 0; left: 0; width: 390px; height: 844px; background: #EEF5F9">
+<dc-import name="MarketItem" listing="{{openKey}}" on-back="{{closeItem}}" hint-size="390px,844px"></dc-import>
+</div>
+</sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+// Example listings, summarised. MarketItem.dc.html holds each one in full.
+var LISTINGS = [
+  { key: 'invoice-chaser', kind: 'workflow', title: 'Invoice chaser', seller: 'Ledgerline', price: '$49', rating: '4.8' },
+  { key: 'month-end', kind: 'pipeline', title: 'Month-end close', seller: 'Kora Ops', price: '$19/mo', rating: '4.9' },
+  { key: 'proposal-pro', kind: 'agent', title: 'Proposal writer pro', seller: 'Mto Labs', price: '$29/mo', rating: '4.7' },
+  { key: 'receipt-reader', kind: 'tool', title: 'Receipt reader', seller: 'Pembe Data', price: '$0.01', rating: '4.6' },
+  { key: 'crm-setup', kind: 'expert', title: 'Sales pipeline setup', seller: 'Imani K.', price: '$600', rating: '5.0' },
+  { key: 'hiring-screen', kind: 'skill', title: 'Hiring screen', seller: 'Nuru People', price: '$9/mo', rating: '4.5' },
+  { key: 'support-triage', kind: 'workflow', title: 'Support triage', seller: 'Kora Ops', price: '$39', rating: '4.7' },
+  { key: 'board-report', kind: 'pipeline', title: 'Weekly board report', seller: 'Mto Labs', price: '$15/mo', rating: '4.4' }
+];
+var KINDS = { workflow: 'Workflow', agent: 'Agent', skill: 'Skill', pipeline: 'Pipeline', tool: 'Tool', expert: 'Expert' };
+var CATEGORIES = [
+  { key: 'all', label: 'All', kinds: null, title: 'All listings' },
+  { key: 'workflows', label: 'Workflows', kinds: ['workflow'], title: 'Workflows' },
+  { key: 'agents', label: 'Agents + skills', kinds: ['agent', 'skill'], title: 'Agents and skills' },
+  { key: 'pipelines', label: 'Pipelines', kinds: ['pipeline'], title: 'Pipelines' },
+  { key: 'tools', label: 'Tools', kinds: ['tool'], title: 'Tools' },
+  { key: 'experts', label: 'Experts', kinds: ['expert'], title: 'Experts who set it up' }
+];
+var MINE = [
+  { title: 'Client portal checklist', sub: 'Workflow · 31 buyers · $25', status: 'Live', statusBg: '#E8F6FB', statusFg: '#086B91' },
+  { title: 'Proposal style guide', sub: 'Skill · 7 buyers · $9/mo', status: 'Live', statusBg: '#E8F6FB', statusFg: '#086B91' },
+  { title: 'Delivery check-in', sub: 'Workflow · sent 2 Oct', status: 'In review', statusBg: '#D6EFF8', statusFg: '#086B91' },
+  { title: 'Weekly cash note', sub: 'Pipeline · not listed yet', status: 'Draft', statusBg: '#E3EFF5', statusFg: '#405C6B' }
+];
+
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { mode: 'buy', cat: 'all', query: '', open: null };
+  }
+  renderVals() {
+    var self = this;
+    var s = this.state;
+    var buy = s.mode === 'buy';
+    var cat = CATEGORIES.filter(function (c) { return c.key === s.cat; })[0];
+    var q = s.query.trim().toLowerCase();
+    var matches = function (l) {
+      return !q || (l.title + ' ' + l.seller + ' ' + KINDS[l.kind]).toLowerCase().indexOf(q) !== -1;
+    };
+    var inCat = function (c, l) { return !c.kinds || c.kinds.indexOf(l.kind) !== -1; };
+    var rows = LISTINGS.filter(function (l) { return inCat(cat, l) && matches(l); });
+    return {
+      isBuy: buy,
+      isSell: !buy,
+      buyBg: buy ? '#086B91' : 'transparent',
+      buyFg: buy ? '#FFFFFF' : '#405C6B',
+      sellBg: buy ? 'transparent' : '#086B91',
+      sellFg: buy ? '#405C6B' : '#FFFFFF',
+      setBuy: function () { self.setState({ mode: 'buy' }); },
+      setSell: function () { self.setState({ mode: 'sell' }); },
+      query: s.query,
+      onQuery: function (e) { self.setState({ query: e.target.value }); },
+      chips: CATEGORIES.map(function (c) {
+        var on = c.key === s.cat;
+        return {
+          label: c.label, on: on,
+          count: String(LISTINGS.filter(function (l) { return inCat(c, l) && matches(l); }).length),
+          bg: on ? '#086B91' : '#FFFFFF',
+          fg: on ? '#FFFFFF' : '#2D4858',
+          countFg: on ? '#FFFFFF' : '#4F6875',
+          pick: function () { self.setState({ cat: c.key }); }
+        };
+      }),
+      showFeatured: s.cat === 'all' && !q,
+      openFeatured: function () { self.setState({ open: 'invoice-chaser' }); },
+      listTitle: cat.title,
+      resultCount: String(rows.length),
+      noResults: rows.length === 0,
+      rows: rows.map(function (l) {
+        return {
+          title: l.title, seller: l.seller, price: l.price, rating: l.rating, kindLabel: KINDS[l.kind],
+          isExpert: l.kind === 'expert', isBuilt: l.kind !== 'expert',
+          isWorkflow: l.kind === 'workflow', isAgent: l.kind === 'agent', isSkill: l.kind === 'skill',
+          isPipeline: l.kind === 'pipeline', isTool: l.kind === 'tool',
+          open: function () { self.setState({ open: l.key }); }
+        };
+      }),
+      mine: MINE,
+      isOpen: !!s.open,
+      openKey: s.open || 'invoice-chaser',
+      closeItem: function () { self.setState({ open: null }); }
+    };
+  }
+}
+</script>
+</body>
+</html>

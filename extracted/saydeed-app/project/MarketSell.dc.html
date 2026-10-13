@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Sell on Marketplace</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;600&amp;family=Quicksand:wght@500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#EEF5F9;-webkit-font-smoothing:antialiased}
+a{color:#086B91;text-decoration:none}a:hover{color:#064F6B}
+button,input,textarea{font-family:inherit}
+button{border:0;padding:0;cursor:pointer}
+input::placeholder,textarea::placeholder{color:#4F6875}
+.i{fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.f{fill:currentColor;stroke:none}
+.mono{font-family:'JetBrains Mono',ui-monospace,Menlo,monospace}
+.noscroll{scrollbar-width:none}.noscroll::-webkit-scrollbar{display:none}
+</style>
+</helmet>
+<div style="position: relative; width: 390px; height: 844px; overflow: hidden; background: #EEF5F9; color: #102A39; font-family: 'Quicksand', ui-rounded, system-ui, sans-serif">
+<header style="position: absolute; top: 52px; left: 16px; right: 16px; height: 48px; display: flex; align-items: center; gap: 12px">
+<a href="Marketplace.dc.html" aria-label="Close and go back to Marketplace" style="flex-shrink: 0; width: 48px; height: 48px; border-radius: 50%; background: #FFFFFF; color: #102A39; display: flex; align-items: center; justify-content: center">
+<svg class="i" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg>
+</a>
+<span style="flex-grow: 1; font-size: 13px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #4F6875">Sell on Marketplace</span>
+<span class="mono" style="flex-shrink: 0; font-size: 13px; font-weight: 600; color: #405C6B">{{stepLabel}}</span>
+</header>
+<div aria-hidden="true" style="position: absolute; top: 112px; left: 20px; right: 20px; height: 6px; display: flex; gap: 6px">
+<sc-for list="{{bars}}" as="b" hint-placeholder-count="3">
+<span style="flex-grow: 1; flex-basis: 0; height: 6px; border-radius: 3px; background: {{b.bg}}"></span>
+</sc-for>
+</div>
+<div class="noscroll" style="position: absolute; top: 136px; left: 0; right: 0; bottom: 108px; overflow-y: auto; box-sizing: border-box; padding: 0 20px 20px; display: flex; flex-direction: column; gap: 18px">
+<sc-if value="{{isPick}}" hint-placeholder-val="{{ true }}">
+<div style="display: flex; flex-direction: column; gap: 6px">
+<h1 style="margin: 0; font-size: 28px; line-height: 1.15; font-weight: 700">What do you want to sell?</h1>
+<p style="margin: 0; font-size: 15px; line-height: 1.45; font-weight: 600; color: #405C6B">Pick something your company already runs. Buyers get the steps, never your data.</p>
+</div>
+<div role="group" aria-label="Things you built" style="display: flex; flex-direction: column; gap: 8px">
+<sc-for list="{{things}}" as="t" hint-placeholder-count="5">
+<button type="button" onClick="{{t.pick}}" aria-pressed="{{t.on}}" style="flex-shrink: 0; min-height: 72px; box-sizing: border-box; padding: 12px 14px; border-radius: 20px; background: {{t.bg}}; box-shadow: inset 0 0 0 2px {{t.ring}}; color: #102A39; text-align: left; display: flex; align-items: center; gap: 12px">
+<span style="flex-shrink: 0; width: 44px; height: 44px; border-radius: {{t.radius}}; background: {{t.tileBg}}; color: {{t.tileFg}}; display: flex; align-items: center; justify-content: center">
+<sc-if value="{{t.isWorkflow}}" hint-placeholder-val="{{ true }}"><svg class="i" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3.5" width="7" height="6" rx="2"></rect><rect x="14" y="14.5" width="7" height="6" rx="2"></rect><path d="M6.5 9.5v2.5a3.5 3.5 0 0 0 3.5 3.5h4"></path></svg></sc-if>
+<sc-if value="{{t.isAgent}}" hint-placeholder-val="{{ false }}"><svg class="i" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="7" width="14" height="11" rx="3.5"></rect><path d="M12 7V4M9.5 12v1M14.5 12v1"></path></svg></sc-if>
+<sc-if value="{{t.isPipeline}}" hint-placeholder-val="{{ false }}"><svg class="i" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6.5h10.5a3 3 0 0 1 0 6h-5a3 3 0 0 0 0 6H20"></path><path d="M17.5 16l2.5 2.5-2.5 2.5"></path></svg></sc-if>
+<sc-if value="{{t.isTool}}" hint-placeholder-val="{{ false }}"><svg class="i" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg></sc-if>
+<sc-if value="{{t.isExpert}}" hint-placeholder-val="{{ false }}"><svg class="i" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.5"></circle><path d="M5 20a7 7 0 0 1 14 0"></path></svg></sc-if>
+</span>
+<span style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px"><span style="font-size: 15px; font-weight: 700">{{t.title}}</span><span style="font-size: 13px; font-weight: 600; color: #405C6B">{{t.kindLabel}} · {{t.proof}}</span></span>
+<span style="flex-shrink: 0; width: 24px; height: 24px; box-sizing: border-box; border-radius: 50%; border: 2px solid {{t.ring2}}; background: {{t.dot}}"></span>
+</button>
+</sc-for>
+</div>
+</sc-if>
+<sc-if value="{{isPrice}}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-direction: column; gap: 6px">
+<h1 style="margin: 0; font-size: 28px; line-height: 1.15; font-weight: 700">Price it and name it</h1>
+<p style="margin: 0; font-size: 15px; line-height: 1.45; font-weight: 600; color: #405C6B">{{chosenTitle}} · {{chosenKind}}</p>
+</div>
+<div role="group" aria-label="How buyers pay" style="height: 52px; box-sizing: border-box; padding: 4px; border-radius: 26px; background: #FFFFFF; display: flex; gap: 4px">
+<sc-for list="{{models}}" as="m" hint-placeholder-count="3">
+<button type="button" onClick="{{m.pick}}" aria-pressed="{{m.on}}" style="flex-grow: 1; flex-basis: 0; height: 44px; border-radius: 22px; background: {{m.bg}}; color: {{m.fg}}; font-size: 15px; font-weight: 700">{{m.label}}</button>
+</sc-for>
+</div>
+<sc-if value="{{paid}}" hint-placeholder-val="{{ true }}">
+<div style="display: flex; flex-direction: column; gap: 6px">
+<label for="sell-price" style="font-size: 13px; font-weight: 700; color: #405C6B">Price in US dollars{{perMonth}}</label>
+<div style="height: 56px; box-sizing: border-box; padding: 0 18px; border-radius: 18px; background: #FFFFFF; box-shadow: inset 0 0 0 1px #C9DCE5; display: flex; align-items: center; gap: 6px">
+<span class="mono" style="font-size: 18px; color: #4F6875">$</span>
+<input id="sell-price" type="text" inputmode="decimal" value="{{price}}" onChange="{{onPrice}}" aria-describedby="sell-price-hint" class="mono" style="flex-grow: 1; min-width: 0; height: 44px; border: 0; outline: none; background: transparent; color: #102A39; font-size: 18px; font-weight: 600">
+</div>
+<span id="sell-price-hint" style="font-size: 12px; font-weight: 600; color: #4F6875">You keep the price minus the marketplace fee.</span>
+</div>
+</sc-if>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<label for="sell-name" style="font-size: 13px; font-weight: 700; color: #405C6B">Listing name</label>
+<input id="sell-name" type="text" value="{{name}}" onChange="{{onName}}" style="height: 56px; box-sizing: border-box; padding: 0 18px; border: 0; outline: none; border-radius: 18px; background: #FFFFFF; box-shadow: inset 0 0 0 1px #C9DCE5; color: #102A39; font-size: 16px; font-weight: 600">
+</div>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<label for="sell-pitch" style="font-size: 13px; font-weight: 700; color: #405C6B">What it does, in one or two lines</label>
+<textarea id="sell-pitch" rows="3" onChange="{{onPitch}}" value="{{pitch}}" style="box-sizing: border-box; padding: 14px 18px; border: 0; outline: none; resize: none; border-radius: 18px; background: #FFFFFF; box-shadow: inset 0 0 0 1px #C9DCE5; color: #102A39; font-size: 15px; line-height: 1.45; font-weight: 600"></textarea>
+</div>
+</sc-if>
+<sc-if value="{{isCheck}}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-direction: column; gap: 6px">
+<h1 style="margin: 0; font-size: 28px; line-height: 1.15; font-weight: 700">Before it goes live</h1>
+<p style="margin: 0; font-size: 15px; line-height: 1.45; font-weight: 600; color: #405C6B">This is what buyers will see, and what stays with you.</p>
+</div>
+<div style="flex-shrink: 0; padding: 16px; border-radius: 22px; background: #FFFFFF; display: flex; align-items: center; gap: 12px">
+<span style="flex-shrink: 0; width: 48px; height: 48px; border-radius: {{chosenRadius}}; background: {{chosenTileBg}}; color: {{chosenTileFg}}; display: flex; align-items: center; justify-content: center"><svg class="i" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 12.2V4.5a1 1 0 0 1 1-1h7.7l8.3 8.3-8.7 8.7z"></path><circle cx="8" cy="8" r="1.4"></circle></svg></span>
+<span style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px"><span style="font-size: 16px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{name}}</span><span style="font-size: 13px; font-weight: 600; color: #405C6B">{{chosenKind}} · Branshs LLC</span></span>
+<span class="mono" style="flex-shrink: 0; font-size: 16px; font-weight: 600">{{priceLabel}}</span>
+</div>
+<div style="display: flex; flex-direction: column; gap: 14px">
+<sc-for list="{{promises}}" as="p" hint-placeholder-count="4">
+<div style="display: flex; gap: 12px; align-items: flex-start">
+<span style="flex-shrink: 0; width: 28px; height: 28px; border-radius: 50%; background: #E8F6FB; color: #086B91; display: flex; align-items: center; justify-content: center"><svg class="i" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true" style="stroke-width: 2.5"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span>
+<span style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 15px; font-weight: 700">{{p.title}}</span><span style="font-size: 13px; line-height: 1.4; font-weight: 600; color: #405C6B">{{p.sub}}</span></span>
+</div>
+</sc-for>
+</div>
+</sc-if>
+<sc-if value="{{isSent}}" hint-placeholder-val="{{ false }}">
+<div style="padding-top: 40px; display: flex; flex-direction: column; align-items: center; gap: 16px; text-align: center">
+<span style="width: 88px; height: 88px; border-radius: 50%; background: #E8F6FB; color: #086B91; display: flex; align-items: center; justify-content: center"><svg class="i" width="40" height="40" viewBox="0 0 24 24" aria-hidden="true" style="stroke-width: 2.5"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span>
+<h1 style="margin: 0; font-size: 28px; line-height: 1.15; font-weight: 700">Submitted for review</h1>
+<p style="margin: 0; font-size: 16px; line-height: 1.5; font-weight: 600; color: #405C6B">{{name}} goes live once our review is done. You will hear back in Inbox, and Chief of Staff answers the buyer questions it can.</p>
+</div>
+</sc-if>
+</div>
+<div style="position: absolute; left: 20px; right: 20px; bottom: 28px; height: 60px; display: flex; gap: 10px">
+<sc-if value="{{canGoBack}}" hint-placeholder-val="{{ false }}">
+<button type="button" onClick="{{prev}}" style="flex-shrink: 0; height: 60px; padding: 0 24px; border-radius: 30px; background: #E3EFF5; color: #102A39; font-size: 16px; font-weight: 700">Back</button>
+</sc-if>
+<sc-if value="{{notSent}}" hint-placeholder-val="{{ true }}">
+<button type="button" onClick="{{next}}" style="flex-grow: 1; height: 60px; border-radius: 30px; background: #086B91; color: #FFFFFF; font-size: 17px; font-weight: 700">{{nextLabel}}</button>
+</sc-if>
+<sc-if value="{{isSent}}" hint-placeholder-val="{{ false }}">
+<a href="Marketplace.dc.html" style="flex-grow: 1; height: 60px; border-radius: 30px; background: #086B91; color: #FFFFFF; font-size: 17px; font-weight: 700; display: flex; align-items: center; justify-content: center">Back to Marketplace</a>
+</sc-if>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+// Example things Branshs LLC runs today that it could sell.
+var THINGS = [
+  { key: 'cash-note', kind: 'pipeline', title: 'Weekly cash note', proof: 'ran 9 times, no errors', pitch: 'Writes a short cash note every Friday from your books and bank feeds.', price: '12' },
+  { key: 'onboarding', kind: 'workflow', title: 'Client onboarding', proof: 'ran 22 times this year', pitch: 'Sends the welcome pack, books the kickoff call and sets up the shared folder.', price: '35' },
+  { key: 'estimator', kind: 'agent', title: 'Quote estimator', proof: 'agent with 2 skills', pitch: 'Turns a call recap into a priced quote using your rate card.', price: '25' },
+  { key: 'receipt-sorter', kind: 'tool', title: 'Receipt sorter', proof: 'built in Code', pitch: 'Sorts forwarded receipts into folders by vendor and month.', price: '5' },
+  { key: 'expert', kind: 'expert', title: 'Your time as an expert', proof: 'set it up for others', pitch: 'I set up client portals for small agencies in one working day.', price: '400' }
+];
+var KINDS = { workflow: 'Workflow', agent: 'Agent', pipeline: 'Pipeline', tool: 'Tool', expert: 'Expert' };
+var MODELS = [{ key: 'once', label: 'Buy once' }, { key: 'month', label: 'Monthly' }, { key: 'free', label: 'Free' }];
+var STEPS = ['pick', 'price', 'check'];
+
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { step: 'pick', thing: 'cash-note', model: 'month', price: null, name: null, pitch: null };
+  }
+  renderVals() {
+    var self = this;
+    var s = this.state;
+    var thing = THINGS.filter(function (t) { return t.key === s.thing; })[0];
+    var price = s.price === null ? thing.price : s.price;
+    var name = s.name === null ? thing.title : s.name;
+    var pitch = s.pitch === null ? thing.pitch : s.pitch;
+    var expert = thing.kind === 'expert';
+    var index = STEPS.indexOf(s.step);
+    var priceLabel = s.model === 'free' ? 'Free' : '$' + (price || '0') + (s.model === 'month' ? '/mo' : '');
+    return {
+      stepLabel: s.step === 'sent' ? 'Done' : (index + 1) + ' of 3',
+      bars: STEPS.map(function (x, i) { return { bg: s.step === 'sent' || i <= index ? '#086B91' : '#E3EFF5' }; }),
+      isPick: s.step === 'pick', isPrice: s.step === 'price', isCheck: s.step === 'check', isSent: s.step === 'sent',
+      notSent: s.step !== 'sent',
+      canGoBack: index > 0,
+      nextLabel: s.step === 'check' ? 'Submit for review' : 'Continue',
+      next: function () { self.setState({ step: s.step === 'check' ? 'sent' : STEPS[index + 1] }); },
+      prev: function () { self.setState({ step: STEPS[index - 1] }); },
+      things: THINGS.map(function (t) {
+        var on = t.key === s.thing;
+        return {
+          title: t.title, proof: t.proof, kindLabel: KINDS[t.kind], on: on,
+          isWorkflow: t.kind === 'workflow', isAgent: t.kind === 'agent', isPipeline: t.kind === 'pipeline',
+          isTool: t.kind === 'tool', isExpert: t.kind === 'expert',
+          radius: t.kind === 'expert' ? '50%' : '14px',
+          tileBg: t.kind === 'expert' ? '#E2E9F6' : '#D6EFF8',
+          tileFg: t.kind === 'expert' ? '#2F4F86' : '#086B91',
+          bg: on ? '#E8F6FB' : '#FFFFFF',
+          ring: on ? '#086B91' : '#FFFFFF',
+          ring2: on ? '#086B91' : '#C9DCE5',
+          dot: on ? '#086B91' : 'transparent',
+          pick: function () { self.setState({ thing: t.key, price: null, name: null, pitch: null, model: t.kind === 'expert' ? 'once' : s.model }); }
+        };
+      }),
+      chosenTitle: thing.title,
+      chosenKind: KINDS[thing.kind],
+      chosenRadius: expert ? '50%' : '14px',
+      chosenTileBg: expert ? '#E2E9F6' : '#D6EFF8',
+      chosenTileFg: expert ? '#2F4F86' : '#086B91',
+      models: MODELS.map(function (m) {
+        var on = m.key === s.model;
+        return {
+          label: m.label, on: on,
+          bg: on ? '#086B91' : 'transparent',
+          fg: on ? '#FFFFFF' : '#405C6B',
+          pick: function () { self.setState({ model: m.key }); }
+        };
+      }),
+      paid: s.model !== 'free',
+      perMonth: s.model === 'month' ? ', per month' : '',
+      price: price, name: name, pitch: pitch, priceLabel: priceLabel,
+      onPrice: function (e) { self.setState({ price: e.target.value.replace(/[^0-9.]/g, '') }); },
+      onName: function (e) { self.setState({ name: e.target.value }); },
+      onPitch: function (e) { self.setState({ pitch: e.target.value }); },
+      promises: [
+        { title: 'Your data stays out', sub: 'Client names, emails and amounts are removed from every example run.' },
+        { title: 'Your files stay private', sub: 'Buyers get the steps and prompts, never your Knowledge.' },
+        { title: 'Buyers stay in control', sub: 'It runs under their approvals, the same way it runs under yours.' },
+        { title: 'Reviewed before it is listed', sub: 'Saydeed checks every listing before buyers can see it.' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,42 +1,47 @@
 import { Ban, Check, UserRound } from 'lucide-react';
-import { ModeGlyph } from '../ModeGlyph';
-import { Window } from './Window';
+import { AgentChip, StateLabel } from './AppWindow';
+import { AGENT } from './app-data';
+import { Window, joinList, lowerFirst } from './Window';
 
 const GROUPS = [
   {
     title: 'Can do on its own',
     tone: 'text-signal-bright',
     Icon: Check,
-    items: ['Read invoices from the accounts inbox', 'Match invoices to orders and receipts', 'Prepare draft ledger entries'],
+    items: ['Search the places you named for prospects', 'Add prospects to the prospect sheet', 'Prepare draft outreach messages'],
   },
   {
     title: 'Needs a person to approve',
     tone: 'text-hold',
     Icon: UserRound,
-    items: ['Schedule a payment', 'Anything above the approval limit'],
+    items: ['Mark any message ready to send', 'Contact anyone already in the CRM'],
   },
   {
     title: 'Never allowed',
     tone: 'text-alert',
     Icon: Ban,
-    items: ['Change supplier bank details', 'Approve its own work'],
+    items: ['Contact anyone on the do-not-contact list', 'Approve its own work'],
   },
 ];
+
+const [OWN, ASK, NEVER] = GROUPS.map((g) => joinList(g.items.map(lowerFirst)));
 
 /** One agent's permissions: what it may do alone, what needs approval, what it may never do. Example data. */
 export function AgentPermissions({ className = '' }: { className?: string }) {
   return (
     <Window
-      title="Invoice agent"
-      meta="Finance"
+      title="Permissions"
+      meta={AGENT.research.workflow}
       className={className}
-      label="Example permissions for a finance agent: it may read invoices, match them to orders and prepare draft entries on its own; scheduling a payment needs a person's approval; changing supplier bank details is never allowed."
+      label={`Example permissions for a lead research agent. On its own it may: ${OWN}. A person must approve: ${ASK}. It is never allowed to: ${NEVER}. It escalates to the agency owner.`}
     >
       <div className="flex items-center gap-3 border-b border-rule px-4 py-3">
-        <ModeGlyph mode="agent" className="size-3 text-signal-bright" />
-        <p className="text-sm text-graphite">
-          <span className="font-medium text-ink">Escalates to </span>the accounts payable lead
-        </p>
+        <AgentChip agent="research" />
+        <div className="min-w-0">
+          <p className="text-sm font-semibold text-ink">{AGENT.research.name}</p>
+          <p className="text-xs text-graphite">Escalates to the agency owner</p>
+        </div>
+        <StateLabel state="Working" />
       </div>
       <div className="divide-y divide-rule">
         {GROUPS.map(({ title, tone, Icon, items }) => (

@@ -1,0 +1,243 @@
+{
+  "v": 3,
+  "attachments": {},
+  "boards": {
+    "Approval.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "07 · Approval",
+      "w": 390,
+      "x": 940,
+      "y": 2824
+    },
+    "Brain.dc.html": {
+      "h": 340,
+      "title": "Component · Brain orb",
+      "w": 340,
+      "x": 1880,
+      "y": 1600
+    },
+    "Call.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "04 · Interactive Call",
+      "w": 390,
+      "x": 1410,
+      "y": 1600
+    },
+    "Chat.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "03 · Let’s Chat · Chief of Staff",
+      "w": 390,
+      "x": 940,
+      "y": 1600
+    },
+    "Create.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "08 · Create",
+      "w": 390,
+      "x": 1410,
+      "y": 2824
+    },
+    "Dashboard.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "02 · Dashboard",
+      "w": 390,
+      "x": 470,
+      "y": 1600
+    },
+    "Hub.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "06 · Inbox",
+      "w": 390,
+      "x": 470,
+      "y": 2824
+    },
+    "IA.dc.html": {
+      "h": 1220,
+      "title": "00 · Information architecture",
+      "w": 1800,
+      "x": 0,
+      "y": 0
+    },
+    "Main.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "01 · Brain Map (home)",
+      "w": 390,
+      "x": 0,
+      "y": 1600
+    },
+    "Sidebar.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "05 · Sidebar (Work | Code)",
+      "w": 390,
+      "x": 0,
+      "y": 2824
+    },
+    "Marketplace.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "09 · Marketplace",
+      "w": 390,
+      "x": 0,
+      "y": 4048
+    },
+    "MarketItem.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "10 · Listing",
+      "w": 390,
+      "x": 470,
+      "y": 4048
+    },
+    "MarketSell.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "title": "11 · Sell what you built",
+      "w": 390,
+      "x": 940,
+      "y": 4048
+    },
+    "WebMarketplace.dc.html": {
+      "expand": "fill",
+      "h": 1294,
+      "is_interactive": true,
+      "title": "14 · Web · Marketplace",
+      "w": 1440,
+      "x": 3040,
+      "y": 5272
+    },
+    "WebMarketItem.dc.html": {
+      "expand": "fill",
+      "h": 960,
+      "is_interactive": true,
+      "title": "15 · Web · Listing",
+      "w": 1440,
+      "x": 4560,
+      "y": 5272
+    },
+    "WebMarketSell.dc.html": {
+      "expand": "fill",
+      "h": 1451,
+      "is_interactive": true,
+      "title": "16 · Web · Sell",
+      "w": 1440,
+      "x": 6080,
+      "y": 5272
+    },
+    "WebRail.dc.html": {
+      "h": 819,
+      "is_interactive": true,
+      "title": "Component · Web nav rail",
+      "w": 248,
+      "x": 7600,
+      "y": 5272
+    },
+    "WebHome.dc.html": {
+      "expand": "fill",
+      "h": 1053,
+      "is_interactive": true,
+      "title": "12 · Web · Home",
+      "w": 1440,
+      "x": 0,
+      "y": 5272
+    },
+    "WebInbox.dc.html": {
+      "expand": "fill",
+      "h": 1049,
+      "is_interactive": true,
+      "title": "13 · Web · Inbox",
+      "w": 1440,
+      "x": 1520,
+      "y": 5272
+    },
+    "WebTopBar.dc.html": {
+      "h": 72,
+      "is_interactive": true,
+      "title": "Component · Web top bar",
+      "w": 1192,
+      "x": 7928,
+      "y": 5272
+    }
+  },
+  "createdOnFiles": {
+    "at": "2026-09-24T12:00:00Z",
+    "v": 1
+  },
+  "designSystems": [],
+  "launch": {
+    "view": "canvas"
+  },
+  "notes": {
+    "row1": {
+      "kind": "title1",
+      "maxW": 2220,
+      "text": "Home and the dock: Brain, Dashboard, Chat, Call",
+      "w": 240,
+      "x": 0,
+      "y": 1340
+    },
+    "row2": {
+      "kind": "title1",
+      "maxW": 1800,
+      "text": "Menu, Inbox and decisions",
+      "w": 240,
+      "x": 0,
+      "y": 2564
+    },
+    "title": {
+      "kind": "title1",
+      "maxW": 1800,
+      "text": "Saydeed · mobile-first, with web",
+      "w": 240,
+      "x": 0,
+      "y": -260
+    },
+    "row3": {
+      "kind": "title1",
+      "maxW": 1330,
+      "text": "Marketplace: buy, sell, list",
+      "w": 240,
+      "x": 0,
+      "y": 3788
+    },
+    "row4": {
+      "kind": "title1",
+      "maxW": 9120,
+      "text": "Web: the app with a left rail and top bar",
+      "w": 240,
+      "x": 0,
+      "y": 5012
+    }
+  },
+  "order": [
+    "IA.dc.html",
+    "Main.dc.html",
+    "Dashboard.dc.html",
+    "Chat.dc.html",
+    "Call.dc.html",
+    "Brain.dc.html",
+    "Sidebar.dc.html",
+    "Hub.dc.html",
+    "Approval.dc.html",
+    "Create.dc.html",
+    "Marketplace.dc.html",
+    "MarketItem.dc.html",
+    "MarketSell.dc.html",
+    "WebMarketplace.dc.html",
+    "WebMarketItem.dc.html",
+    "WebMarketSell.dc.html",
+    "WebRail.dc.html",
+    "WebHome.dc.html",
+    "WebInbox.dc.html",
+    "WebTopBar.dc.html"
+  ],
+  "pages": [],
+  "title": "Saydeed App"
+}

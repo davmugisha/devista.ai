@@ -2,7 +2,7 @@
 // Everything is in UTC epoch milliseconds. A visitor's time zone only changes how a slot is
 // labelled and which calendar day it falls on, never when it happens.
 
-import { BOOKING, MS_DAY, MS_HOUR, MS_MINUTE } from './booking-config';
+import { BOOKING, BUFFER_MS, MS_DAY, MS_HOUR, MS_MINUTE } from './booking-config';
 import { clockToMinutes, dateKeyInZone, zonedParts, zonedWallToUtc } from './booking-time';
 
 export type Interval = { start: number; end: number };
@@ -39,8 +39,7 @@ export function gridSlots(from: number, to: number): Interval[] {
 
 /** True when a busy interval comes within the buffer of a slot, on either side. */
 export function clashes(slot: Interval, busy: readonly Interval[]) {
-  const buffer = BOOKING.bufferMinutes * MS_MINUTE;
-  return busy.some((b) => slot.start < b.end + buffer && slot.end + buffer > b.start);
+  return busy.some((b) => slot.start < b.end + BUFFER_MS && slot.end + BUFFER_MS > b.start);
 }
 
 export function freeSlots(slots: readonly Interval[], busy: readonly Interval[]) {

@@ -5,9 +5,20 @@ import type { DetailsInput, FieldErrors } from './booking-validate';
 
 export type Slot = { start: string; end: string };
 
+/** The server has no calendar connected, so nothing can be booked until the owner connects one. */
+export class BookingClosedError extends Error {
+  constructor() {
+    super('Booking is not configured.');
+  }
+}
+
 async function getJson<T>(url: string): Promise<T> {
   const res = await fetch(url, { cache: 'no-store' });
-  if (!res.ok) throw new Error(`availability ${res.status}`);
+  if (!res.ok) {
+    const body = (await res.json().catch(() => ({}))) as { error?: string };
+    if (res.status === 503 && body.error === 'not_configured') throw new BookingClosedError();
+    throw new Error(`availability ${res.status}`);
+  }
   return (await res.json()) as T;
 }
 
@@ -66,22 +77,20 @@ export function browserTimeZone() {
 /** "Africa, Kigali": the zone's name without underscores and slashes. */
 export const tzName = (tz: string) => tz.replace(/_/g, ' ').replace(/\//g, ', ');
 
-/** "Central Africa Time" or "Central European Summer Time", for a specific instant. */
-export function tzLongName(tz: string, at: Date) {
+/** The zone's name at an instant, in the given style. Empty when the browser does not know the zone. */
+function zoneLabel(tz: string, at: Date, style: 'long' | 'shortOffset', locale?: string) {
   try {
-    return new Intl.DateTimeFormat(undefined, { timeZone: tz, timeZoneName: 'long' }).formatToParts(at).find((p) => p.type === 'timeZoneName')?.value ?? '';
+    return new Intl.DateTimeFormat(locale, { timeZone: tz, timeZoneName: style }).formatToParts(at).find((p) => p.type === 'timeZoneName')?.value ?? '';
   } catch {
     return '';
   }
 }
 
-function tzOffsetLabel(tz: string, at: Date) {
-  try {
-    return new Intl.DateTimeFormat('en', { timeZone: tz, timeZoneName: 'shortOffset' }).formatToParts(at).find((p) => p.type === 'timeZoneName')?.value ?? '';
-  } catch {
-    return '';
-  }
-}
+/** "Central Africa Time" or "Central European Summer Time", for a specific instant. */
+export const tzLongName = (tz: string, at: Date) => zoneLabel(tz, at, 'long');
+
+/** "GMT+2", always in English so the zone list reads the same everywhere. */
+const tzOffsetLabel = (tz: string, at: Date) => zoneLabel(tz, at, 'shortOffset', 'en');
 
 /** Every IANA zone the browser knows, with the detected zone and UTC always present. */
 export function timeZoneOptions(detected: string) {

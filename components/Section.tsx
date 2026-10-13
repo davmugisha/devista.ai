@@ -17,25 +17,22 @@ type HeadProps = {
   chip?: ReactNode;
   title: ReactNode;
   lede?: ReactNode;
-  as?: 'h1' | 'h2';
-  align?: 'center' | 'left';
 };
 
-/** Chip, heading and one-sentence lede. Centred by default. */
-export function SectionHead({ id, chip, title, lede, as: H = 'h2', align = 'center' }: HeadProps) {
-  const center = align === 'center';
+/** Chip, centred h2 and one-sentence lede. */
+export function SectionHead({ id, chip, title, lede }: HeadProps) {
   return (
-    <div className={center ? 'mx-auto flex max-w-heading flex-col items-center text-center' : 'max-w-heading'}>
+    <div className="mx-auto flex max-w-heading flex-col items-center text-center">
       {chip ? (
         <div data-reveal>
           <Chip>{chip}</Chip>
         </div>
       ) : null}
-      <H id={`${id}-title`} data-reveal style={delay(80)} className="mt-5 text-4xl font-display tracking-display text-ink">
+      <h2 id={`${id}-title`} data-reveal style={delay(80)} className="mt-5 text-4xl font-display tracking-display text-ink">
         {title}
-      </H>
+      </h2>
       {lede ? (
-        <p data-reveal style={delay(160)} className={'mt-5 max-w-narrow text-lg text-graphite ' + (center ? 'mx-auto' : '')}>
+        <p data-reveal style={delay(160)} className="mx-auto mt-5 max-w-narrow text-lg text-graphite">
           {lede}
         </p>
       ) : null}

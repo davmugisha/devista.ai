@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Saydeed App preview</title>
+<style>
+  :root { color-scheme: light; --bg: #EEF5F9; --ink: #102A39; --muted: #4F6875; --line: #C9DCE5; --accent: #086B91; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 14px/1.4 system-ui, sans-serif; }
+  header { position: sticky; top: 0; z-index: 10; display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center;
+    padding: 12px 16px; background: rgba(255, 255, 255, .92); border-bottom: 1px solid var(--line); backdrop-filter: blur(8px); }
+  h1 { margin: 0; font-size: 16px; }
+  .views { display: flex; gap: 4px; margin-left: auto; }
+  button { font: inherit; color: var(--ink); background: #FFFFFF; border: 1px solid var(--line); border-radius: 999px; padding: 6px 14px; cursor: pointer; }
+  button[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: #FFFFFF; }
+  main { padding: 24px 16px 48px; overflow: auto; }
+  .canvas { position: relative; transform-origin: 0 0; }
+  .board, .note { position: absolute; }
+  .board > p, .grid figcaption { margin: 0 0 8px; color: var(--muted); font-size: 13px; }
+  .board > p a, .grid figcaption a { color: inherit; }
+  iframe { display: block; border: 0; border-radius: 12px; background: #FFFFFF; box-shadow: 0 0 0 1px var(--line); }
+  .note { font-size: 40px; font-weight: 700; white-space: nowrap; }
+  .grid { display: flex; flex-wrap: wrap; gap: 32px; justify-content: center; }
+  .grid figure { margin: 0; }
+  .grid .wide { flex-basis: 100%; overflow-x: auto; }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<header>
+  <h1 id="title">Saydeed App</h1>
+  <div class="views" role="group" aria-label="View">
+    <button type="button" data-view="canvas" aria-pressed="true">Canvas</button>
+    <button type="button" data-view="grid" aria-pressed="false">Screens</button>
+  </div>
+</header>
+<main>
+  <div class="canvas" id="canvas"></div>
+  <div class="grid" id="grid" hidden></div>
+</main>
+<script>
+  const LABEL = 40; // each board's title sits above its frame, so the last row needs this much more room
+  const canvasEl = document.getElementById('canvas');
+  const gridEl = document.getElementById('grid');
+
+  function frame(file, b) {
+    const f = document.createElement('iframe');
+    f.src = 'project/' + file;
+    f.width = b.w;
+    f.height = b.h;
+    f.title = b.title;
+    f.loading = 'lazy';
+    return f;
+  }
+
+  function caption(tag, file, b) {
+    const el = document.createElement(tag);
+    const a = document.createElement('a');
+    a.href = 'project/' + file;
+    a.target = '_blank';
+    a.textContent = b.title;
+    el.append(a);
+    return el;
+  }
+
+  function fit(width) {
+    const main = document.querySelector('main');
+    const scale = Math.min(1, (main.clientWidth - 32) / width);
+    canvasEl.style.transform = `scale(${scale})`;
+    // A transform keeps the unscaled box, so pull the space below back in.
+    canvasEl.style.marginBottom = `${canvasEl.offsetHeight * (scale - 1)}px`;
+  }
+
+  fetch('project/canvas.json').then((r) => r.json()).then((c) => {
+    document.getElementById('title').textContent = c.title;
+    document.title = c.title + ' preview';
+    const items = [...Object.values(c.notes).map((n) => ({ ...n, w: 0, h: 60 })), ...Object.values(c.boards)];
+    const minX = Math.min(...items.map((i) => i.x));
+    const minY = Math.min(...items.map((i) => i.y));
+    const width = Math.max(...items.map((i) => i.x + i.w)) - minX;
+    const height = Math.max(...items.map((i) => i.y + i.h)) - minY + LABEL;
+    canvasEl.style.width = width + 'px';
+    canvasEl.style.height = height + 'px';
+
+    for (const n of Object.values(c.notes)) {
+      const el = document.createElement('div');
+      el.className = 'note';
+      el.textContent = n.text;
+      el.style.left = n.x - minX + 'px';
+      el.style.top = n.y - minY + 'px';
+      canvasEl.append(el);
+    }
+    for (const file of c.order) {
+      const b = c.boards[file];
+      const el = document.createElement('div');
+      el.className = 'board';
+      el.style.left = b.x - minX + 'px';
+      el.style.top = b.y - minY + 'px';
+      el.append(caption('p', file, b), frame(file, b));
+      canvasEl.append(el);
+
+      const fig = document.createElement('figure');
+      if (b.w > 600) fig.className = 'wide';
+      fig.append(caption('figcaption', file, b), frame(file, b));
+      gridEl.append(fig);
+    }
+    fit(width);
+    addEventListener('resize', () => fit(width));
+  });
+
+  for (const btn of document.querySelectorAll('[data-view]')) {
+    btn.addEventListener('click', () => {
+      for (const b of document.querySelectorAll('[data-view]')) b.setAttribute('aria-pressed', String(b === btn));
+      canvasEl.hidden = btn.dataset.view !== 'canvas';
+      gridEl.hidden = btn.dataset.view !== 'grid';
+    });
+  }
+</script>
+</body>
+</html>

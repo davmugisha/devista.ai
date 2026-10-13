@@ -10,7 +10,7 @@ cd "$(dirname "$0")/.."
 echo "Copying the source to $TARGET:$DIR/src"
 tar -czf - \
   --exclude=./node_modules --exclude='./.next*' --exclude=./.git --exclude=./.unlazy --exclude=./.claude \
-  --exclude=./redesign --exclude='./*.tsbuildinfo' --exclude='./.env*' . |
+  --exclude=./redesign --exclude=./prototype --exclude='./*.tsbuildinfo' --exclude='./.env*' . |
   ssh "$TARGET" "set -e; mkdir -p $DIR; rm -rf $DIR/src.new; mkdir $DIR/src.new; tar --no-same-owner -xzf - -C $DIR/src.new; rm -rf $DIR/src; mv $DIR/src.new $DIR/src"
 
 echo "Installing the compose file and the certificate timer"
@@ -22,7 +22,7 @@ ssh "$TARGET" "set -e; cd $DIR
   mkdir -p data && chown 1000:1000 data  # the image runs as the node user (uid 1000)
   docker compose build --pull
   docker compose up -d --remove-orphans
-  docker image prune -f --filter label=org.opencontainers.image.title=devista-site >/dev/null
+  docker image prune -f --filter label=org.opencontainers.image.title=saydeed-site >/dev/null
   systemctl daemon-reload
   rm -f $DIR/.cert-retries
   systemctl enable --now saydeed-cert.timer

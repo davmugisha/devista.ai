@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Sell on Marketplace (web)</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;600&amp;family=Quicksand:wght@500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#EEF5F9;-webkit-font-smoothing:antialiased;caret-color:#086B91}
+::selection{background:#D6EFF8;color:#102A39}
+html{scrollbar-color:#B9CFDA #EEF5F9}
+a{color:#086B91;text-decoration:none}a:hover{color:#064F6B}
+button,input,textarea{font-family:inherit}
+button{border:0;padding:0;cursor:pointer}
+input::placeholder,textarea::placeholder{color:#4F6875}
+:focus-visible{outline:2px solid #086B91;outline-offset:2px}
+.i{fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.f{fill:currentColor;stroke:none}
+.mono{font-family:'JetBrains Mono',ui-monospace,Menlo,monospace;font-variant-numeric:tabular-nums}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.rail-item:not([aria-current="page"]):hover{background:#EEF5F9!important}
+.btn-accent{transition:background-color .15s ease}.btn-accent:hover{background:#064F6B!important;color:#FFFFFF!important}
+.btn-soft{transition:background-color .15s ease}.btn-soft:hover{background:#C3E5F2!important}
+.card{transition:box-shadow .15s ease,transform .15s ease}.card:hover{box-shadow:0 8px 22px rgba(16,42,57,.10),inset 0 0 0 1px #9FC3D3!important}
+.chip{transition:background-color .15s ease}.chip[aria-pressed="false"]:hover{background:#D6EFF8!important}
+.narrow-only{display:none!important}
+@media (max-width:760px){.rail-list>a{flex:1 1 auto!important}.rail-list:not(.rail-open)>a:not(.rail-core):not([aria-current="page"]){display:none!important}.rail-more{display:flex!important}.rail-actions{display:flex!important}.rail-head,.rail-extra,.tb-label,.tb-kbd,.tb-actions{display:none!important}.narrow-only{display:flex!important}.is-hidden-narrow{display:none!important}.two-col{grid-template-columns:minmax(0,1fr)!important}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</helmet>
+<div style="box-sizing: border-box; width: 100%; background: #EEF5F9; color: #102A39; font-family: 'Quicksand', ui-rounded, system-ui, sans-serif; display: flex; flex-wrap: wrap; align-items: stretch">
+<div style="flex: 1 1 248px; min-width: 0; background: #FFFFFF; border-right: 1px solid #C9DCE5">
+<dc-import name="WebRail" active="marketplace" hint-size="100%,900px"></dc-import>
+</div>
+<div style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column">
+<dc-import name="WebTopBar" hint-size="100%,72px"></dc-import>
+<main style="box-sizing: border-box; width: 100%; max-width: 1240px; padding: 32px clamp(16px, 3vw, 40px) 64px">
+<div style="width: 100%; display: flex; flex-direction: column; gap: 32px">
+<nav aria-label="Breadcrumb" style="display: flex; flex-wrap: wrap; align-items: center; gap: 10px; font-size: 14px; font-weight: 700; color: #4F6875">
+<a href="WebMarketplace.dc.html" style="height: 40px; box-sizing: border-box; padding: 0 16px 0 10px; border-radius: 20px; background: #FFFFFF; color: #102A39; font-size: 14px; font-weight: 700; display: flex; align-items: center; gap: 6px">
+<svg class="i" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg>
+Marketplace
+</a>
+<span aria-hidden="true">/</span>
+<span aria-current="page" style="color: #2D4858">Sell</span>
+</nav>
+<sc-if value="{{editing}}" hint-placeholder-val="{{ true }}">
+<div style="display: flex; flex-direction: column; gap: 10px">
+<h1 style="margin: 0; font-size: 34px; line-height: 1.1; font-weight: 700; letter-spacing: -0.01em">Sell something you built</h1>
+<p style="margin: 0; max-width: 62ch; font-size: 17px; line-height: 1.5; font-weight: 600; color: #405C6B">Pick something your company already runs, price it and name it. Buyers get the steps, never your data.</p>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 32px; align-items: flex-start">
+<form aria-label="New listing" onSubmit="{{submit}}" style="flex: 999 1 480px; min-width: 0; margin: 0; display: flex; flex-direction: column; gap: 36px">
+<fieldset style="margin: 0; padding: 0; border: 0; min-width: 0; display: flex; flex-direction: column; gap: 14px">
+<legend style="padding: 0; margin-bottom: 14px; display: flex; align-items: center; gap: 12px; font-size: 20px; font-weight: 700"><span style="width: 30px; height: 30px; border-radius: 50%; background: #086B91; color: #FFFFFF; font-size: 14px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center">1</span>What do you want to sell?</legend>
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px">
+<sc-for list="{{things}}" as="t" hint-placeholder-count="5">
+<button type="button" onClick="{{t.pick}}" aria-pressed="{{t.on}}" style="box-sizing: border-box; padding: 16px; border-radius: 20px; background: {{t.bg}}; box-shadow: inset 0 0 0 2px {{t.ring}}; color: #102A39; text-align: left; display: flex; flex-direction: column; gap: 12px">
+<span style="display: flex; align-items: center; justify-content: space-between">
+<span style="flex-shrink: 0; width: 44px; height: 44px; border-radius: {{t.radius}}; background: {{t.tileBg}}; color: {{t.tileFg}}; display: flex; align-items: center; justify-content: center">
+<sc-if value="{{t.isWorkflow}}" hint-placeholder-val="{{ true }}"><svg class="i" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3.5" width="7" height="6" rx="2"></rect><rect x="14" y="14.5" width="7" height="6" rx="2"></rect><path d="M6.5 9.5v2.5a3.5 3.5 0 0 0 3.5 3.5h4"></path></svg></sc-if>
+<sc-if value="{{t.isAgent}}" hint-placeholder-val="{{ false }}"><svg class="i" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="7" width="14" height="11" rx="3.5"></rect><path d="M12 7V4M9.5 12v1M14.5 12v1"></path></svg></sc-if>
+<sc-if value="{{t.isPipeline}}" hint-placeholder-val="{{ false }}"><svg class="i" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6.5h10.5a3 3 0 0 1 0 6h-5a3 3 0 0 0 0 6H20"></path><path d="M17.5 16l2.5 2.5-2.5 2.5"></path></svg></sc-if>
+<sc-if value="{{t.isTool}}" hint-placeholder-val="{{ false }}"><svg class="i" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg></sc-if>
+<sc-if value="{{t.isExpert}}" hint-placeholder-val="{{ false }}"><svg class="i" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.5"></circle><path d="M5 20a7 7 0 0 1 14 0"></path></svg></sc-if>
+</span>
+<span style="flex-shrink: 0; width: 22px; height: 22px; box-sizing: border-box; border-radius: 50%; border: 2px solid {{t.ring2}}; background: {{t.dot}}"></span>
+</span>
+<span style="display: flex; flex-direction: column; gap: 3px"><span style="font-size: 16px; font-weight: 700">{{t.title}}</span><span style="font-size: 13px; font-weight: 600; color: #405C6B">{{t.kindLabel}} · {{t.proof}}</span></span>
+</button>
+</sc-for>
+</div>
+</fieldset>
+<fieldset style="margin: 0; padding: 0; border: 0; min-width: 0; display: flex; flex-direction: column; gap: 14px">
+<legend style="padding: 0; margin-bottom: 14px; display: flex; align-items: center; gap: 12px; font-size: 20px; font-weight: 700"><span style="width: 30px; height: 30px; border-radius: 50%; background: #086B91; color: #FFFFFF; font-size: 14px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center">2</span>How buyers pay</legend>
+<div style="display: flex; flex-wrap: wrap; align-items: flex-end; gap: 16px">
+<div role="group" aria-label="Pricing model" style="flex: 0 1 360px; height: 52px; box-sizing: border-box; padding: 4px; border-radius: 26px; background: #FFFFFF; display: flex; gap: 4px">
+<sc-for list="{{models}}" as="m" hint-placeholder-count="3">
+<button type="button" onClick="{{m.pick}}" aria-pressed="{{m.on}}" style="flex-grow: 1; flex-basis: 0; height: 44px; border-radius: 22px; background: {{m.bg}}; color: {{m.fg}}; font-size: 15px; font-weight: 700">{{m.label}}</button>
+</sc-for>
+</div>
+<sc-if value="{{paid}}" hint-placeholder-val="{{ true }}">
+<div style="flex: 1 1 220px; max-width: 280px; display: flex; flex-direction: column; gap: 6px">
+<label for="web-sell-price" style="font-size: 13px; font-weight: 700; color: #405C6B">Price in US dollars{{perMonth}}</label>
+<div style="height: 52px; box-sizing: border-box; padding: 0 18px; border-radius: 16px; background: #FFFFFF; box-shadow: inset 0 0 0 1px #C9DCE5; display: flex; align-items: center; gap: 6px">
+<span class="mono" style="font-size: 17px; color: #4F6875">$</span>
+<input id="web-sell-price" type="text" inputmode="decimal" value="{{price}}" onChange="{{onPrice}}" aria-describedby="web-sell-price-hint" class="mono" style="flex-grow: 1; min-width: 0; height: 44px; border: 0; outline: none; background: transparent; color: #102A39; font-size: 17px; font-weight: 600">
+</div>
+</div>
+</sc-if>
+</div>
+<span id="web-sell-price-hint" style="font-size: 13px; font-weight: 600; color: #4F6875">You keep the price minus the marketplace fee, paid out on the 1st of each month.</span>
+</fieldset>
+<fieldset style="margin: 0; padding: 0; border: 0; min-width: 0; display: flex; flex-direction: column; gap: 14px">
+<legend style="padding: 0; margin-bottom: 14px; display: flex; align-items: center; gap: 12px; font-size: 20px; font-weight: 700"><span style="width: 30px; height: 30px; border-radius: 50%; background: #086B91; color: #FFFFFF; font-size: 14px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center">3</span>Name it for buyers</legend>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<label for="web-sell-name" style="font-size: 13px; font-weight: 700; color: #405C6B">Listing name</label>
+<input id="web-sell-name" type="text" value="{{nameInput}}" onChange="{{onName}}" style="height: 52px; box-sizing: border-box; padding: 0 18px; border: 0; outline: none; border-radius: 16px; background: #FFFFFF; box-shadow: inset 0 0 0 1px #C9DCE5; color: #102A39; font-size: 16px; font-weight: 600">
+</div>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<label for="web-sell-pitch" style="font-size: 13px; font-weight: 700; color: #405C6B">What it does, in one or two lines</label>
+<textarea id="web-sell-pitch" rows="3" value="{{pitch}}" onChange="{{onPitch}}" style="box-sizing: border-box; padding: 14px 18px; border: 0; outline: none; resize: vertical; border-radius: 16px; background: #FFFFFF; box-shadow: inset 0 0 0 1px #C9DCE5; color: #102A39; font-size: 15px; line-height: 1.45; font-weight: 600"></textarea>
+</div>
+</fieldset>
+<fieldset style="margin: 0; padding: 0; border: 0; min-width: 0; display: flex; flex-direction: column; gap: 14px">
+<legend style="padding: 0; margin-bottom: 14px; display: flex; align-items: center; gap: 12px; font-size: 20px; font-weight: 700"><span style="width: 30px; height: 30px; border-radius: 50%; background: #086B91; color: #FFFFFF; font-size: 14px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center">4</span>Before it goes live</legend>
+<div class="two-col" style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px 24px">
+<sc-for list="{{promises}}" as="p" hint-placeholder-count="4">
+<div style="display: flex; gap: 12px; align-items: flex-start">
+<span style="flex-shrink: 0; width: 28px; height: 28px; border-radius: 50%; background: #E8F6FB; color: #086B91; display: flex; align-items: center; justify-content: center"><svg class="i" width="16" height="16" viewBox="0 0 24 24" aria-hidden="true" style="stroke-width: 2.5"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span>
+<span style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 15px; font-weight: 700">{{p.title}}</span><span style="font-size: 13px; line-height: 1.45; font-weight: 600; color: #405C6B">{{p.sub}}</span></span>
+</div>
+</sc-for>
+</div>
+</fieldset>
+<div style="display: flex; flex-wrap: wrap; gap: 10px">
+<button type="submit" style="height: 56px; padding: 0 28px; border-radius: 28px; background: #086B91; color: #FFFFFF; font-size: 17px; font-weight: 700">Submit for review</button>
+<a href="WebMarketplace.dc.html" style="height: 56px; box-sizing: border-box; padding: 0 24px; border-radius: 28px; background: #E3EFF5; color: #102A39; font-size: 16px; font-weight: 700; display: flex; align-items: center">Cancel</a>
+</div>
+</form>
+<aside aria-label="How buyers will see it" style="flex: 1 1 300px; min-width: 0; display: flex; flex-direction: column; gap: 14px">
+<h2 style="margin: 0; font-size: 19px; font-weight: 700; color: #102A39">How buyers will see it</h2>
+<div style="box-sizing: border-box; padding: 18px; border-radius: 24px; background: #FFFFFF; box-shadow: inset 0 0 0 1px #E3EFF5; display: flex; flex-direction: column; gap: 12px">
+<span style="display: flex; align-items: center; justify-content: space-between; gap: 10px">
+<span style="flex-shrink: 0; width: 48px; height: 48px; border-radius: {{chosenRadius}}; background: {{chosenTileBg}}; color: {{chosenTileFg}}; display: flex; align-items: center; justify-content: center"><svg class="i" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 12.2V4.5a1 1 0 0 1 1-1h7.7l8.3 8.3-8.7 8.7z"></path><circle cx="8" cy="8" r="1.4"></circle></svg></span>
+<span style="height: 26px; padding: 0 10px; box-sizing: border-box; border-radius: 13px; background: #E3EFF5; color: #2D4858; font-size: 12px; font-weight: 700; display: flex; align-items: center">{{chosenKind}}</span>
+</span>
+<span style="display: flex; flex-direction: column; gap: 3px"><span data-preview="name" style="font-size: 17px; font-weight: 700; overflow-wrap: anywhere">{{name}}</span><span style="font-size: 13px; font-weight: 600; color: #4F6875">by Branshs LLC</span></span>
+<span style="font-size: 14px; line-height: 1.45; font-weight: 600; color: #405C6B; overflow-wrap: anywhere">{{pitch}}</span>
+<span style="display: flex; align-items: center; justify-content: space-between; gap: 10px">
+<span style="height: 24px; padding: 0 9px; box-sizing: border-box; border-radius: 12px; background: #D6EFF8; color: #086B91; font-size: 12px; font-weight: 700; display: flex; align-items: center">New</span>
+<span data-preview="price" class="mono" style="font-size: 15px; font-weight: 600">{{priceLabel}}</span>
+</span>
+</div>
+<p style="margin: 0; font-size: 13px; line-height: 1.5; font-weight: 600; color: #4F6875">Buyers also see what it reads, drafts and does, taken from how it runs at Branshs LLC today.</p>
+</aside>
+</div>
+</sc-if>
+<sc-if value="{{sent}}" hint-placeholder-val="{{ false }}">
+<div role="status" style="max-width: 640px; padding: 36px; border-radius: 28px; background: #FFFFFF; box-shadow: inset 0 0 0 1px #E3EFF5; display: flex; flex-direction: column; gap: 16px">
+<span style="width: 72px; height: 72px; border-radius: 50%; background: #E8F6FB; color: #086B91; display: flex; align-items: center; justify-content: center"><svg class="i" width="34" height="34" viewBox="0 0 24 24" aria-hidden="true" style="stroke-width: 2.5"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span>
+<h1 style="margin: 0; font-size: 34px; line-height: 1.15; font-weight: 700">Submitted for review</h1>
+<p style="margin: 0; font-size: 17px; line-height: 1.5; font-weight: 600; color: #405C6B">{{name}} goes live at {{priceLabel}} once our review is done. You will hear back in Inbox, and Chief of Staff answers the buyer questions it can.</p>
+<div style="display: flex; flex-wrap: wrap; gap: 10px">
+<a href="WebMarketplace.dc.html" style="height: 52px; box-sizing: border-box; padding: 0 22px; border-radius: 26px; background: #086B91; color: #FFFFFF; font-size: 16px; font-weight: 700; display: flex; align-items: center">Back to Marketplace</a>
+<button type="button" onClick="{{again}}" style="height: 52px; padding: 0 22px; border-radius: 26px; background: #E3EFF5; color: #102A39; font-size: 16px; font-weight: 700">Sell something else</button>
+</div>
+</div>
+</sc-if>
+</div>
+</main>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1451}}'>
+// The same example things Branshs LLC could sell as MarketSell.dc.html.
+var THINGS = [
+  { key: 'cash-note', kind: 'pipeline', title: 'Weekly cash note', proof: 'ran 9 times, no errors', pitch: 'Writes a short cash note every Friday from your books and bank feeds.', price: '12' },
+  { key: 'onboarding', kind: 'workflow', title: 'Client onboarding', proof: 'ran 22 times this year', pitch: 'Sends the welcome pack, books the kickoff call and sets up the shared folder.', price: '35' },
+  { key: 'estimator', kind: 'agent', title: 'Quote estimator', proof: 'agent with 2 skills', pitch: 'Turns a call recap into a priced quote using your rate card.', price: '25' },
+  { key: 'receipt-sorter', kind: 'tool', title: 'Receipt sorter', proof: 'built in Code', pitch: 'Sorts forwarded receipts into folders by vendor and month.', price: '5' },
+  { key: 'expert', kind: 'expert', title: 'Your time as an expert', proof: 'set it up for others', pitch: 'I set up client portals for small agencies in one working day.', price: '400' }
+];
+var KINDS = { workflow: 'Workflow', agent: 'Agent', pipeline: 'Pipeline', tool: 'Tool', expert: 'Expert' };
+var MODELS = [{ key: 'once', label: 'Buy once' }, { key: 'month', label: 'Monthly' }, { key: 'free', label: 'Free' }];
+
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { sent: false, thing: 'cash-note', model: 'month', price: null, name: null, pitch: null };
+  }
+  renderVals() {
+    var self = this;
+    var s = this.state;
+    var thing = THINGS.filter(function (t) { return t.key === s.thing; })[0];
+    var price = s.price === null ? thing.price : s.price;
+    var name = s.name === null ? thing.title : s.name;
+    var pitch = s.pitch === null ? thing.pitch : s.pitch;
+    var expert = thing.kind === 'expert';
+    return {
+      editing: !s.sent,
+      sent: s.sent,
+      submit: function (e) { if (e && e.preventDefault) e.preventDefault(); self.setState({ sent: true }); },
+      again: function () { self.setState({ sent: false, price: null, name: null, pitch: null }); },
+      things: THINGS.map(function (t) {
+        var on = t.key === s.thing;
+        return {
+          title: t.title, proof: t.proof, kindLabel: KINDS[t.kind], on: on,
+          isWorkflow: t.kind === 'workflow', isAgent: t.kind === 'agent', isPipeline: t.kind === 'pipeline',
+          isTool: t.kind === 'tool', isExpert: t.kind === 'expert',
+          radius: t.kind === 'expert' ? '50%' : '14px',
+          tileBg: t.kind === 'expert' ? '#E2E9F6' : '#D6EFF8',
+          tileFg: t.kind === 'expert' ? '#2F4F86' : '#086B91',
+          bg: on ? '#E8F6FB' : '#FFFFFF',
+          ring: on ? '#086B91' : '#E3EFF5',
+          ring2: on ? '#086B91' : '#C9DCE5',
+          dot: on ? '#086B91' : 'transparent',
+          pick: function () { self.setState({ thing: t.key, price: null, name: null, pitch: null, model: t.kind === 'expert' ? 'once' : s.model }); }
+        };
+      }),
+      chosenKind: KINDS[thing.kind],
+      chosenRadius: expert ? '50%' : '14px',
+      chosenTileBg: expert ? '#E2E9F6' : '#D6EFF8',
+      chosenTileFg: expert ? '#2F4F86' : '#086B91',
+      models: MODELS.map(function (m) {
+        var on = m.key === s.model;
+        return {
+          label: m.label, on: on,
+          bg: on ? '#086B91' : 'transparent',
+          fg: on ? '#FFFFFF' : '#405C6B',
+          pick: function () { self.setState({ model: m.key }); }
+        };
+      }),
+      paid: s.model !== 'free',
+      perMonth: s.model === 'month' ? ', per month' : '',
+      price: price, nameInput: name, name: name || 'Untitled listing', pitch: pitch,
+      priceLabel: s.model === 'free' ? 'Free' : '$' + (price || '0') + (s.model === 'month' ? '/mo' : ''),
+      onPrice: function (e) { self.setState({ price: e.target.value.replace(/[^0-9.]/g, '') }); },
+      onName: function (e) { self.setState({ name: e.target.value }); },
+      onPitch: function (e) { self.setState({ pitch: e.target.value }); },
+      promises: [
+        { title: 'Your data stays out', sub: 'Client names, emails and amounts are removed from every example run.' },
+        { title: 'Your files stay private', sub: 'Buyers get the steps and prompts, never your Knowledge.' },
+        { title: 'Buyers stay in control', sub: 'It runs under their approvals, the same way it runs under yours.' },
+        { title: 'Reviewed before it is listed', sub: 'Saydeed checks every listing before buyers can see it.' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

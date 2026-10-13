@@ -1,19 +1,22 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { BRAND_MARK_PATHS } from '@/lib/brand';
+import { BRAND } from '@/lib/brand';
 import { SITE } from '@/lib/site';
 
 type Node = { name: string; x: number; y: number };
 
-// Five systems on a ring around the centre of a 520 by 420 canvas.
+// Five kinds of tool an agency already runs, on a ring around the center of a 520 by 420 canvas.
+// Kinds of system, never vendors. The picture and its labels are both built from this array.
 const NODES: Node[] = [
   { name: 'CRM', x: 260, y: 52 },
-  { name: 'ERP', x: 444, y: 160 },
-  { name: 'Accounting', x: 372, y: 360 },
-  { name: 'Help desk', x: 148, y: 360 },
-  { name: 'Spreadsheets', x: 76, y: 160 },
+  { name: 'Inbox', x: 444, y: 160 },
+  { name: 'Spreadsheets', x: 372, y: 360 },
+  { name: 'Project tool', x: 148, y: 360 },
+  { name: 'Documents', x: 76, y: 160 },
 ];
+
+const SYSTEMS = `${NODES.length} systems, ${NODES.slice(0, -1).map((n) => n.name).join(', ')} and ${NODES[NODES.length - 1].name}`;
 const C = { x: 260, y: 212 };
 // Today: people carry work along every edge between systems, and across two diagonals.
 const EDGES: [number, number][] = [[0, 1], [1, 2], [2, 3], [3, 4], [4, 0], [1, 3], [4, 2]];
@@ -22,24 +25,24 @@ const STATES = {
   today: {
     label: 'Today',
     caption: 'People carry the work between systems: re-keying, chasing, forwarding, exporting.',
-    aria: 'Today: five systems, CRM, ERP, accounting, help desk and spreadsheets, with people carrying work along every connection between them.',
+    aria: `Today: ${SYSTEMS}, with people carrying work along every connection between them.`,
   },
   with: {
     label: `With ${SITE.shortName}`,
-    caption: 'One operating layer carries it. Agents do the handoffs, and people approve what matters.',
-    aria: `With ${SITE.shortName}: the same five systems each connect once, to the ${SITE.shortName} operating layer in the centre, which carries work between them and sends decisions to people.`,
+    caption: 'One place carries it. Agents do the handoffs, and people approve what matters.',
+    aria: `With ${SITE.shortName}: the same ${NODES.length} systems each connect once, to ${SITE.shortName} in the center, which carries work between them and sends decisions to people.`,
   },
 } as const;
 
-type Mode = keyof typeof STATES;
+type View = keyof typeof STATES;
 
 /**
  * The problem and the answer on one canvas. "Today" draws the tangle of person-carried
- * handoffs; "With Devista" redraws the same systems around one hub. Plays on its own until the
- * visitor chooses a view; reduced motion shows "With Devista" still.
+ * handoffs; the second view redraws the same systems around one hub. Plays on its own until the
+ * visitor chooses a view; reduced motion shows the second view still.
  */
 export function HubDiagram() {
-  const [mode, setMode] = useState<Mode>('today');
+  const [mode, setMode] = useState<View>('today');
   const [auto, setAuto] = useState(true);
   const [still, setStill] = useState(false);
 
@@ -58,7 +61,7 @@ export function HubDiagram() {
     return () => clearInterval(t);
   }, [auto]);
 
-  const choose = (m: Mode) => {
+  const choose = (m: View) => {
     setAuto(false);
     setMode(m);
   };
@@ -69,7 +72,7 @@ export function HubDiagram() {
     <div className="card card-quiet p-4 sm:p-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div role="group" aria-label="Choose a view" className="inline-flex rounded-control border border-rule bg-paper p-1">
-          {(Object.keys(STATES) as Mode[]).map((m) => (
+          {(Object.keys(STATES) as View[]).map((m) => (
             <button
               key={m}
               type="button"
@@ -110,7 +113,7 @@ export function HubDiagram() {
           })}
         </g>
 
-        {/* With Devista: every system connects once, to the hub. */}
+        {/* The second view: every system connects once, to the hub. */}
         <g className={'transition-opacity duration-700 ' + (withOn ? 'opacity-100' : 'opacity-0')}>
           <circle cx={C.x} cy={C.y} r="120" fill="url(#hub-glow)" className="text-glow" />
           {NODES.map((n, i) => {
@@ -128,7 +131,7 @@ export function HubDiagram() {
           })}
           <circle cx={C.x} cy={C.y} r="50" className="fill-signal-tint stroke-signal-bright" strokeWidth="1.5" />
           <g transform={`translate(${C.x - 16} ${C.y - 33}) scale(0.5)`} className="fill-ink">
-            {BRAND_MARK_PATHS.map((path) => <path key={path} d={path} />)}
+            {BRAND.mark.map((path) => <path key={path} d={path} />)}
           </g>
           <text x={C.x} y={C.y + 22} textAnchor="middle" className="fill-ink text-xs font-semibold">
             {SITE.shortName}

@@ -5,7 +5,7 @@ import { ExplorerView } from './ExplorerView';
 import { WORKFLOWS, type Mode } from '@/lib/workflows';
 
 /**
- * The signature interactive: pick a department, see one example workflow split into who does
+ * The signature interactive: pick an agency workflow, see it split into who does
  * each step, where approval sits and what escalates to a person. Tabs follow the ARIA tabs
  * pattern (arrow keys, Home, End); the legend doubles as a highlight filter.
  * Loaded by ExplorerIsland once the section nears the viewport; it takes over from identical

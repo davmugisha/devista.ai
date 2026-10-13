@@ -1,14 +1,12 @@
 import type { KeyboardEvent, MutableRefObject } from 'react';
 import { ModeGlyph } from '../ModeGlyph';
-import { MODES, WORKFLOWS, type Mode } from '@/lib/workflows';
-
-export const MODE_ORDER: Mode[] = ['person', 'assisted', 'agent'];
+import { MODES, MODE_ORDER, WORKFLOWS, type Mode } from '@/lib/workflows';
 
 type Props = {
   uid: string;
   active: number;
   focus: Mode | null;
-  /** Replays the arrive motion; only after the visitor changes department. */
+  /** Replays the arrive motion; only after the visitor changes workflow. */
   animate?: boolean;
   onSelect?: (i: number) => void;
   onTabKey?: (e: KeyboardEvent<HTMLButtonElement>) => void;
@@ -34,7 +32,7 @@ export function ExplorerView({ uid, active, focus, animate = false, onSelect, on
   return (
     <div className="mt-14 overflow-hidden rounded-card border border-rule bg-mist shadow-float" data-interactive={interactive ? 'true' : undefined}>
       <div className="flex flex-col gap-4 border-b border-rule px-4 pt-4 md:flex-row md:items-end md:justify-between md:px-6 md:pt-5">
-        <div role="tablist" aria-label="Department" className="-mb-px flex gap-1 overflow-x-auto">
+        <div role="tablist" aria-label="Example workflows" className="-mb-px flex gap-1 overflow-x-auto">
           {WORKFLOWS.map((w, i) => (
             <button
               key={w.id}
@@ -53,11 +51,11 @@ export function ExplorerView({ uid, active, focus, animate = false, onSelect, on
               onClick={onSelect ? () => onSelect(i) : undefined}
               onKeyDown={onTabKey}
               className={
-                'h-11 shrink-0 border-b-2 px-3 text-sm font-medium transition-colors duration-150 ' +
+                'h-11 shrink-0 whitespace-nowrap border-b-2 px-3 text-sm font-medium transition-colors duration-150 ' +
                 (i === active ? 'border-signal-bright text-ink' : 'border-transparent text-graphite hover:text-ink')
               }
             >
-              {w.department}
+              {w.tab ?? w.name}
             </button>
           ))}
         </div>
@@ -88,7 +86,10 @@ export function ExplorerView({ uid, active, focus, animate = false, onSelect, on
         className="grid gap-8 p-4 md:p-6 lg:grid-cols-12 lg:gap-12"
       >
         <div key={`${wf.id}-head`} className={arrive + 'self-start lg:sticky lg:top-24 lg:col-span-4'}>
-          <p className="inline-flex rounded-chip border border-rule bg-panel px-2 py-px text-xs text-graphite">Example workflow</p>
+          <p className="flex flex-wrap items-center gap-2">
+            <span className="inline-flex rounded-chip border border-rule bg-panel px-2 py-px text-xs text-graphite">Example workflow</span>
+            <span className="inline-flex rounded-chip bg-signal-tint px-2 py-px text-xs font-medium text-signal-bright">{wf.department}</span>
+          </p>
           <h3 className="mt-3 text-xl font-display tracking-display">{wf.name}</h3>
           <p className="mt-2 max-w-measure text-sm text-graphite">{wf.summary}</p>
           <ul className="mt-6 space-y-3 border-t border-rule pt-4" aria-label="Who does the work in this workflow">

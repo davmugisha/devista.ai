@@ -2,6 +2,8 @@
 
 import { CalendarPlus, Check } from 'lucide-react';
 import { buttonClass, ButtonLink } from '@/components/Button';
+import { ContactLink } from '@/components/ContactLink';
+import { CheckBadge } from '@/components/Field';
 import { formatDay, formatRange, tzLongName, tzName } from '@/lib/booking-client';
 import { BOOKING } from '@/lib/booking-config';
 import { buildIcs } from '@/lib/booking-ics';
@@ -50,15 +52,14 @@ export function ConfirmedStep({ firstName, email, start, end, tz, meetLink, onRe
   return (
     <div className="animate-arrive">
       <div className="flex items-center gap-3">
-        <span className="flex size-8 shrink-0 items-center justify-center rounded-dot bg-signal-tint" aria-hidden="true">
-          <Check className="size-4 text-signal-bright" strokeWidth={2.2} />
-        </span>
+        <CheckBadge />
         <h2 id="step-3-title" tabIndex={-1} className="text-2xl font-display tracking-display text-ink outline-none">
           You’re booked, {firstName}.
         </h2>
       </div>
       <p className="mt-4 text-base text-graphite">
         A calendar invite with the video link is on its way to <span className="font-medium text-ink break-words">{email}</span>.
+        Questions before the call? Email <ContactLink />.
       </p>
 
       <dl className="mt-6 grid gap-3 sm:grid-cols-3">
@@ -80,6 +81,10 @@ export function ConfirmedStep({ firstName, email, start, end, tz, meetLink, onRe
           </li>
         ))}
       </ul>
+
+      <p className="mt-6 text-sm text-graphite">
+        If it fits, we send a written scope and a fixed price after the call. Nothing starts until you have paid.
+      </p>
 
       <div className="mt-8 flex flex-col gap-3 border-t border-rule pt-6 sm:flex-row sm:flex-wrap sm:items-center">
         <button type="button" onClick={download} className={buttonClass('primary', 'md', 'w-full sm:w-auto')}>

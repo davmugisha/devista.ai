@@ -6,7 +6,7 @@ import { Footer } from '@/components/Footer';
 import { Header } from '@/components/Header';
 import { RevealObserver } from '@/components/RevealObserver';
 import { OPEN_GRAPH, SITE } from '@/lib/site';
-import { COLOR } from '@/lib/tokens';
+import { COLOR_DARK } from '@/lib/tokens';
 import './globals.css';
 
 // Self-hosted at build time by next/font.
@@ -24,7 +24,7 @@ const noindex = (process.env.VERCEL_ENV && process.env.VERCEL_ENV !== 'productio
 export const metadata: Metadata = {
   metadataBase: new URL(SITE.url),
   title: {
-    default: `${SITE.name}: the operating layer between your systems`,
+    default: `${SITE.name}: ${SITE.tagline}`,
     template: `%s | ${SITE.name}`,
   },
   description: SITE.description,
@@ -35,8 +35,8 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: COLOR.paper,
-  colorScheme: 'light',
+  themeColor: COLOR_DARK.paper,
+  colorScheme: 'dark',
 };
 
 const organization = {
@@ -50,13 +50,16 @@ const organization = {
 
 // Runs before first paint: arms the scroll reveal, and disarms it if RevealObserver has not
 // started within three seconds, so a failed script can never leave content hidden.
+// The page is served dark (data-theme on <html>). The script restores a saved light choice (the
+// footer switch, components/ThemeToggle.tsx) before anything is painted, so it never flashes dark.
 const REVEAL_SCRIPT =
   "(function(){var d=document.documentElement;d.setAttribute('data-reveal-ready','');" +
+  "try{if(localStorage.getItem('theme')==='light')d.removeAttribute('data-theme')}catch(e){}" +
   "setTimeout(function(){if(!window.__reveal)d.removeAttribute('data-reveal-ready')},3000)})()";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={instrument.variable} suppressHydrationWarning>
+    <html lang="en" data-theme="dark" className={instrument.variable} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: REVEAL_SCRIPT }} />
       </head>

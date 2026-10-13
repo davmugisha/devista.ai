@@ -1,4 +1,5 @@
-import type { ReactNode } from 'react';
+import { Check } from 'lucide-react';
+import type { ReactNode, Ref } from 'react';
 
 const control =
   'block w-full rounded-control border bg-panel px-4 text-base text-ink transition-colors duration-150 ' +
@@ -47,6 +48,28 @@ export function Field({ id, label, optional, hint, error, children }: Props) {
 
 export function describedBy(id: string, hint?: boolean) {
   return [hint ? `${id}-hint` : '', `${id}-error`].filter(Boolean).join(' ');
+}
+
+/**
+ * A `website` field hidden from people and assistive technology. Bots fill it, and the API then
+ * answers with a success that does nothing (readForm in lib/api-http.ts).
+ */
+export function Honeypot({ id, ref }: { id: string; ref?: Ref<HTMLInputElement> }) {
+  return (
+    <div aria-hidden="true" className="sr-only">
+      <label htmlFor={id}>Website</label>
+      <input ref={ref} id={id} name="website" tabIndex={-1} autoComplete="off" defaultValue="" />
+    </div>
+  );
+}
+
+/** The tick that opens a form's confirmation. */
+export function CheckBadge() {
+  return (
+    <span className="flex size-8 shrink-0 items-center justify-center rounded-dot bg-signal-tint" aria-hidden="true">
+      <Check className="size-4 text-signal-bright" strokeWidth={2.2} />
+    </span>
+  );
 }
 
 export function Chevron() {

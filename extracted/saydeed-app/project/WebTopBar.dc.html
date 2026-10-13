@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Web top bar</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;600&amp;family=Quicksand:wght@500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+</style>
+</helmet>
+<header style="position: relative; z-index: 5; box-sizing: border-box; width: 100%; min-height: 72px; padding: 12px clamp(16px, 3vw, 40px); display: flex; flex-wrap: wrap; align-items: center; gap: 12px; background: #FFFFFF; border-bottom: 1px solid #C9DCE5; color: #102A39; font-family: 'Quicksand', ui-rounded, system-ui, sans-serif">
+<div role="search" style="position: relative; flex: 1 1 280px; max-width: 560px; min-width: 0">
+<label for="top-search" style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap">Search Saydeed, or ask Chief of Staff</label>
+<div style="height: 46px; box-sizing: border-box; padding: 0 8px 0 16px; border-radius: 23px; background: #EEF5F9; box-shadow: inset 0 0 0 1px #D6E6EE; display: flex; align-items: center; gap: 10px; color: #4F6875">
+<svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"></circle><path d="M16 16l4 4"></path></svg>
+<input id="top-search" type="search" autocomplete="off" value="{{query}}" onChange="{{onQuery}}" aria-controls="top-search-results" aria-expanded="{{open}}" placeholder="Search, or ask Chief of Staff" style="flex-grow: 1; min-width: 0; height: 40px; border: 0; outline: none; background: transparent; color: #102A39; font-family: inherit; font-size: 15px; font-weight: 600">
+<kbd class="tb-kbd" aria-hidden="true" style="flex-shrink: 0; height: 26px; padding: 0 8px; box-sizing: border-box; border-radius: 8px; background: #FFFFFF; box-shadow: inset 0 0 0 1px #C9DCE5; font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11px; color: #4F6875; display: flex; align-items: center">Ctrl K</kbd>
+</div>
+<sc-if value="{{open}}" hint-placeholder-val="{{ false }}">
+<div id="top-search-results" style="position: absolute; top: 54px; left: 0; right: 0; z-index: 30; box-sizing: border-box; padding: 8px; border-radius: 18px; background: #FFFFFF; box-shadow: 0 12px 32px rgba(16, 42, 57, 0.18), 0 0 0 1px #C9DCE5; display: flex; flex-direction: column; gap: 2px">
+<a href="WebInbox.dc.html" style="min-height: 48px; box-sizing: border-box; padding: 8px 12px; border-radius: 12px; background: #E8F6FB; color: #06445C; text-decoration: none; display: flex; align-items: center; gap: 12px">
+<span style="flex-shrink: 0; width: 32px; height: 32px; border-radius: 10px; background: #D6EFF8; color: #086B91; font-family: 'JetBrains Mono', ui-monospace, Menlo, monospace; font-size: 11px; font-weight: 600; display: flex; align-items: center; justify-content: center">CoS</span>
+<span style="min-width: 0; font-size: 15px; font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">Ask Chief of Staff: “{{query}}”</span>
+</a>
+<sc-for list="{{results}}" as="r" hint-placeholder-count="3">
+<a href="{{r.href}}" style="min-height: 48px; box-sizing: border-box; padding: 8px 12px; border-radius: 12px; color: #102A39; text-decoration: none; display: flex; align-items: center; gap: 12px">
+<span style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px"><span style="font-size: 15px; font-weight: 700">{{r.title}}</span><span style="font-size: 13px; font-weight: 600; color: #4F6875">{{r.where}}</span></span>
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink: 0; color: #4F6875"><path d="M9 6l6 6-6 6"></path></svg>
+</a>
+</sc-for>
+<sc-if value="{{noResults}}" hint-placeholder-val="{{ false }}">
+<span style="padding: 10px 12px; font-size: 14px; font-weight: 600; color: #4F6875">Nothing in your company matches. Chief of Staff can still look.</span>
+</sc-if>
+</div>
+</sc-if>
+</div>
+<div class="tb-actions" style="margin-left: auto; display: flex; align-items: center; gap: 8px">
+<a href="WebInbox.dc.html" aria-label="Chief of Staff" style="height: 46px; box-sizing: border-box; padding: 0 14px 0 12px; white-space: nowrap; border-radius: 23px; background: #D6EFF8; color: #06445C; text-decoration: none; font-size: 15px; font-weight: 700; display: flex; align-items: center; gap: 8px">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 11.5A7.5 7.5 0 1 0 15.8 17.64L19.6 19.4L18.3 14.67A7.5 7.5 0 0 0 19 11.5Z"></path><circle cx="9" cy="11.5" r="1.25" fill="currentColor" stroke="none"></circle><circle cx="14" cy="11.5" r="1.25" fill="currentColor" stroke="none"></circle></svg>
+<span class="tb-label">Chief of Staff</span>
+</a>
+<a href="WebInbox.dc.html" aria-label="Inbox, 3 things need you" style="position: relative; width: 46px; height: 46px; border-radius: 50%; background: #EEF5F9; color: #102A39; display: flex; align-items: center; justify-content: center">
+<svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 13.5l2.6-7.2A2 2 0 0 1 8.5 5h7a2 2 0 0 1 1.9 1.3l2.6 7.2V18a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"></path><path d="M4 13.5h4.5l1.5 2.5h4l1.5-2.5H20"></path></svg>
+<span aria-hidden="true" style="position: absolute; top: -3px; right: -3px; min-width: 22px; height: 22px; padding: 0 6px; box-sizing: border-box; border-radius: 11px; border: 2px solid #FFFFFF; background: #9A5A00; color: #FFFFFF; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center">3</span>
+</a>
+<div style="position: relative">
+<button type="button" onClick="{{toggleCreate}}" aria-haspopup="true" aria-expanded="{{createOpen}}" aria-controls="create-menu" aria-label="Create" style="height: 46px; padding: 0 18px 0 14px; border: 0; cursor: pointer; font-family: inherit; border-radius: 23px; background: #086B91; color: #FFFFFF; font-size: 15px; font-weight: 700; display: flex; align-items: center; gap: 8px">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>
+<span class="tb-label">Create</span>
+</button>
+<sc-if value="{{createOpen}}" hint-placeholder-val="{{ false }}">
+<div id="create-menu" style="position: absolute; top: 54px; right: 0; z-index: 30; width: 280px; box-sizing: border-box; padding: 8px; border-radius: 18px; background: #FFFFFF; box-shadow: 0 12px 32px rgba(16, 42, 57, 0.18), 0 0 0 1px #C9DCE5; display: flex; flex-direction: column; gap: 2px">
+<sc-for list="{{createItems}}" as="c" hint-placeholder-count="5">
+<a href="{{c.href}}" style="min-height: 52px; box-sizing: border-box; padding: 8px 12px; border-radius: 12px; color: #102A39; text-decoration: none; display: flex; flex-direction: column; justify-content: center; gap: 1px">
+<span style="font-size: 15px; font-weight: 700">{{c.label}}</span><span style="font-size: 12px; font-weight: 600; color: #4F6875">{{c.sub}}</span>
+</a>
+</sc-for>
+</div>
+</sc-if>
+</div>
+<button type="button" aria-label="Profile and settings, Samuel Shami" style="width: 46px; height: 46px; border: 0; padding: 0; cursor: pointer; font-family: inherit; border-radius: 50%; background: #E2E9F6; color: #2F4F86; font-size: 15px; font-weight: 700">SS</button>
+</div>
+</header>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1192,"height":72}}'>
+// What the search can find, example data from the rest of the design.
+var INDEX = [
+  { title: 'Send 2 payment reminders', where: 'Inbox · Billing agent needs you', href: 'WebInbox.dc.html' },
+  { title: 'Review the Umoja proposal', where: 'Inbox · Proposal writer needs you', href: 'WebInbox.dc.html' },
+  { title: 'Pick a portal launch date', where: 'Inbox · Delivery lead needs you', href: 'WebInbox.dc.html' },
+  { title: 'Invoice chaser', where: 'Marketplace · Workflow by Ledgerline', href: 'WebMarketplace.dc.html' },
+  { title: 'Month-end close', where: 'Marketplace · Pipeline by Kora Ops', href: 'WebMarketplace.dc.html' },
+  { title: 'Receipt reader', where: 'Marketplace · Tool by Pembe Data', href: 'WebMarketplace.dc.html' },
+  { title: 'CFO agent', where: 'Agent · reconciling September invoices', href: 'WebHome.dc.html' },
+  { title: 'Cash in bank', where: 'Home · $18,420 today', href: 'WebHome.dc.html' },
+  { title: 'Sell something you built', where: 'Marketplace · list a workflow, agent or tool', href: 'WebMarketSell.dc.html' }
+];
+var CREATE = [
+  { label: 'Ask Chief of Staff', sub: 'Say what you need, it sets it up', href: 'WebInbox.dc.html' },
+  { label: 'Hire an agent', sub: 'From the Marketplace', href: 'WebMarketplace.dc.html' },
+  { label: 'Find a workflow or tool', sub: 'Browse the Marketplace', href: 'WebMarketplace.dc.html' },
+  { label: 'Sell what you built', sub: 'List it on the Marketplace', href: 'WebMarketSell.dc.html' }
+];
+
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { query: '', create: false };
+  }
+  renderVals() {
+    var self = this;
+    var q = this.state.query.trim().toLowerCase();
+    var results = q ? INDEX.filter(function (r) { return (r.title + ' ' + r.where).toLowerCase().indexOf(q) !== -1; }).slice(0, 5) : [];
+    return {
+      query: this.state.query,
+      open: !!q,
+      results: results,
+      noResults: !!q && results.length === 0,
+      onQuery: function (e) { self.setState({ query: e.target.value, create: false }); },
+      createOpen: this.state.create,
+      toggleCreate: function () { self.setState({ create: !self.state.create, query: '' }); },
+      createItems: CREATE
+    };
+  }
+}
+</script>
+</body>
+</html>

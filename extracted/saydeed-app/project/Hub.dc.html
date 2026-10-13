@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Inbox</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;600&amp;family=Quicksand:wght@500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#EEF5F9;-webkit-font-smoothing:antialiased}
+a{color:#086B91;text-decoration:none}a:hover{color:#064F6B}
+button,input{font-family:inherit}
+button{border:0;padding:0;cursor:pointer}
+input::placeholder{color:#4F6875}
+.i{fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.f{fill:currentColor;stroke:none}
+.mono{font-family:'JetBrains Mono',ui-monospace,Menlo,monospace}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+</style>
+</helmet>
+<div style="position: relative; width: 390px; height: 844px; overflow: hidden; background: #EEF5F9; color: #102A39; font-family: 'Quicksand', ui-rounded, system-ui, sans-serif">
+<header style="position: absolute; top: 52px; left: 16px; right: 16px; height: 52px; display: flex; align-items: center; gap: 12px">
+<a href="Main.dc.html" aria-label="Back to Brain Map" style="flex-shrink: 0; width: 48px; height: 48px; border-radius: 50%; background: #FFFFFF; color: #102A39; display: flex; align-items: center; justify-content: center">
+<svg class="i" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg>
+</a>
+<h1 style="margin: 0; flex-grow: 1; font-size: 26px; font-weight: 700">Inbox</h1>
+<button type="button" aria-label="New conversation" style="flex-shrink: 0; width: 48px; height: 48px; border-radius: 50%; background: #D6EFF8; color: #086B91; display: flex; align-items: center; justify-content: center">
+<svg class="i" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"></path><path d="M13.5 6.5l4 4"></path></svg>
+</button>
+</header>
+<div style="position: absolute; top: 120px; left: 16px; right: 16px; height: 48px; box-sizing: border-box; padding: 0 16px; border-radius: 24px; background: #FFFFFF; display: flex; align-items: center; gap: 10px; color: #4F6875">
+<svg class="i" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"></circle><path d="M16 16l4 4"></path></svg>
+<label class="sr" for="inbox-search">Search inbox</label>
+<input id="inbox-search" type="search" placeholder="Search people, agents, calls" style="flex-grow: 1; min-width: 0; height: 44px; border: 0; outline: none; background: transparent; color: #102A39; font-size: 15px; font-weight: 600">
+</div>
+<div style="position: absolute; top: 182px; left: 16px; right: 0; display: flex; gap: 8px; overflow: hidden">
+<sc-for list="{{chips}}" as="c" hint-placeholder-count="6">
+<button type="button" onClick="{{c.pick}}" aria-pressed="{{c.on}}" style="flex-shrink: 0; height: 44px; padding: 0 16px; border-radius: 22px; background: {{c.bg}}; color: {{c.fg}}; font-size: 14px; font-weight: 700; white-space: nowrap; display: flex; align-items: center; gap: 6px">
+<span>{{c.label}}</span>
+<sc-if value="{{c.hasCount}}" hint-placeholder-val="{{ false }}"><span class="mono" style="font-size: 12px; font-weight: 600; color: {{c.countFg}}">{{c.count}}</span></sc-if>
+</button>
+</sc-for>
+</div>
+<div style="position: absolute; top: 244px; left: 16px; right: 16px; bottom: 0; overflow: hidden; display: flex; flex-direction: column; gap: 14px">
+<sc-if value="{{showNeeds}}" hint-placeholder-val="{{ true }}">
+<section aria-label="Needs you" style="display: flex; flex-direction: column">
+<h2 style="margin: 0 0 4px; font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #9A5A00; display: flex; align-items: center; gap: 8px"><span style="width: 8px; height: 8px; border-radius: 50%; background: #9A5A00"></span>Needs you</h2>
+<sc-for list="{{needs}}" as="n" hint-placeholder-count="3">
+<a href="{{n.href}}" style="height: 64px; display: flex; align-items: center; gap: 12px; color: #102A39">
+<span style="flex-shrink: 0; width: 44px; height: 44px; border-radius: 14px; background: #FFE9C2; color: #9A5A00; display: flex; align-items: center; justify-content: center">
+<svg class="i" width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5.5c0 4.5-3 8-7 9.5-4-1.5-7-5-7-9.5V6z"></path><path d="M8.8 12l2.3 2.3 4.2-4.3"></path></svg>
+</span>
+<span style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px">
+<span style="font-size: 15px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{n.title}}</span>
+<span style="font-size: 13px; font-weight: 600; color: #405C6B; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{n.sub}}</span>
+</span>
+<span class="mono" style="flex-shrink: 0; font-size: 12px; color: #4F6875">{{n.time}}</span>
+<svg class="i" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" style="flex-shrink: 0; color: #4F6875"><path d="M9 6l6 6-6 6"></path></svg>
+</a>
+</sc-for>
+</section>
+</sc-if>
+<sc-if value="{{showConv}}" hint-placeholder-val="{{ true }}">
+<section aria-label="Conversations" style="display: flex; flex-direction: column">
+<h2 style="margin: 0 0 4px; font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #4F6875">{{convTitle}}</h2>
+<sc-for list="{{conv}}" as="r" hint-placeholder-count="5">
+<a href="{{r.href}}" style="height: 64px; display: flex; align-items: center; gap: 12px; color: #102A39">
+<sc-if value="{{r.isAgent}}" hint-placeholder-val="{{ true }}"><span class="mono" style="flex-shrink: 0; width: 44px; height: 44px; border-radius: 14px; background: #D6EFF8; color: #086B91; font-size: 11px; font-weight: 600; display: flex; align-items: center; justify-content: center">{{r.initials}}</span></sc-if>
+<sc-if value="{{r.isHuman}}" hint-placeholder-val="{{ false }}"><span style="flex-shrink: 0; width: 44px; height: 44px; border-radius: 50%; background: #E2E9F6; color: #2F4F86; font-size: 14px; font-weight: 700; display: flex; align-items: center; justify-content: center">{{r.initials}}</span></sc-if>
+<sc-if value="{{r.isGroup}}" hint-placeholder-val="{{ false }}"><span style="flex-shrink: 0; position: relative; width: 44px; height: 44px"><span class="mono" style="position: absolute; left: 0; top: 0; width: 30px; height: 30px; border-radius: 10px; background: #D6EFF8; color: #086B91; font-size: 9px; font-weight: 600; display: flex; align-items: center; justify-content: center">SAL</span><span style="position: absolute; right: 0; bottom: 0; width: 28px; height: 28px; border-radius: 50%; background: #E2E9F6; color: #2F4F86; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 0 3px #EEF5F9">E</span></span></sc-if>
+<sc-if value="{{r.isCall}}" hint-placeholder-val="{{ false }}"><span style="flex-shrink: 0; width: 44px; height: 44px; border-radius: 14px; background: #D6EFF8; color: #086B91; display: flex; align-items: center; justify-content: center"><svg class="i" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"></path></svg></span></sc-if>
+<sc-if value="{{r.isAlert}}" hint-placeholder-val="{{ false }}"><span style="flex-shrink: 0; width: 44px; height: 44px; border-radius: 14px; background: #E3EFF5; color: #2D4858; display: flex; align-items: center; justify-content: center"><svg class="i" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4l9 15.5H3z"></path><path d="M12 10v4M12 17v.01"></path></svg></span></sc-if>
+<span style="flex-grow: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px">
+<span style="font-size: 15px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{r.title}}</span>
+<span style="font-size: 13px; font-weight: 600; color: #405C6B; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{r.preview}}</span>
+</span>
+<span style="flex-shrink: 0; display: flex; flex-direction: column; align-items: flex-end; gap: 6px">
+<span class="mono" style="font-size: 12px; color: #4F6875">{{r.time}}</span>
+<sc-if value="{{r.hasUnread}}" hint-placeholder-val="{{ false }}"><span style="min-width: 20px; height: 20px; padding: 0 6px; box-sizing: border-box; border-radius: 10px; background: #086B91; color: #FFFFFF; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center">{{r.unread}}</span></sc-if>
+</span>
+</a>
+</sc-for>
+</section>
+</sc-if>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { filter: 'all' };
+  }
+  renderVals() {
+    var self = this;
+    var f = this.state.filter;
+    var filters = [
+      { key: 'all', label: 'All' },
+      { key: 'needs', label: 'Needs you', count: '3' },
+      { key: 'agents', label: 'Agents' },
+      { key: 'people', label: 'People' },
+      { key: 'groups', label: 'Groups' },
+      { key: 'calls', label: 'Calls' },
+      { key: 'alerts', label: 'Alerts' }
+    ];
+    var needs = [
+      { title: 'Send 2 payment reminders', sub: 'Billing agent · $3,650 overdue', time: '8:04', href: 'Approval.dc.html' },
+      { title: 'Review the Umoja proposal', sub: 'Proposal writer · $4,800', time: '7:52', href: 'Approval.dc.html' },
+      { title: 'Pick a portal launch date', sub: 'Delivery lead · client portal', time: '7:30', href: 'Chat.dc.html' }
+    ];
+    var rows = [
+      { kind: 'agent', initials: 'CoS', title: 'Chief of Staff', preview: 'Morning brief: 3 things need you', time: '8:10', unread: 0, href: 'Chat.dc.html' },
+      { kind: 'group', title: 'Sales room', preview: 'Eric: I’ll take the Nyota call', time: '7:40', unread: 2, href: '#' },
+      { kind: 'call', title: 'Call with Chief of Staff', preview: '6 min · 3 visuals · 2 tasks created', time: 'Tue', unread: 0, href: 'Call.dc.html' },
+      { kind: 'human', initials: 'AM', title: 'Aline M.', preview: 'Signed contract is in the shared drive', time: 'Yest.', unread: 1, href: '#' },
+      { kind: 'agent', initials: 'CFO', title: 'CFO agent', preview: 'September books closed, 2 anomalies flagged', time: 'Yest.', unread: 0, href: '#' },
+      { kind: 'alert', title: 'Budget alert', preview: 'Agent spend hit 80% of today’s budget', time: '6:15', unread: 0, href: '#' }
+    ];
+    var kindFor = { agents: 'agent', people: 'human', groups: 'group', calls: 'call', alerts: 'alert' };
+    var conv = f === 'needs' ? [] : rows.filter(function (r) { return f === 'all' || r.kind === kindFor[f]; });
+    var titles = { all: 'Conversations', agents: 'Agents', people: 'People', groups: 'Groups', calls: 'Call recaps', alerts: 'Alerts' };
+    return {
+      chips: filters.map(function (x) {
+        var on = x.key === f;
+        return {
+          label: x.label, on: on,
+          hasCount: !!x.count, count: x.count || '',
+          bg: on ? '#086B91' : '#FFFFFF',
+          fg: on ? '#FFFFFF' : '#2D4858',
+          countFg: on ? '#FFFFFF' : '#9A5A00',
+          pick: function () { self.setState({ filter: x.key }); }
+        };
+      }),
+      showNeeds: f === 'all' || f === 'needs',
+      needs: needs,
+      showConv: conv.length > 0,
+      convTitle: titles[f] || 'Conversations',
+      conv: conv.map(function (r) {
+        return {
+          title: r.title, preview: r.preview, time: r.time, href: r.href,
+          initials: r.initials || '',
+          unread: r.unread, hasUnread: r.unread > 0,
+          isAgent: r.kind === 'agent', isHuman: r.kind === 'human', isGroup: r.kind === 'group',
+          isCall: r.kind === 'call', isAlert: r.kind === 'alert'
+        };
+      })
+    };
+  }
+}
+</script>
+</body>
+</html>

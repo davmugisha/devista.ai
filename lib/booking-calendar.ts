@@ -14,7 +14,8 @@ export type NewEvent = {
   end: number;
   summary: string;
   description: string;
-  attendee: { email: string; name: string };
+  /** Everyone Google emails the invite to: the visitor and the host's own address. */
+  attendees: { email: string; name: string }[];
 };
 
 export type CreatedEvent = { id: string; meetLink: string | null };
@@ -23,7 +24,7 @@ export interface CalendarProvider {
   readonly kind: 'google' | 'mock';
   /** Busy intervals between two instants. */
   busy(from: number, to: number): Promise<Interval[]>;
-  /** Creates the event with a Meet link and emails the invite to the attendee. */
+  /** Creates the event with a Meet link and emails the invite to every attendee. */
   create(event: NewEvent): Promise<CreatedEvent>;
 }
 
@@ -131,7 +132,7 @@ function googleProvider(c: Credentials): CalendarProvider {
           description: event.description,
           start: { dateTime: new Date(event.start).toISOString(), timeZone: 'UTC' },
           end: { dateTime: new Date(event.end).toISOString(), timeZone: 'UTC' },
-          attendees: [{ email: event.attendee.email, displayName: event.attendee.name }],
+          attendees: event.attendees.map((a) => ({ email: a.email, displayName: a.name })),
           conferenceData: {
             createRequest: { requestId: crypto.randomUUID(), conferenceSolutionKey: { type: 'hangoutsMeet' } },
           },
@@ -152,7 +153,7 @@ function googleProvider(c: Credentials): CalendarProvider {
 // A development calendar that behaves like a real one: some days are full, others have meetings
 // in the way, and every booking made while the server runs becomes busy time.
 type MockStore = { booked: Interval[] };
-const mockStore: MockStore = ((globalThis as { __devistaMockCalendar?: MockStore }).__devistaMockCalendar ??= { booked: [] });
+const mockStore: MockStore = ((globalThis as { __saydeedMockCalendar?: MockStore }).__saydeedMockCalendar ??= { booked: [] });
 
 function mockMeetings(from: number, to: number): Interval[] {
   const out: Interval[] = [];

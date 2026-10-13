@@ -1,16 +1,15 @@
 import type { Metadata } from 'next';
+import { ButtonLink } from '@/components/Button';
 import { CtaBand } from '@/components/CtaBand';
 import { Faq } from '@/components/Faq';
-import { Benefits } from '@/components/home/Benefits';
-import { Commitments } from '@/components/home/Commitments';
-import { ExplorerIsland } from '@/components/home/ExplorerIsland';
-import { ExplorerView } from '@/components/home/ExplorerView';
-import { Features } from '@/components/home/Features';
-import { Gaps } from '@/components/home/Gaps';
+import { Founder } from '@/components/Founder';
+import { AgentTeam } from '@/components/home/AgentTeam';
+import { CostCalculator } from '@/components/home/CostCalculator';
+import { Deliverables } from '@/components/home/Deliverables';
 import { Hero } from '@/components/home/Hero';
-import { RoiCalculator } from '@/components/home/RoiCalculator';
-import { SystemsMarquee } from '@/components/home/SystemsMarquee';
-import { ButtonLink } from '@/components/Button';
+import { Pains } from '@/components/home/Pains';
+import { ToolMarquee } from '@/components/home/ToolMarquee';
+import { MagneticButtonLink } from '@/components/MagneticButtonLink';
 import { Pricing } from '@/components/Pricing';
 import { Section } from '@/components/Section';
 import { StageCards } from '@/components/StageCards';
@@ -19,75 +18,81 @@ import { CTA, OPEN_GRAPH, SITE } from '@/lib/site';
 
 export const metadata: Metadata = {
   alternates: { canonical: '/' },
-  openGraph: { ...OPEN_GRAPH, title: `${SITE.name}: the operating layer between your systems` },
+  title: { absolute: `${SITE.name}: ${SITE.tagline}` },
+  description: SITE.description,
+  openGraph: { ...OPEN_GRAPH, title: `${SITE.name}: ${SITE.tagline}`, description: SITE.description },
 };
 
+// Service first (David, 2026-10-11): the page sells the problem, the agent team, the steps, what
+// the buyer gets and who they work with. App screens live on /product only.
 export default function Home() {
   return (
     <>
       <Hero />
-      <SystemsMarquee />
-      <Gaps />
-      <Benefits />
-      <RoiCalculator />
-      <Features />
-
-      <Section
-        id="idea"
-        chip="Every step has an owner"
-        title="People command. AI executes."
-        lede="Each task goes to the best mix of people, AI and software. Pick a department to see who does each step, where approval sits, and what escalates to a person."
-      >
-        <div data-reveal>
-          <ExplorerIsland uid="wf">
-            <ExplorerView uid="wf" active={0} focus={null} />
-          </ExplorerIsland>
-        </div>
-        <p className="mt-4 text-center text-xs text-slate">
-          Examples for illustration. Your workflows, rules and approvers are mapped during the audit and set by you.
-        </p>
-      </Section>
+      <ToolMarquee />
+      <Pains />
 
       <Section
         id="how-it-works"
         chip="How it works"
-        title="Start with one department. Expand when it proves itself."
-        lede={`Six stages take you from the first conversation to a department running on ${SITE.shortName}, with a decision for you at each one.`}
+        title="From a free call to agents at work in 7 days."
+        lede="Four steps, and each one ends with something you can check. The install starts once you have paid and we have agreed the workflow."
       >
         <StageCards />
-        <div data-reveal className="mt-12 flex justify-center">
-          <ButtonLink href="/how-it-works" variant="secondary" track="home-how">
-            How an engagement runs
-          </ButtonLink>
+        <div data-reveal className="card card-lit mt-6 flex flex-col items-start gap-5 p-6 md:flex-row md:items-center md:justify-between md:p-8">
+          <div>
+            <p className="text-xl font-display tracking-snug text-ink">Know what you get and what it costs before you pay anything.</p>
+            <p className="mt-1 text-sm text-graphite">The call is free. The scope and the price come in writing after it.</p>
+          </div>
+          <div className="flex shrink-0 flex-wrap items-center gap-4">
+            <ButtonLink href="/how-it-works" variant="quiet" track="home-how">
+              How the install runs
+            </ButtonLink>
+            <MagneticButtonLink href={CTA.book.href} track="how">
+              {CTA.book.label}
+            </MagneticButtonLink>
+          </div>
         </div>
       </Section>
+
+      <CostCalculator />
+      <AgentTeam />
+      <Deliverables />
 
       <Section
         id="pricing"
         chip="Pricing"
-        title="Start free. Decide with the findings in hand."
-        lede="The audit costs nothing. Everything after it is scoped, priced and agreed in writing before any work starts."
+        title="Fixed prices, paid upfront."
+        lede="Start with the Agent Team Setup: 3 to 5 agents on one workflow in 7 days. The other two offers are scoped on the free call."
       >
         <Pricing />
       </Section>
 
-      <Commitments />
+      <Founder />
 
-      <section id="faq" aria-labelledby="faq-title" className="px-4 py-20 md:px-8 md:py-28">
-        <div className="mx-auto grid max-w-page gap-12 rounded-card border border-rule bg-mist px-6 py-12 md:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] md:gap-16 md:px-12 md:py-20">
-          <div data-reveal>
-            <p className="font-mono text-xs font-semibold uppercase tracking-wide text-signal">FAQ</p>
-            <h2 id="faq-title" className="mt-5 max-w-sm text-4xl font-display tracking-display text-ink">What should you know before we talk?</h2>
-            <p className="mt-6 max-w-sm text-base text-graphite">Clear answers about the work, the controls and the first step.</p>
-            <ButtonLink href={CTA.book.href} variant="quiet" track="faq" className="mt-6">
+      {/* One centred column of question cards, closing with the booking button (after altari.ai). */}
+      <section id="faq" aria-labelledby="faq-title" className="px-4 py-16 md:px-8 md:py-24">
+        <div className="mx-auto max-w-narrow">
+          <div data-reveal className="text-center">
+            <p className="font-mono text-xs font-semibold uppercase tracking-wide text-signal-bright">FAQ</p>
+            <h2 id="faq-title" className="mt-4 text-4xl font-display tracking-display text-ink">
+              Common <span className="text-signal-bright">questions.</span>
+            </h2>
+          </div>
+          <Faq className="mt-10" items={FAQ.filter((f) => !HOME_FAQ_EXCLUDE.has(f.q))} />
+          <div data-faq-more data-reveal className="mt-10 text-center">
+            <p className="text-base text-graphite">Still got questions? Get them answered in 30 minutes.</p>
+            <ButtonLink href={CTA.book.href} track="faq" className="mt-4">
               {CTA.book.label}
             </ButtonLink>
           </div>
-          <Faq items={FAQ.filter((f) => !HOME_FAQ_EXCLUDE.has(f.q))} />
         </div>
       </section>
 
-      <CtaBand />
+      <CtaBand
+        title="Let’s find the hours your agency is losing."
+        lede="A free 30 minute call. You leave knowing which workflow to hand to agents first and what it costs."
+      />
     </>
   );
 }
