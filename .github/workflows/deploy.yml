@@ -1,0 +1,84 @@
+# Every push to main is checked, then deployed to saydeed.com with deploy/deploy.sh.
+# Pull requests only run the checks. Setup (one time): see "Automatic deploys" in deploy/README.md.
+name: Check and deploy
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  DEPLOY_HOST: srv2035906.hstgr.cloud
+  NEXT_TELEMETRY_DISABLED: 1
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci --no-audit --no-fund
+      - name: Site rules
+        run: for c in banned offer brand dashes tokens facts; do node scripts/verify-site.mjs "$c"; done
+      - name: Build
+        run: npm run build
+        env:
+          NEXT_PUBLIC_SITE_URL: https://saydeed.com
+      # After the build, which writes next-env.d.ts.
+      - run: npm run typecheck
+
+  deploy:
+    needs: check
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    # One deploy at a time; a newer push waits for the running one instead of cutting it off.
+    concurrency:
+      group: deploy-production
+      cancel-in-progress: false
+    environment:
+      name: production
+      url: https://saydeed.com
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up SSH
+        env:
+          SSH_KEY: ${{ secrets.VPS_SSH_KEY }}
+          KNOWN_HOSTS: ${{ secrets.VPS_KNOWN_HOSTS }}
+        run: |
+          if [ -z "$SSH_KEY" ]; then
+            echo "::error::The VPS_SSH_KEY secret is missing. See 'Automatic deploys' in deploy/README.md."
+            exit 1
+          fi
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$SSH_KEY" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          if [ -n "$KNOWN_HOSTS" ]; then
+            printf '%s\n' "$KNOWN_HOSTS" > ~/.ssh/known_hosts
+          else
+            echo "::warning::VPS_KNOWN_HOSTS is not set, so the server's key is trusted on first sight. Add the secret."
+            ssh-keyscan -t ed25519,rsa "$DEPLOY_HOST" > ~/.ssh/known_hosts
+          fi
+      - name: Deploy
+        run: sh deploy/deploy.sh "root@$DEPLOY_HOST"
+      # The preview address works whatever saydeed.com's DNS says, so it decides pass or fail.
+      - name: Check the live site
+        run: |
+          for i in $(seq 1 24); do
+            code=$(curl -s -o /dev/null -w '%{http_code}' "https://saydeed.$DEPLOY_HOST/" || true)
+            [ "$code" = "200" ] && break
+            sleep 5
+          done
+          echo "Preview answered $code"
+          [ "$code" = "200" ] || { echo "::error::https://saydeed.$DEPLOY_HOST/ did not answer 200 after deploy."; exit 1; }
+          live=$(curl -s -o /dev/null -w '%{http_code}' https://saydeed.com/ || true)
+          echo "saydeed.com answered $live"
+          [ "$live" = "200" ] || echo "::warning::https://saydeed.com/ answered $live. Check its DNS and certificate."

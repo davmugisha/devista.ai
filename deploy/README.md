@@ -14,6 +14,35 @@ sh deploy/deploy.sh
 
 It copies the working tree to `/docker/saydeed/src`, builds the image on the server, restarts the container, and enables `saydeed-cert.timer`.
 
+## Automatic deploys
+
+`.github/workflows/deploy.yml` runs on every push to `main`: the site rule checks, the build and the type check, then `deploy/deploy.sh` from GitHub's runner, then a check that the site answers. Pull requests get the checks only. If a check fails, nothing is deployed. The Actions tab on GitHub shows each run, and **Run workflow** there redeploys without a new commit.
+
+It needs two repository secrets, set once. In Git Bash on your computer:
+
+1. Make a key used only for deploys (no passphrase):
+
+   ```sh
+   ssh-keygen -t ed25519 -N "" -C github-actions-saydeed -f ~/.ssh/saydeed_deploy
+   ```
+
+2. Allow it on the server:
+
+   ```sh
+   cat ~/.ssh/saydeed_deploy.pub | ssh root@srv2035906.hstgr.cloud 'cat >> ~/.ssh/authorized_keys'
+   ```
+
+3. On GitHub, open the repository's **Settings → Secrets and variables → Actions → New repository secret** and add:
+
+   | Name              | Value                                                                 |
+   | ----------------- | --------------------------------------------------------------------- |
+   | `VPS_SSH_KEY`     | everything in `~/.ssh/saydeed_deploy` (the file without `.pub`)        |
+   | `VPS_KNOWN_HOSTS` | the output of `ssh-keyscan -t ed25519,rsa srv2035906.hstgr.cloud`      |
+
+4. In the Actions tab, open **Check and deploy** and click **Run workflow**.
+
+To stop automatic deploys, delete the `VPS_SSH_KEY` secret, or remove its line from `/root/.ssh/authorized_keys` on the server.
+
 The same container also answers at **https://saydeed.srv2035906.hstgr.cloud**, the server's own Hostinger address, which works whatever saydeed.com's DNS says. It sends `X-Robots-Tag: noindex` so search engines only index saydeed.com.
 
 ## DNS (Namecheap)
